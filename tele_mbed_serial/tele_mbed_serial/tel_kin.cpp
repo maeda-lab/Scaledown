@@ -35,18 +35,18 @@ void cal_T(double x, double y, double z, double qx, double qy, double qz, double
     //printf("qx=%f\nqy=%f\nqz=%f\nqw=%f\n\n", qx, qy, qz, qw);
     //ämîFçœÇ›Å™
 
-    Trans[0][0] = qx * qx - qy * qy - qz * qz + qw * qw;//nx
-    Trans[1][0] = 2.0 * qx * qy + 2.0 * qz * qw;//ny
-    Trans[2][0] = 2.0 * qx * qz - 2.0 * qy * qw;//nz
+    Trans[0][0] = qx * qx - qy * qy - qz * qz + qw * qw;//nx 0
+    Trans[1][0] = 2.0 * qx * qy + 2.0 * qz * qw;//ny 0
+    Trans[2][0] = 2.0 * qx * qz - 2.0 * qy * qw;//nz 1 ?
     Trans[3][0] = 0.0;//0
 
-    Trans[0][1] = 2.0 * qx * qy + 2.0 * qz * qw;//ox
-    Trans[1][1] = -qx * qx + qy * qy - qz * qz + qw * qw;//oy
+    Trans[0][1] = 2.0 * qx * qy - 2.0 * qz * qw;//ox //reference : https://qiita.com/drken/items/0639cf34cce14e8d58a5
+    Trans[1][1] = -qx * qx + qy * qy - qz * qz + qw * qw;//oy?
     Trans[2][1] = 2.0 * qy * qz + 2.0 * qx * qw;//oz
     Trans[3][1] = 0.0;//0
 
     Trans[0][2] = 2.0 * qx * qz + 2.0 * qy * qw;//ax
-    Trans[1][2] = 2.0 * qy * qz - 2.0 * qx * qw;//ay
+    Trans[1][2] = 2.0 * qy * qz - 2.0 * qx * qw;//ay?
     Trans[2][2] = -qx * qx - qy * qy + qz * qz + qw * qw;//az
     Trans[3][2] = 0.0;//0
 

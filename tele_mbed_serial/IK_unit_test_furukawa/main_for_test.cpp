@@ -78,7 +78,9 @@ void cal_T_from_arg(Arg arg, Pos pos)
     Trans[2][3] = pos.z;//pz
     Trans[3][3] = 1.0;//1
 
-    printf("座標変換行列です\n");
+}
+void dumpT(void) {
+    printf("\n座標変換行列です\n");
     for (int cnti = 0; cnti < 4; cnti++)
     {
         for (int cntj = 0; cntj < 4; cntj++)
@@ -139,31 +141,34 @@ int main()
     Pos pos;
     PointandPosture arm;
 
-    arg.a = 40.0;
+    arg.a = 0.0;//40.0
     arg.b = 0.0;
     arg.c = 0.0;
-    arg.d = 30.0;
-    arg.e = 30.0;
+    arg.d = 0.0;//30.0;
+    arg.e = 0.0;//30.0;
     arg.f = 0.0;
 
-    ans.a = 0.0;
-    ans.b = 0.0;
-    ans.c = 0.0;
-    ans.d = 0.0;
-    ans.e = 0.0;
-    ans.f = 0.0;
+    ans.a = 999.0;
+    ans.b = 999.0;
+    ans.c = 999.0;
+    ans.d = 999.0;
+    ans.e = 999.0;
+    ans.f = 999.0;
 
 
     printf("逆運動学のチェックを行います.\n計算は次の角度情報を入力します\n");
-    printf("arg[a,b,c,d,e,f]=[%.3lf,%.3lf,%.3lf,%.3lf,%.3lf,%.3lf]\n", arg.a, arg.b, arg.c, arg.d, arg.e, arg.f);
+    printf("arg[a,b,c,d,e,f] = [%.3lf,\t%.3lf,\t%.3lf,\t%.3lf,\t%.3lf,\t%.3lf]\n", arg.a, arg.b, arg.c, arg.d, arg.e, arg.f);
 
-    printf("\n\n\n\nまず，順運動学で手先位置の計算を行います．\nプログラムの詳細は関数cal_x,cal_y,cal_zを確認してください\n");
+    printf("\n\nまず，順運動学で手先位置の計算を行います．\nプログラムの詳細は関数cal_x,cal_y,cal_zを確認してください\n");
     pos.x = cal_x(arg);
     pos.y = cal_y(arg);
     pos.z = cal_z(arg);
 
     printf("純運動学を計算した結果．原点から見た手先位置は次のようになりました．\n");
-    printf("\npos[x,y,z]=[%.3lf,%.3lf,%.3lf]\n\nただし単位はOptiからの長さと合わせるために[m]です\n", pos.x, pos.y, pos.z);
+    printf("\npos[x,y,z]=[%.3lf,%.3lf,%.3lf]\n\nただし単位はOptiからの長さと合わせるために[m]です\n\n", pos.x, pos.y, pos.z);
+
+    cal_T_from_arg(arg, pos); 
+    dumpT();
 
     printf("\n\n続いて逆運動学で各関節の角度の計算を行います．\nプログラムの詳細は関数cal_a～cal_fを確認してください\n");
     //アームの単位はmmで計算していることに注意　
@@ -176,13 +181,29 @@ int main()
     arm.x = pos.x;//* 0.005;// -1.0 * double(data->RigidBodies[i].z - HumanFirstPlace.z) * scale;
     arm.y = pos.y;// *0.005;//        double(data->RigidBodies[i].y - HumanFirstPlace.y)* scale;
     arm.z = pos.z;// *0.005;//        double(data->RigidBodies[i].x - HumanFirstPlace.x)* scale;
-    arm.qx = 1.0;// -1.0 * double(data->RigidBodies[i].qz);
-    arm.qy = 0;//       double(data->RigidBodies[i].qy);
-    arm.qz = 0;//      double(data->RigidBodies[i].qx);
-    arm.qw = 1;//      double(data->RigidBodies[i].qw);
-
+    // 
+    // https://qiita.com/drken/items/0639cf34cce14e8d58a5
+    double th = 90;
+    struct Vec { double x; double y; double z; };
+    Vec vec;
+    vec.x = 1.0;
+    vec.y = 1.0;
+    vec.z = 1.0;
+    arm.qx = vec.x * S(deg2rad(th / 2.0));// -1.0 * double(data->RigidBodies[i].qz);
+    arm.qy = vec.y * S(deg2rad(th / 2.0));//       double(data->RigidBodies[i].qy);
+    arm.qz = vec.z * S(deg2rad(th / 2.0));//      double(data->RigidBodies[i].qx);
+    arm.qw = C(deg2rad(th / 2.0));//      double(data->RigidBodies[i].qw);
+    //double norm = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+    double norm = sqrt(arm.qx * arm.qx + arm.qy * arm.qy + arm.qz * arm.qz + arm.qw * arm.qw);
+    if (norm != 0.0) {
+        arm.qx /= norm;
+        arm.qy /= norm;
+        arm.qz /= norm;
+        arm.qw /= norm;
+    }
     //======================手先座標系→基準座標系========================
     cal_T(arm.x, arm.y, arm.z, arm.qx, arm.qy, arm.qz, arm.qw);
+    dumpT();
 
     double a = cal_a();
     double b = cal_b(a);
