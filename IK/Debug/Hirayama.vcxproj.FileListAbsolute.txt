@@ -1,0 +1,2 @@
+C:\Users\MasahiroFurukawa\source\myProjects\hirayama\Hirayama\Debug\Hirayama.exe
+C:\Users\MasahiroFurukawa\source\myProjects\hirayama\Hirayama\Debug\Hirayama.pdb

@@ -1,0 +1,10 @@
+
+IK/.vs/Hirayama/v16/Browse.VC.db
+IK/Debug/Hirayama.tlog/CL.command.1.tlog
+*.tlog
+*.opendb
+*.idb
+*.ipch
+*.db-wal
+*.db-shm
+*.filters
