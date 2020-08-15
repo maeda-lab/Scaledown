@@ -8,3 +8,5 @@ IK/Debug/Hirayama.tlog/CL.command.1.tlog
 *.db-wal
 *.db-shm
 *.filters
+*.ipdb
+*.iobj
