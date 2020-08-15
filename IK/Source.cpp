@@ -7,8 +7,8 @@
 #include<iostream>
 
 #define PI  3.14159265358979
-//ƒA[ƒ€‚Ìƒpƒ‰ƒ[ƒ^
-//’PˆÊ‚Í‚·‚×‚Äƒ[ƒgƒ‹(m)
+//ã‚¢ãƒ¼ãƒ ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+//å˜ä½ã¯ã™ã¹ã¦ãƒ¡ãƒ¼ãƒˆãƒ«(m)
 #define g  0.030
 #define h  0.102
 #define j  0.120
@@ -18,7 +18,7 @@
 #define n  0.026
 
 
-//‚»‚ê‚¼‚ê‚ÌŠp‚Ì”ÍˆÍ
+//ãã‚Œãã‚Œã®è§’ã®ç¯„å›²
 
 
 #define a_min  -120.0
@@ -54,11 +54,11 @@ struct Pos {
 double rad2deg(double rad) {
     return rad * 180.0 / PI;
 }
-//“x”‚©‚çƒ‰ƒWƒAƒ“‚É
+//åº¦æ•°ã‹ã‚‰ãƒ©ã‚¸ã‚¢ãƒ³ã«
 double deg2rad(double deg) {
     return deg * PI / 180.0 ;
 }
-//Cos,Sin‚Ì—ª‹L
+//Cos,Sinã®ç•¥è¨˜
 double C(double a) {
     return cos(a);
 }
@@ -66,11 +66,11 @@ double S(double a) {
     return sin(a);
 }
 
-//=======================================‡‰^“®Šw======================================
+//=======================================é †é‹å‹•å­¦======================================
 
 double cal_x(Arg arg)
 {
-    //ƒ‰ƒWƒAƒ“•\‹L‚É•ÏŠ·‚·‚é‚±‚Æ
+    //ãƒ©ã‚¸ã‚¢ãƒ³è¡¨è¨˜ã«å¤‰æ›ã™ã‚‹ã“ã¨
     double a = deg2rad(arg.a);
     double b = deg2rad(arg.b);
     double c = deg2rad(arg.c);
@@ -83,7 +83,7 @@ double cal_x(Arg arg)
 }
 double cal_y(Arg arg)
 {
-    //ƒ‰ƒWƒAƒ“•\‹L‚É•ÏŠ·‚·‚é‚±‚Æ
+    //ãƒ©ã‚¸ã‚¢ãƒ³è¡¨è¨˜ã«å¤‰æ›ã™ã‚‹ã“ã¨
     double a = deg2rad(arg.a);
     double b = deg2rad(arg.b);
     double c = deg2rad(arg.c);
@@ -96,7 +96,7 @@ double cal_y(Arg arg)
 }
 double cal_z(Arg arg)
 {
-    //ƒ‰ƒWƒAƒ“•\‹L‚É•ÏŠ·‚·‚é‚±‚Æ
+    //ãƒ©ã‚¸ã‚¢ãƒ³è¡¨è¨˜ã«å¤‰æ›ã™ã‚‹ã“ã¨
     double a = deg2rad(arg.a);
     double b = deg2rad(arg.b);
     double c = deg2rad(arg.c);
@@ -110,15 +110,15 @@ double cal_z(Arg arg)
 
 
 
-//=================================================‹t‰^“®Šw=======================================================
+//=================================================é€†é‹å‹•å­¦=======================================================
 
-//À•W•ÏŠ·s—ñ
+//åº§æ¨™å¤‰æ›è¡Œåˆ—
 double Trans[4][4];
-//ƒNƒH[ƒ^ƒjƒIƒ“¨À•W•ÏŠ·s—ñ‚ÌŒvZ
+//ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³â†’åº§æ¨™å¤‰æ›è¡Œåˆ—ã®è¨ˆç®—
 void cal_T(double x, double y, double z, double qx, double qy, double qz, double qw) {
 
     //printf("qx=%f\nqy=%f\nqz=%f\nqw=%f\n\n", qx, qy, qz, qw);
-    //Šm”FÏ‚İª
+    //ç¢ºèªæ¸ˆã¿â†‘
 
     Trans[0][0] = qx * qx - qy * qy - qz * qz + qw * qw;//nx
     Trans[1][0] = 2.0 * qx * qy + 2.0 * qz * qw;//ny
@@ -150,13 +150,17 @@ void cal_T_from_arg(Arg arg,Pos pos)
     double e = deg2rad(arg.e);
     double f = deg2rad(arg.f);
 
-    Trans[0][0] = -C(a) * S(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f) + C(b + c) * S(e) * S(f))   +   S(a) * (S(d) * C(e) * S(f) - C(d) * C(f));//nx
-    Trans[1][0] = -S(a) * S(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f) + C(b + c) * S(e) * S(f))   -   C(a) * (S(d) * C(e) * S(f) - C(d) * C(f));//ny
+    //Trans[0][0] = -C(a) * S(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f) + C(b + c) * S(e) * S(f))   +   S(a) * (S(d) * C(e) * S(f) - C(d) * C(f));//nx
+    //Trans[1][0] = -S(a) * S(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f) + C(b + c) * S(e) * S(f))   -   C(a) * (S(d) * C(e) * S(f) - C(d) * C(f));//ny
+    Trans[0][0] = -C(a) * (S(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f)) + C(b + c) * S(e) * S(f)) + S(a) * (S(d) * C(e) * S(f) - C(d) * C(f));//nx
+    Trans[1][0] = -S(a) * (S(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f)) + C(b + c) * S(e) * S(f)) - C(a) * (S(d) * C(e) * S(f) - C(d) * C(f));//ny
     Trans[2][0] =         C(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f) - S(b + c) * S(e) * S(f));//nz
     Trans[3][0] = 0.0;//0
 
-    Trans[0][1] = -C(a) * S(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f) + C(b + c) * S(e) * C(f))   +   S(a) * (S(d) * C(e) * C(f) + C(d) * S(f));//ox
-    Trans[1][1] = -S(a) * S(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f) + C(b + c) * S(e) * C(f))   -   C(a) * (S(d) * C(e) * C(f) + C(d) * S(f));//oy
+    //Trans[0][1] = -C(a) * S(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f) + C(b + c) * S(e) * C(f))   +   S(a) * (S(d) * C(e) * C(f) + C(d) * S(f));//ox
+    //Trans[1][1] = -S(a) * S(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f) + C(b + c) * S(e) * C(f))   -   C(a) * (S(d) * C(e) * C(f) + C(d) * S(f));//oy
+    Trans[0][1] = -C(a) * (S(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f)) + C(b + c) * S(e) * C(f)) + S(a) * (S(d) * C(e) * C(f) + C(d) * S(f));//ox
+    Trans[1][1] = -S(a) * (S(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f)) + C(b + c) * S(e) * C(f)) - C(a) * (S(d) * C(e) * C(f) + C(d) * S(f));//oy
     Trans[2][1] =         C(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f) - S(b + c) * S(e) * C(f));//oz
     Trans[3][1] = 0.0;//0
 
@@ -170,7 +174,7 @@ void cal_T_from_arg(Arg arg,Pos pos)
     Trans[2][3] = pos.z;//pz
     Trans[3][3] = 1.0;//1
 
-    printf("À•W•ÏŠ·s—ñ‚Å‚·\n");
+    printf("åº§æ¨™å¤‰æ›è¡Œåˆ—ã§ã™\n");
     for (int cnti = 0; cnti < 4; cnti++)
     {
         for (int cntj = 0; cntj < 4; cntj++)
@@ -210,7 +214,7 @@ double cal_b(Arg arg) {
     //double b2 = rad2deg(2 * atan2(-B - sqrt(abs(B * B + A * A - D * D)), A + D));
 
     printf("b1,b2=%lf,%lf", b1, b2);
-    //ƒGƒ‰[‚ª‹N‚«‚é——RFsqrt‚Ì’†g‚ª•‰‚É‚È‚Á‚Ä‚¢‚éC‚È‚éê‡‚ª‚ ‚é
+    //ã‚¨ãƒ©ãƒ¼ãŒèµ·ãã‚‹ç†ç”±ï¼šsqrtã®ä¸­èº«ãŒè² ã«ãªã£ã¦ã„ã‚‹ï¼Œãªã‚‹å ´åˆãŒã‚ã‚‹
 
     printf("sqrt(D=b^2-4ac)=%lf\n" ,- B + sqrt(B * B + A * A - D * D));
     
@@ -221,7 +225,7 @@ double cal_b(Arg arg) {
 
     //printf("A=%lf\nB=%lf\nD=%lf\nb1=%lf\nb2=%lf\n\n", A, B, D, b1, b2);
 
-    //‰ğ‚ª“ñ‚Â‚Å‚Ä‚¢‚é‚Ì‚Å”ÍˆÍŠO‚È‚ç‚Í‚¶‚­
+    //è§£ãŒäºŒã¤ã§ã¦ã„ã‚‹ã®ã§ç¯„å›²å¤–ãªã‚‰ã¯ã˜ã
     if ((b_min <= b1 && b_max >= b1) && (b_min > b2 || b_max < b2)) {
         return b1;
     }
@@ -229,18 +233,18 @@ double cal_b(Arg arg) {
         return b2;
     }
     else if ((b_min<b1 && b_max>b1) && (b_min<b2 && b_max>b2))
-    {//—¼•û‚Æ‚à‰ğ‚É‚È‚è‚¤‚éê‡,‚Æ‚è‚ ‚¦‚¸ƒGƒ‰[
+    {//ä¸¡æ–¹ã¨ã‚‚è§£ã«ãªã‚Šã†ã‚‹å ´åˆ,ã¨ã‚Šã‚ãˆãšã‚¨ãƒ©ãƒ¼
         printf("answer error in b : two answer\n");
         return EOF;
     }
     else if ((b_min > b1 || b_max < b1) && (b_min > b2 || b_max < b2))
-    {//“š‚¦‚ª‚È‚¢ê‡
-        printf("atan2error in bFNo answer\n");
+    {//ç­”ãˆãŒãªã„å ´åˆ
+        printf("atan2error in bï¼šNo answer\n");
         return EOF;
     }
     else
     {
-        printf("error in b:‚È‚ñ‚©‚¨‚©‚µ‚¢D\n");
+        printf("error in b:ãªã‚“ã‹ãŠã‹ã—ã„ï¼\n");
         return EOF;
     }*/
 
@@ -302,13 +306,13 @@ double cal_c(Arg arg) {
 
 
 
-    //‰ğ‚Ì’²®
+    //è§£ã®èª¿æ•´
     /*if (c1 > 180.0) { c1 = c1 - 180.0; }
     else if (c1 < -180.0) { c1 = c1 + 360; }
     if (c2 > 180.0) { c2 = c2 - 180.0; }
     else if (c2 < -180.0) { c2 = c2 + 360; }
 
-    //‰ğ‚ª“ñ‚Â‚Å‚Ä‚¢‚é‚Ì‚Å”ÍˆÍŠO‚È‚ç‚Í‚¶‚­
+    //è§£ãŒäºŒã¤ã§ã¦ã„ã‚‹ã®ã§ç¯„å›²å¤–ãªã‚‰ã¯ã˜ã
     if ((c_min<c1 && c_max>c1) && (c_min > c2 || c_max < c2)) {
         return c1;
     }
@@ -316,18 +320,18 @@ double cal_c(Arg arg) {
         return c2;
     }
     else if ((c_min<c1 && c_max>c1) && (c_min<c2 && c_max>c2))
-    {//—¼•û‚Æ‚à‰ğ‚É‚È‚è‚¤‚éê‡,‚Æ‚è‚ ‚¦‚¸ƒGƒ‰[
+    {//ä¸¡æ–¹ã¨ã‚‚è§£ã«ãªã‚Šã†ã‚‹å ´åˆ,ã¨ã‚Šã‚ãˆãšã‚¨ãƒ©ãƒ¼
         printf("answer error in c : two answer\n");
         return EOF;
     }
     else if ((c_min > c1 || c_max < c1) && (c_min > c2 || c_max < c2))
-    {//“š‚¦‚ª‚È‚¢ê‡
-        printf("atan2error in cFNo answer\n");
+    {//ç­”ãˆãŒãªã„å ´åˆ
+        printf("atan2error in cï¼šNo answer\n");
         return EOF;
     }
     else
     {
-        printf("error in c:‚È‚ñ‚©‚¨‚©‚µ‚¢D\n");
+        printf("error in c:ãªã‚“ã‹ãŠã‹ã—ã„ï¼\n");
         return EOF;
     }*/
         
@@ -343,7 +347,7 @@ double cal_d(Arg arg) {
     double y = Trans[0][2] * S(a) - Trans[1][2] * C(a);
     double d = rad2deg(atan2(y, x));
 
-    //printf("Šp“xd‚É‚Â‚¢‚Ä\n");
+    //printf("è§’åº¦dã«ã¤ã„ã¦\n");
     //printf("x,y,d=%lf,%lf,%lf\n", x, y,d);
     if (x == 0.0 || y == 0.0)
     {
@@ -425,18 +429,18 @@ int main()
     arg.f = 0.0;
 
 
-    printf("‹t‰^“®Šw‚Ìƒ`ƒFƒbƒN‚ğs‚¢‚Ü‚·.\nŒvZ‚ÍŸ‚ÌŠp“xî•ñ‚ğ“ü—Í‚µ‚Ü‚·\n");
+    printf("é€†é‹å‹•å­¦ã®ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã„ã¾ã™.\nè¨ˆç®—ã¯æ¬¡ã®è§’åº¦æƒ…å ±ã‚’å…¥åŠ›ã—ã¾ã™\n");
     printf("arg[a,b,c,d,e,f]=[%.3lf,%.3lf,%.3lf,%.3lf,%.3lf,%.3lf]\n",arg.a,arg.b,arg.c,arg.d,arg.e,arg.f);
     
-    printf("\n\n\n\n‚Ü‚¸C‡‰^“®Šw‚ÅèæˆÊ’u‚ÌŒvZ‚ğs‚¢‚Ü‚·D\nƒvƒƒOƒ‰ƒ€‚ÌÚ×‚ÍŠÖ”cal_x,cal_y,cal_z‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢\n");
+    printf("\n\n\n\nã¾ãšï¼Œé †é‹å‹•å­¦ã§æ‰‹å…ˆä½ç½®ã®è¨ˆç®—ã‚’è¡Œã„ã¾ã™ï¼\nãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®è©³ç´°ã¯é–¢æ•°cal_x,cal_y,cal_zã‚’ç¢ºèªã—ã¦ãã ã•ã„\n");
     pos.x = cal_x(arg);
     pos.y = cal_y(arg);
     pos.z = cal_z(arg);
 
-    printf("ƒ‰^“®Šw‚ğŒvZ‚µ‚½Œ‹‰ÊDŒ´“_‚©‚çŒ©‚½èæˆÊ’u‚ÍŸ‚Ì‚æ‚¤‚É‚È‚è‚Ü‚µ‚½D\n");
-    printf("pos[x,y,z]=[%.3lf,%.3lf,%.3lf]\t‚½‚¾‚µ’PˆÊ‚ÍOpti‚©‚ç‚Ì’·‚³‚Æ‡‚í‚¹‚é‚½‚ß‚É[m]‚Å‚·\n", pos.x, pos.y, pos.z);
+    printf("ç´”é‹å‹•å­¦ã‚’è¨ˆç®—ã—ãŸçµæœï¼åŸç‚¹ã‹ã‚‰è¦‹ãŸæ‰‹å…ˆä½ç½®ã¯æ¬¡ã®ã‚ˆã†ã«ãªã‚Šã¾ã—ãŸï¼\n");
+    printf("pos[x,y,z]=[%.3lf,%.3lf,%.3lf]\tãŸã ã—å˜ä½ã¯Optiã‹ã‚‰ã®é•·ã•ã¨åˆã‚ã›ã‚‹ãŸã‚ã«[m]ã§ã™\n", pos.x, pos.y, pos.z);
 
-    printf("\n\n\n\n‘±‚¢‚Ä‹t‰^“®Šw‚ÅŠeŠÖß‚ÌŠp“x‚ÌŒvZ‚ğs‚¢‚Ü‚·D\nƒvƒƒOƒ‰ƒ€‚ÌÚ×‚ÍŠÖ”cal_a`cal_f‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢\n");
+    printf("\n\n\n\nç¶šã„ã¦é€†é‹å‹•å­¦ã§å„é–¢ç¯€ã®è§’åº¦ã®è¨ˆç®—ã‚’è¡Œã„ã¾ã™ï¼\nãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®è©³ç´°ã¯é–¢æ•°cal_aï½cal_fã‚’ç¢ºèªã—ã¦ãã ã•ã„\n");
     
     cal_T_from_arg(arg, pos);
     ans.a = cal_a();
@@ -446,9 +450,9 @@ int main()
     ans.e = cal_e(arg);
     ans.f = cal_f(arg);
 
-    printf("‹t‰^“®Šw‚ğŒvZ‚µ‚½Œ‹‰ÊDŠÖßŠp“x‚ÍŸ‚Ì‚æ‚¤‚É‚È‚è‚Ü‚µ‚½D\n");
+    printf("é€†é‹å‹•å­¦ã‚’è¨ˆç®—ã—ãŸçµæœï¼é–¢ç¯€è§’åº¦ã¯æ¬¡ã®ã‚ˆã†ã«ãªã‚Šã¾ã—ãŸï¼\n");
     printf("arg[a,b,c,d,e,f]=[%.3lf,%.3lf,%.3lf,%.3lf,%.3lf,%.3lf]\n", ans.a, ans.b, ans.c, ans.d, ans.e, ans.f);
-    printf("\n\n‰ğ‚ğ”äŠr‚µ‚Ü‚·D\n");
+    printf("\n\nè§£ã‚’æ¯”è¼ƒã—ã¾ã™ï¼\n");
 
     printf("arg[a,b,c,d,e,f]=[%.3lf,%.3lf,%.3lf,%.3lf,%.3lf,%.3lf]\n", arg.a, arg.b, arg.c, arg.d, arg.e, arg.f);
     printf("arg[a,b,c,d,e,f]=[%.3lf,%.3lf,%.3lf,%.3lf,%.3lf,%.3lf]\n", ans.a, ans.b, ans.c, ans.d, ans.e, ans.f);
