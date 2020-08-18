@@ -55,3 +55,36 @@ double cal_c(double);
 double cal_d(double, double, double);
 double cal_e(double, double, double, double);
 double cal_f(double, double, double);
+
+// Macro
+#define _nx_ Trans[0][0] 
+#define _ny_ Trans[1][0]
+#define _nz_ Trans[2][0]
+
+#define _ox_ Trans[0][1]
+#define _oy_ Trans[1][1]
+#define _oz_ Trans[2][1]
+
+#define _ax_ Trans[0][2]
+#define _ay_ Trans[1][2]
+#define _az_ Trans[2][2]
+
+#define _px_ Trans[0][3]
+#define _py_ Trans[1][3]
+#define _pz_ Trans[2][3]
+
+#define Ca C(a)
+#define Cb C(b)
+#define Cc C(c)
+#define Cd C(d)
+#define Ce C(e)
+#define Cf C(f)
+#define Cbc C(b+c)
+#define Sbc S(b+c)
+
+#define Sa S(a)
+#define Sb S(b)
+#define Sc S(c)
+#define Sd S(d)
+#define Se S(e)
+#define Sf S(f)

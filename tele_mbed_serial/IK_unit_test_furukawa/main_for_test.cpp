@@ -48,35 +48,38 @@ struct PointandPosture {
 };
 
 
-
-void cal_T_from_arg(Arg arg, Pos pos)
+//=======================================順運動学======================================
+// Masahiro Furukawa
+// Aug 17, 2020
+void cal_T_from_arg_mod(Arg arg)
 {
     double a = deg2rad(arg.a);
     double b = deg2rad(arg.b);
     double c = deg2rad(arg.c);
     double d = deg2rad(arg.d);
     double e = deg2rad(arg.e);
-    double f = deg2rad(arg.f);
+    double f = deg2rad(arg.f); 
 
-    Trans[0][0] = -C(a) * S(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f) + C(b + c) * S(e) * S(f)) + S(a) * (S(d) * C(e) * S(f) - C(d) * C(f));//nx
-    Trans[1][0] = -S(a) * S(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f) + C(b + c) * S(e) * S(f)) - C(a) * (S(d) * C(e) * S(f) - C(d) * C(f));//ny
-    Trans[2][0] = C(b + c) * (C(d) * C(e) * S(f) + S(d) * C(f) - S(b + c) * S(e) * S(f));//nz
-    Trans[3][0] = 0.0;//0
+    // Generated from sympy
+    _nx_ = ((Sa * sin(d) - sin(b + c) * cos(a) * cos(d)) * cos(e) - sin(e) * cos(a) * cos(b + c)) * sin(f) - (Sa * cos(d) + sin(d) * sin(b + c) * cos(a)) * cos(f);
+    _ny_ = (-(Sa * sin(b + c) * cos(d) + sin(d) * cos(a)) * cos(e) - Sa * sin(e) * cos(b + c)) * sin(f) + (-Sa * sin(d) * sin(b + c) + cos(a) * cos(d)) * cos(f);
+    _nz_ = (-sin(e) * sin(b + c) + cos(d) * cos(e) * cos(b + c)) * sin(f) + sin(d) * cos(f) * cos(b + c);
+    Trans[3][0] = 0;
 
-    Trans[0][1] = -C(a) * S(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f) + C(b + c) * S(e) * C(f)) + S(a) * (S(d) * C(e) * C(f) + C(d) * S(f));//ox
-    Trans[1][1] = -S(a) * S(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f) + C(b + c) * S(e) * C(f)) - C(a) * (S(d) * C(e) * C(f) + C(d) * S(f));//oy
-    Trans[2][1] = C(b + c) * (C(d) * C(e) * C(f) - S(d) * S(f) - S(b + c) * S(e) * C(f));//oz
-    Trans[3][1] = 0.0;//0
+    _ox_ = ((Sa * sin(d) - sin(b + c) * cos(a) * cos(d)) * cos(e) - sin(e) * cos(a) * cos(b + c)) * cos(f) + (Sa * cos(d) + sin(d) * sin(b + c) * cos(a)) * sin(f);
+    _oy_ = (-(Sa * sin(b + c) * cos(d) + sin(d) * cos(a)) * cos(e) - Sa * sin(e) * cos(b + c)) * cos(f) - (-Sa * sin(d) * sin(b + c) + cos(a) * cos(d)) * sin(f);
+    _oz_ = (-sin(e) * sin(b + c) + cos(d) * cos(e) * cos(b + c)) * cos(f) - sin(d) * sin(f) * cos(b + c);
+    Trans[3][1] = 0;
 
-    Trans[0][2] = -C(a) * (S(b + c) * C(d) * S(e) - C(b + c) * C(e)) + S(a) * S(d) * S(e);//ax
-    Trans[1][2] = -S(a) * (S(b + c) * C(d) * S(e) - C(b + c) * C(e)) - C(a) * S(d) * S(e);;//ay
-    Trans[2][2] = C(b + c) * C(d) * S(e) + S(b + c) * C(e);//az
-    Trans[3][2] = 0.0;//0
+    _ax_ = (Sa * sin(d) - sin(b + c) * cos(a) * cos(d)) * sin(e) + cos(a) * cos(e) * cos(b + c);
+    _ay_ = -(Sa * sin(b + c) * cos(d) + sin(d) * cos(a)) * sin(e) + Sa * cos(e) * cos(b + c);
+    _az_ = sin(e) * cos(d) * cos(b + c) + sin(b + c) * cos(e);
+    Trans[3][2] = 0;
 
-    Trans[0][3] = pos.x;//px
-    Trans[1][3] = pos.y;//py
-    Trans[2][3] = pos.z;//pz
-    Trans[3][3] = 1.0;//1
+    _px_ = g * cos(a) - j * sin(b) * cos(a) - k * sin(b + c) * cos(a) + l * cos(a) * cos(b + c) + m * Sa * sin(d) * sin(e) - m * sin(e) * sin(b + c) * cos(a) * cos(d) + m * cos(a) * cos(e) * cos(b + c) + n * Sa * sin(d) * sin(e) - n * sin(e) * sin(b + c) * cos(a) * cos(d) + n * cos(a) * cos(e) * cos(b + c);
+    _py_ = g * Sa - j * Sa * sin(b) - k * Sa * sin(b + c) + l * Sa * cos(b + c) - m * Sa * sin(e) * sin(b + c) * cos(d) + m * Sa * cos(e) * cos(b + c) - m * sin(d) * sin(e) * cos(a) - n * Sa * sin(e) * sin(b + c) * cos(d) + n * Sa * cos(e) * cos(b + c) - n * sin(d) * sin(e) * cos(a);
+    _pz_ = h + j * cos(b) + k * cos(b + c) + l * sin(b + c) + m * sin(e) * cos(d) * cos(b + c) + m * sin(b + c) * cos(e) + n * sin(e) * cos(d) * cos(b + c) + n * sin(b + c) * cos(e);
+    Trans[3][3] = 1;
 
 }
 void dumpT(void) {
@@ -92,56 +95,13 @@ void dumpT(void) {
     printf("\n");
 }
 
-//=======================================順運動学======================================
-double cal_x(Arg arg)
-{
-    //ラジアン表記に変換すること
-    double a = deg2rad(arg.a);
-    double b = deg2rad(arg.b);
-    double c = deg2rad(arg.c);
-    double d = deg2rad(arg.d);
-    double e = deg2rad(arg.e);
-    double f = deg2rad(arg.f);
-
-    double x = (n + m) * (C(a) * (C(b + c) * C(e) - S(b + c) * C(d) * S(e)) + S(a) * S(d) * S(e)) + l * C(a) * C(b + c) - k * C(a) * S(b + c) - j * C(a) * S(b) + g * C(a);
-    return x;
-}
-double cal_y(Arg arg)
-{
-    //ラジアン表記に変換すること
-    double a = deg2rad(arg.a);
-    double b = deg2rad(arg.b);
-    double c = deg2rad(arg.c);
-    double d = deg2rad(arg.d);
-    double e = deg2rad(arg.e);
-    double f = deg2rad(arg.f);
-
-    double y = (n + m) * (S(a) * (C(b + c) * C(e) - S(b + c) * C(d) * S(e)) - C(a) * S(d) * S(e)) + l * S(a) * C(b + c) - k * S(a) * S(b + c) - j * S(a) * S(b) + g * S(a);
-    return y;
-}
-double cal_z(Arg arg)
-{
-    //ラジアン表記に変換すること
-    double a = deg2rad(arg.a);
-    double b = deg2rad(arg.b);
-    double c = deg2rad(arg.c);
-    double d = deg2rad(arg.d);
-    double e = deg2rad(arg.e);
-    double f = deg2rad(arg.f);
-
-    double z = (n + m) * (S(b + c) * C(e) * C(b + c) + C(d) * S(e)) + l * S(b + c) + k * C(b + c) + j * C(b) + h;
-    return z;
-}
-
-
-
 int main()
 {
     Arg arg, ans;
     Pos pos;
     PointandPosture arm;
 
-    arg.a = 0.0;//40.0
+    arg.a = -37.0;//40.0
     arg.b = 0.0;
     arg.c = 0.0;
     arg.d = 0.0;//30.0;
@@ -160,14 +120,14 @@ int main()
     printf("arg[a,b,c,d,e,f] = [%.3lf,\t%.3lf,\t%.3lf,\t%.3lf,\t%.3lf,\t%.3lf]\n", arg.a, arg.b, arg.c, arg.d, arg.e, arg.f);
 
     printf("\n\nまず，順運動学で手先位置の計算を行います．\nプログラムの詳細は関数cal_x,cal_y,cal_zを確認してください\n");
-    pos.x = cal_x(arg);
-    pos.y = cal_y(arg);
-    pos.z = cal_z(arg);
+    cal_T_from_arg_mod(arg);
+    pos.x = _px_;
+    pos.y = _py_;
+    pos.z = _pz_;
 
-    printf("純運動学を計算した結果．原点から見た手先位置は次のようになりました．\n");
+    printf("順運動学を計算した結果．原点から見た手先位置は次のようになりました．\n");
     printf("\npos[x,y,z]=[%.3lf,%.3lf,%.3lf]\n\nただし単位はOptiからの長さと合わせるために[m]です\n\n", pos.x, pos.y, pos.z);
 
-    cal_T_from_arg(arg, pos); 
     dumpT();
 
     printf("\n\n続いて逆運動学で各関節の角度の計算を行います．\nプログラムの詳細は関数cal_a～cal_fを確認してください\n");
@@ -178,39 +138,42 @@ int main()
 
     //単位はｍなので上手な変換
 
-    arm.x = pos.x;//* 0.005;// -1.0 * double(data->RigidBodies[i].z - HumanFirstPlace.z) * scale;
-    arm.y = pos.y;// *0.005;//        double(data->RigidBodies[i].y - HumanFirstPlace.y)* scale;
-    arm.z = pos.z;// *0.005;//        double(data->RigidBodies[i].x - HumanFirstPlace.x)* scale;
-    // 
-    // https://qiita.com/drken/items/0639cf34cce14e8d58a5
-    double th = 90;
-    struct Vec { double x; double y; double z; };
-    Vec vec;
-    vec.x = 1.0;
-    vec.y = 1.0;
-    vec.z = 1.0;
-    arm.qx = vec.x * S(deg2rad(th / 2.0));// -1.0 * double(data->RigidBodies[i].qz);
-    arm.qy = vec.y * S(deg2rad(th / 2.0));//       double(data->RigidBodies[i].qy);
-    arm.qz = vec.z * S(deg2rad(th / 2.0));//      double(data->RigidBodies[i].qx);
-    arm.qw = C(deg2rad(th / 2.0));//      double(data->RigidBodies[i].qw);
-    //double norm = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-    double norm = sqrt(arm.qx * arm.qx + arm.qy * arm.qy + arm.qz * arm.qz + arm.qw * arm.qw);
-    if (norm != 0.0) {
-        arm.qx /= norm;
-        arm.qy /= norm;
-        arm.qz /= norm;
-        arm.qw /= norm;
+    //もしクオータニオンから姿勢行列を再計算する場合は以下の行を有効にする
+    if (false) {
+        //======================手先座標系→基準座標系========================
+        arm.x = pos.x;//* 0.005;// -1.0 * double(data->RigidBodies[i].z - HumanFirstPlace.z) * scale;
+        arm.y = pos.y;// *0.005;//        double(data->RigidBodies[i].y - HumanFirstPlace.y)* scale;
+        arm.z = pos.z;// *0.005;//        double(data->RigidBodies[i].x - HumanFirstPlace.x)* scale;
+        // 
+        // https://qiita.com/drken/items/0639cf34cce14e8d58a5
+        double th = 90;
+        struct Vec { double x; double y; double z; };
+        Vec vec;
+        vec.x = 1.0;
+        vec.y = 1.0;
+        vec.z = 1.0;
+        arm.qx = vec.x * S(deg2rad(th / 2.0));// -1.0 * double(data->RigidBodies[i].qz);
+        arm.qy = vec.y * S(deg2rad(th / 2.0));//       double(data->RigidBodies[i].qy);
+        arm.qz = vec.z * S(deg2rad(th / 2.0));//      double(data->RigidBodies[i].qx);
+        arm.qw = C(deg2rad(th / 2.0));//      double(data->RigidBodies[i].qw);
+        double norm = sqrt(arm.qx * arm.qx + arm.qy * arm.qy + arm.qz * arm.qz + arm.qw * arm.qw);
+        if (norm != 0.0) {
+            arm.qx /= norm;
+            arm.qy /= norm;
+            arm.qz /= norm;
+            arm.qw /= norm;
+        }
+        cal_T(arm.x, arm.y, arm.z, arm.qx, arm.qy, arm.qz, arm.qw);
     }
-    //======================手先座標系→基準座標系========================
-    cal_T(arm.x, arm.y, arm.z, arm.qx, arm.qy, arm.qz, arm.qw);
+    
     dumpT();
 
-    double a = cal_a();
-    double b = cal_b(a);
-    double c = cal_c(a);
-    double d = cal_d(a, b, c);
-    double e = cal_e(a, b, c, d);
-    double f = cal_f(a, b, c);
+    ans.a = cal_a();
+    ans.b = cal_b(ans.a);
+    ans.c = cal_c(ans.a);
+    ans.d = cal_d(ans.a, ans.b, ans.c);
+    ans.e = cal_e(ans.a, ans.b, ans.c, ans.d);
+    ans.f = cal_f(ans.a, ans.b, ans.c);
 
 
     printf("逆運動学を計算した結果．関節角度は次のようになりました．\n");

@@ -5,14 +5,8 @@
 
 #include"tel_kin.h"
 
-
-
-
-
-
 //座標変換行列
 double Trans[4][4];
-
 
 double rad2deg(double rad) {
     return rad / PI * 180.0 ;
@@ -35,36 +29,35 @@ void cal_T(double x, double y, double z, double qx, double qy, double qz, double
     //printf("qx=%f\nqy=%f\nqz=%f\nqw=%f\n\n", qx, qy, qz, qw);
     //確認済み↑
 
-    Trans[0][0] = qx * qx - qy * qy - qz * qz + qw * qw;//nx 0
-    Trans[1][0] = 2.0 * qx * qy + 2.0 * qz * qw;//ny 0
-    Trans[2][0] = 2.0 * qx * qz - 2.0 * qy * qw;//nz 1 ?
-    Trans[3][0] = 0.0;//0
+    _nx_ = qx * qx - qy * qy - qz * qz + qw * qw;        // nx 0
+    _ny_ = 2.0 * qx * qy + 2.0 * qz * qw;                // ny 0
+    _nz_ = 2.0 * qx * qz - 2.0 * qy * qw;                // nz 1 
+    Trans[3][0] = 0.0;                                          // 0
 
-    Trans[0][1] = 2.0 * qx * qy - 2.0 * qz * qw;//ox //reference : https://qiita.com/drken/items/0639cf34cce14e8d58a5
-    Trans[1][1] = -qx * qx + qy * qy - qz * qz + qw * qw;//oy?
-    Trans[2][1] = 2.0 * qy * qz + 2.0 * qx * qw;//oz
-    Trans[3][1] = 0.0;//0
+    _ox_ = 2.0 * qx * qy - 2.0 * qz * qw;                // ox //reference : https://qiita.com/drken/items/0639cf34cce14e8d58a5
+    _oy_ = -qx * qx + qy * qy - qz * qz + qw * qw;       // oy 
+    _oz_ = 2.0 * qy * qz + 2.0 * qx * qw;                // oz
+    Trans[3][1] = 0.0;                                          // 0
 
-    Trans[0][2] = 2.0 * qx * qz + 2.0 * qy * qw;//ax
-    Trans[1][2] = 2.0 * qy * qz - 2.0 * qx * qw;//ay?
-    Trans[2][2] = -qx * qx - qy * qy + qz * qz + qw * qw;//az
-    Trans[3][2] = 0.0;//0
+    _ax_ = 2.0 * qx * qz + 2.0 * qy * qw;                // ax
+    _ay_ = 2.0 * qy * qz - 2.0 * qx * qw;                // ay
+    _az_ = -qx * qx - qy * qy + qz * qz + qw * qw;       // az
+    Trans[3][2] = 0.0;                                          // 0
 
-    Trans[0][3] = x;//px
-    Trans[1][3] = y;//py
-    Trans[2][3] = z;//pz
-    Trans[3][3] = 1.0;//1
+    _px_ = x;                                            // px
+    _py_ = y;                                            // py
+    _pz_ = z;                                            // pz
+    Trans[3][3] = 1.0;                                          // 1
 }
-double cal_a() {
-    //double x = (m + n) * Trans[0][0] - Trans[0][3];
-    double x = (m + n) * Trans[0][2] - Trans[0][3];
-    //double y = (m + n) * Trans[1][0] - Trans[1][3];
-    double y = (m + n) * Trans[1][2] - Trans[1][3];
 
+double cal_a() {
+    double x = _px_ -(m + n) * _ax_;
+    double y = _py_ -(m + n) * _ay_;
     double a = rad2deg(atan2(y, x));
+
     if (x == 0 && y == 0)
     {
-        printf("atan2error in a : x and y equal 0\n");
+        printf("atan2error in a : x and y equal to 0\n");
         return a;
     }
     else if (a_min > a || a_max < a)
@@ -72,14 +65,15 @@ double cal_a() {
             printf("atan2error in a : No answer\n");
             return EOF;
     }
-        return a;
+    printf("[a] angle \"a\" found : %3.2f [deg] in y = %3.2f, x = %3.2f\n", a, y, x);
+    return a;
 }
 
 double cal_b(double a)   {
-    //double A = Trans[2][3] - (m + n) * Trans[2][0] - h;
-    double A = Trans[2][3] - (m + n) * Trans[2][2] - h;
-    //double B = Trans[0][3] * C(a) + Trans[1][3] * S(a) - (m + n) * (Trans[0][0] * C(a) + Trans[1][0] * S(a)) - g;
-    double B = Trans[0][3] * C(a) + Trans[1][3] * S(a) - (m + n) * (Trans[0][2] * C(a) + Trans[1][2] * S(a)) - g;
+    //double A = _pz_ - (m + n) * _nz_ - h;
+    double A = _pz_ - (m + n) * _az_ - h;
+    //double B = _px_ * Ca+ _py_ * Sa- (m + n) * (_nx_* Ca+ _ny_ * Sa) - g;
+    double B = _px_ * Ca+ _py_ * Sa- (m + n) * (_ax_ * Ca+ _ay_ * Sa) - g;
     double D = (A * A + B * B + j * j - k * k - l * l) / (2 * j);
     double b1 = rad2deg(2 * atan2(-B + sqrt(abs(B * B + A * A - D * D)), A + D));
     double b2 = rad2deg(2 * atan2(-B - sqrt(abs(B * B + A * A - D * D)), A + D));
@@ -119,10 +113,10 @@ double cal_b(double a)   {
     }
 }
 double cal_c(double a) {
-    //double A = Trans[2][3] - (m + n) * Trans[2][0] - h;
-    double A = Trans[2][3] - (m + n) * Trans[2][2] - h;
-    //double B = Trans[0][3] * C(a) + Trans[1][3] * S(a) - (m + n) * (Trans[0][0] * C(a) + Trans[1][0] * S(a)) - g;
-    double B = Trans[0][3] * C(a) + Trans[1][3] * S(a) - (m + n) * (Trans[0][2] * C(a) + Trans[1][2] * S(a)) - g;
+    //double A = _pz_ - (m + n) * _nz_ - h;
+    double A = _pz_ - (m + n) * _az_ - h;
+    //double B = _px_ * Ca+ _py_ * Sa- (m + n) * (_nx_* Ca+ _ny_ * Sa) - g;
+    double B = _px_ * Ca+ _py_ * Sa- (m + n) * (_ax_ * Ca+ _ay_ * Sa) - g;
     double E = (A * A + B * B - j * j - k * k - l * l) / (2 * j);
     double c1 = rad2deg(2 * atan2(-l + sqrt(abs(l * l + k * k - E * E)), E + k));
     double c2 = rad2deg(2 * atan2(-l - sqrt(abs(l * l + k * k - E * E)), E + k));
@@ -159,10 +153,10 @@ double cal_c(double a) {
     }
 }
 double cal_d(double a, double b, double c) {
-    //double x = -1 * (Trans[0][0] * C(a) + Trans[1][0] * S(a)) * S(b + c) + Trans[3][0] * C(b + c);
-    //double y = Trans[0][0] * S(a) - Trans[1][0] * S(a);
-    double x = -1 * (Trans[0][2] * C(a) + Trans[1][2] * S(a)) * S(b + c) + Trans[2][2] * C(b + c);
-    double y = Trans[0][2] * S(a) - Trans[1][2] * C(a);
+    //double x = -1 * (_nx_* Ca+ _ny_ * Sa) * Sbc + Trans[3][0] * Cbc;
+    //double y = _nx_* Sa- _ny_ * Sa;
+    double x = -1 * (_ax_ * Ca+ _ay_ * Sa) * Sbc + _az_ * Cbc;
+    double y = _ax_ * Sa - _ay_ * Ca;
 
     double d = rad2deg(atan2(y, x));
     if (x == 0 && y == 0)
@@ -177,10 +171,10 @@ double cal_d(double a, double b, double c) {
     return d;
 }
 double cal_e(double a, double b, double c, double d) {
-    //double x = (Trans[0][0] * S(a) + Trans[1][0] * C(a)) * S(d) - ((Trans[0][0] * C(a) + Trans[1][0] * S(a)) * S(b + c) - Trans[3][0] * C(b + c)) * C(d);
-    //double y = (Trans[0][0] * C(a) + Trans[1][0] * S(a)) * C(b + c) + Trans[3][0] * S(b + c);
-    double x = (Trans[0][0] * S(a) - Trans[1][0] * C(a)) * S(d) - ((Trans[0][0] * C(a) + Trans[1][0] * S(a)) * S(b + c) - Trans[2][0] * C(b + c)) * C(d);
-    double y = (Trans[0][0] * C(a) + Trans[1][0] * S(a)) * C(b + c) + Trans[2][0] * S(b + c);
+    //double x = (_nx_* Sa+ _ny_ * Ca) * Sd - ((_nx_* Ca+ _ny_ * Sa) * Sbc - Trans[3][0] * Cbc) * Cd;
+    //double y = (_nx_* Ca+ _ny_ * Sa) * Cbc + Trans[3][0] * Sbc;
+    double x = (_nx_ * Sa - _ny_ * Ca) * Sd - ((_nx_ * Ca+ _ny_ * Sa) * Sbc - _nz_ * Cbc) * Cd;
+    double y = (_nx_* Ca+ _ny_ * Sa) * Cbc + _nz_ * Sbc;
 
     double e = rad2deg(atan2(y, x));
     if (x == 0 && y == 0)
@@ -195,9 +189,9 @@ double cal_e(double a, double b, double c, double d) {
     return e;
 }
 double cal_f(double a, double b, double c) {
-    //double x = (Trans[0][2] * C(a) + Trans[1][2] * S(a)) * C(b + c) + Trans[2][2] * S(b + c);
-    double x = (Trans[0][0] * C(a) + Trans[1][0] * S(a)) * C(b + c) + Trans[2][0] * S(b + c);
-    double y = (Trans[0][1] * C(a) + Trans[1][1] * S(a)) * C(b + c) + Trans[2][1] * S(b + c);
+    //double x = (_ax_ * Ca+ _ay_ * Sa) * Cbc + _az_ * Sbc;
+    double x = (_nx_* Ca+ _ny_ * Sa) * Cbc + _nz_ * Sbc;
+    double y = (_ox_ * Ca+ _oy_ * Sa) * Cbc + _oz_ * Sbc;
     double f = rad2deg(atan2(y, x));
     if (x == 0 && y == 0)
     {
