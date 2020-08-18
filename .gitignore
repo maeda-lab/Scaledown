@@ -11,3 +11,9 @@ IK/Debug/Hirayama.tlog/CL.command.1.tlog
 *.ipdb
 *.iobj
 *.db
+tele_mbed_serial/.vs/tele_mbed_serial/v16/.suo
+*.log
+*.obj
+*.pdb
+*.exe
+*.ilk
