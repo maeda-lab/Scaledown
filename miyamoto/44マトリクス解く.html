@@ -2,7 +2,7 @@
 <html>
 <head><meta charset="utf-8" />
 
-<title>44マトリクス解くマン_hiraver-Copy1</title>
+<title>44マトリクス解く</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -13077,13 +13077,15 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="&#12525;&#12508;&#12483;&#12488;&#12510;&#12491;&#12500;&#12517;&#12524;&#12540;&#12479;&#12398;&#36870;&#36939;&#21205;&#23398;&#12434;4&#215;4&#12510;&#12488;&#12522;&#12463;&#12473;&#12434;&#29992;&#12356;&#12390;&#35299;&#12367;&#65281;&#65281;&#65281;">&#12525;&#12508;&#12483;&#12488;&#12510;&#12491;&#12500;&#12517;&#12524;&#12540;&#12479;&#12398;&#36870;&#36939;&#21205;&#23398;&#12434;4&#215;4&#12510;&#12488;&#12522;&#12463;&#12473;&#12434;&#29992;&#12356;&#12390;&#35299;&#12367;&#65281;&#65281;&#65281;<a class="anchor-link" href="#&#12525;&#12508;&#12483;&#12488;&#12510;&#12491;&#12500;&#12517;&#12524;&#12540;&#12479;&#12398;&#36870;&#36939;&#21205;&#23398;&#12434;4&#215;4&#12510;&#12488;&#12522;&#12463;&#12473;&#12434;&#29992;&#12356;&#12390;&#35299;&#12367;&#65281;&#65281;&#65281;">&#182;</a></h1>
+<h1 id="&#12525;&#12508;&#12483;&#12488;&#12510;&#12491;&#12500;&#12517;&#12524;&#12540;&#12479;&#12398;&#36870;&#36939;&#21205;&#23398;&#12434;4&#215;4&#12510;&#12488;&#12522;&#12463;&#12473;&#12434;&#29992;&#12356;&#12390;&#35299;&#12367;&#65281;&#65281;&#65281;">&#12525;&#12508;&#12483;&#12488;&#12510;&#12491;&#12500;&#12517;&#12524;&#12540;&#12479;&#12398;&#36870;&#36939;&#21205;&#23398;&#12434;4&#215;4&#12510;&#12488;&#12522;&#12463;&#12473;&#12434;&#29992;&#12356;&#12390;&#35299;&#12367;&#65281;&#65281;&#65281;<a class="anchor-link" href="#&#12525;&#12508;&#12483;&#12488;&#12510;&#12491;&#12500;&#12517;&#12524;&#12540;&#12479;&#12398;&#36870;&#36939;&#21205;&#23398;&#12434;4&#215;4&#12510;&#12488;&#12522;&#12463;&#12473;&#12434;&#29992;&#12356;&#12390;&#35299;&#12367;&#65281;&#65281;&#65281;">&#182;</a></h1><p>Created by Hiroki Miyamoto</p>
+<p>Modified by Masahiro Furukawa, Aug 18, 2020</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#参考URL -&gt; https://qiita.com/tibigame/items/61cecf86fc978628bfee</span>
@@ -13114,7 +13116,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#sin.cosの簡易記述用</span>
@@ -13132,7 +13134,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#回転・並進行列</span>
@@ -13232,10 +13234,10 @@ X2軸方向にa3移動、X2軸回りにα3=180度(π)回転、回転後のZ2軸�
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列 A1 の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
 
 <span class="n">A1</span><span class="o">=</span><span class="n">rotz</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">h</span><span class="p">)</span><span class="o">*</span><span class="n">rotx</span><span class="p">(</span><span class="n">Pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A1</span><span class="p">)</span>
@@ -13251,7 +13253,7 @@ X2軸方向にa3移動、X2軸回りにα3=180度(π)回転、回転後のZ2軸�
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[4]:</div>
+    <div class="prompt output_prompt">Out[25]:</div>
 
 
 
@@ -13268,10 +13270,80 @@ $\displaystyle \left[\begin{matrix}\cos{\left(a \right)} & 0 & \sin{\left(a \rig
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列  A1inv</span>
+<span class="n">A1inv</span><span class="o">=</span><span class="n">rotx</span><span class="p">(</span><span class="o">-</span><span class="n">Pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="o">-</span><span class="n">g</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">h</span><span class="p">)</span><span class="o">*</span><span class="n">rotz</span><span class="p">(</span><span class="o">-</span><span class="n">a</span><span class="p">)</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A1inv</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[26]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}\cos{\left(a \right)} & \sin{\left(a \right)} & 0 & - g\\0 & 0 & 1 & - h\\\sin{\left(a \right)} & - \cos{\left(a \right)} & 0 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列をかけると単位行列になることの確認</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">A1inv</span><span class="o">*</span><span class="n">A1</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[27]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}1 & 0 & 0 & 0\\0 & 1 & 0 & 0\\0 & 0 & 1 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列 A2 の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
 
 <span class="n">A2</span><span class="o">=</span><span class="n">rotz</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A2</span><span class="p">)</span>
@@ -13287,7 +13359,7 @@ $\displaystyle \left[\begin{matrix}\cos{\left(a \right)} & 0 & \sin{\left(a \rig
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[5]:</div>
+    <div class="prompt output_prompt">Out[28]:</div>
 
 
 
@@ -13304,10 +13376,80 @@ $\displaystyle \left[\begin{matrix}\cos{\left(b \right)} & - \sin{\left(b \right
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列  A2inv</span>
+<span class="n">A2inv</span><span class="o">=</span><span class="n">trans</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">rotz</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="p">)</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A2inv</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[29]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}\cos{\left(b \right)} & \sin{\left(b \right)} & 0 & 0\\- \sin{\left(b \right)} & \cos{\left(b \right)} & 0 & - j\\0 & 0 & 1 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列をかけると単位行列になることの確認</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">A2inv</span><span class="o">*</span><span class="n">A2</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[30]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}1 & 0 & 0 & 0\\0 & 1 & 0 & 0\\0 & 0 & 1 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列 A3 の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
 
 <span class="n">A3</span><span class="o">=</span><span class="n">rotz</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">roty</span><span class="p">(</span><span class="n">Pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A3</span><span class="p">)</span>
@@ -13323,7 +13465,7 @@ $\displaystyle \left[\begin{matrix}\cos{\left(b \right)} & - \sin{\left(b \right
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[6]:</div>
+    <div class="prompt output_prompt">Out[31]:</div>
 
 
 
@@ -13340,10 +13482,80 @@ $\displaystyle \left[\begin{matrix}0 & - \sin{\left(c \right)} & \cos{\left(c \r
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列  A3inv</span>
+<span class="n">A3inv</span><span class="o">=</span><span class="n">roty</span><span class="p">(</span><span class="o">-</span><span class="n">Pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">k</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">rotz</span><span class="p">(</span><span class="o">-</span><span class="n">c</span><span class="p">)</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A3inv</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[32]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}0 & 0 & -1 & 0\\- \sin{\left(c \right)} & \cos{\left(c \right)} & 0 & - k\\\cos{\left(c \right)} & \sin{\left(c \right)} & 0 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列をかけると単位行列になることの確認</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">A3inv</span><span class="o">*</span><span class="n">A3</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[33]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}1 & 0 & 0 & 0\\0 & 1 & 0 & 0\\0 & 0 & 1 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列 A4 の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
 
 <span class="n">A4</span><span class="o">=</span><span class="n">rotz</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">l</span><span class="p">)</span><span class="o">*</span><span class="n">roty</span><span class="p">(</span><span class="o">-</span><span class="n">Pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A4</span><span class="p">)</span>
@@ -13359,7 +13571,7 @@ $\displaystyle \left[\begin{matrix}0 & - \sin{\left(c \right)} & \cos{\left(c \r
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[8]:</div>
+    <div class="prompt output_prompt">Out[34]:</div>
 
 
 
@@ -13376,10 +13588,80 @@ $\displaystyle \left[\begin{matrix}0 & - \sin{\left(d \right)} & - \cos{\left(d 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列  A4inv</span>
+<span class="n">A4inv</span><span class="o">=</span><span class="n">roty</span><span class="p">(</span><span class="n">Pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">l</span><span class="p">)</span><span class="o">*</span><span class="n">rotz</span><span class="p">(</span><span class="o">-</span><span class="n">d</span><span class="p">)</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A4inv</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[35]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}0 & 0 & 1 & - l\\- \sin{\left(d \right)} & \cos{\left(d \right)} & 0 & 0\\- \cos{\left(d \right)} & - \sin{\left(d \right)} & 0 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列をかけると単位行列になることの確認</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">A4inv</span><span class="o">*</span><span class="n">A4</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[36]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}1 & 0 & 0 & 0\\0 & 1 & 0 & 0\\0 & 0 & 1 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列 A5 の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
 
 <span class="n">A5</span><span class="o">=</span><span class="n">rotz</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">roty</span><span class="p">(</span><span class="n">Pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A5</span><span class="p">)</span>
@@ -13395,7 +13677,7 @@ $\displaystyle \left[\begin{matrix}0 & - \sin{\left(d \right)} & - \cos{\left(d 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[9]:</div>
+    <div class="prompt output_prompt">Out[37]:</div>
 
 
 
@@ -13412,10 +13694,80 @@ $\displaystyle \left[\begin{matrix}0 & - \sin{\left(e \right)} & \cos{\left(e \r
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列  A5inv</span>
+<span class="n">A5inv</span><span class="o">=</span><span class="n">roty</span><span class="p">(</span><span class="o">-</span><span class="n">Pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="o">-</span><span class="n">m</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">rotz</span><span class="p">(</span><span class="o">-</span><span class="n">e</span><span class="p">)</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A5inv</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[38]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}0 & 0 & -1 & 0\\- \sin{\left(e \right)} & \cos{\left(e \right)} & 0 & 0\\\cos{\left(e \right)} & \sin{\left(e \right)} & 0 & - m\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列をかけると単位行列になることの確認</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">A5inv</span><span class="o">*</span><span class="n">A5</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[39]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}1 & 0 & 0 & 0\\0 & 1 & 0 & 0\\0 & 0 & 1 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#変換行列 A6 の指定（1.モーターによる回転成分 -&gt; 2.機構に基づく並進成分 -&gt; 3.機構に基づく座標系の回転）</span>
 
 <span class="n">A6</span><span class="o">=</span><span class="n">rotz</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">*</span><span class="n">trans</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
 <span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A6</span><span class="p">)</span>
@@ -13431,7 +13783,7 @@ $\displaystyle \left[\begin{matrix}0 & - \sin{\left(e \right)} & \cos{\left(e \r
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[10]:</div>
+    <div class="prompt output_prompt">Out[40]:</div>
 
 
 
@@ -13448,7 +13800,77 @@ $\displaystyle \left[\begin{matrix}\cos{\left(f \right)} & - \sin{\left(f \right
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列  A6inv</span>
+<span class="n">A6inv</span><span class="o">=</span><span class="n">trans</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="n">rotz</span><span class="p">(</span><span class="o">-</span><span class="n">f</span><span class="p">)</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A6inv</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[41]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}\cos{\left(f \right)} & \sin{\left(f \right)} & 0 & 0\\- \sin{\left(f \right)} & \cos{\left(f \right)} & 0 & 0\\0 & 0 & 1 & - n\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 逆行列をかけると単位行列になることの確認</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="n">A6inv</span><span class="o">*</span><span class="n">A6</span>
+<span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[42]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}1 & 0 & 0 & 0\\0 & 1 & 0 & 0\\0 & 0 & 1 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A1</span><span class="o">*</span><span class="n">A2</span><span class="o">*</span><span class="n">A3</span><span class="o">*</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span><span class="p">)</span>
@@ -13464,7 +13886,7 @@ $\displaystyle \left[\begin{matrix}\cos{\left(f \right)} & - \sin{\left(f \right
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[11]:</div>
+    <div class="prompt output_prompt">Out[43]:</div>
 
 
 
@@ -13481,15 +13903,15 @@ $\displaystyle \left[\begin{matrix}\left(\left(\sin{\left(a \right)} \sin{\left(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">T5</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A6</span><span class="p">)</span>
-<span class="n">T4</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span><span class="p">)</span>
-<span class="n">T3</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span><span class="p">)</span>
-<span class="n">T2</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A3</span><span class="o">*</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span><span class="p">)</span>
-<span class="n">T1</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A2</span><span class="o">*</span><span class="n">A3</span><span class="o">*</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span><span class="p">)</span>
-<span class="n">T</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">A1</span><span class="o">*</span><span class="n">A2</span><span class="o">*</span><span class="n">A3</span><span class="o">*</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">T5</span><span class="o">=</span><span class="n">A6</span>
+<span class="n">T4</span><span class="o">=</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span>
+<span class="n">T3</span><span class="o">=</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span>
+<span class="n">T2</span><span class="o">=</span><span class="n">A3</span><span class="o">*</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span>
+<span class="n">T1</span><span class="o">=</span><span class="n">A2</span><span class="o">*</span><span class="n">A3</span><span class="o">*</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span>
+<span class="n">T</span><span class="o">=</span><span class="n">A1</span><span class="o">*</span><span class="n">A2</span><span class="o">*</span><span class="n">A3</span><span class="o">*</span><span class="n">A4</span><span class="o">*</span><span class="n">A5</span><span class="o">*</span><span class="n">A6</span>
 
 <span class="c1">#x,y,zの順運動学が確認したければここを表示して，Tの４列目を確認</span>
 <span class="c1">#sym.trigsimp(T*trans(n,0,0))</span>
@@ -13502,15 +13924,108 @@ $\displaystyle \left[\begin{matrix}\left(\left(\sin{\left(a \right)} \sin{\left(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">B1</span><span class="o">=</span><span class="n">A1</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
-<span class="n">B2</span><span class="o">=</span><span class="n">A2</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
-<span class="n">B3</span><span class="o">=</span><span class="n">A3</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
-<span class="n">B4</span><span class="o">=</span><span class="n">A4</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
-<span class="n">B5</span><span class="o">=</span><span class="n">A5</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
-<span class="n">B6</span><span class="o">=</span><span class="n">A6</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[45]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}\left(\left(\sin{\left(a \right)} \sin{\left(d \right)} - \sin{\left(b + c \right)} \cos{\left(a \right)} \cos{\left(d \right)}\right) \cos{\left(e \right)} - \sin{\left(e \right)} \cos{\left(a \right)} \cos{\left(b + c \right)}\right) \sin{\left(f \right)} - \left(\sin{\left(a \right)} \cos{\left(d \right)} + \sin{\left(d \right)} \sin{\left(b + c \right)} \cos{\left(a \right)}\right) \cos{\left(f \right)} & \left(\left(\sin{\left(a \right)} \sin{\left(d \right)} - \sin{\left(b + c \right)} \cos{\left(a \right)} \cos{\left(d \right)}\right) \cos{\left(e \right)} - \sin{\left(e \right)} \cos{\left(a \right)} \cos{\left(b + c \right)}\right) \cos{\left(f \right)} + \left(\sin{\left(a \right)} \cos{\left(d \right)} + \sin{\left(d \right)} \sin{\left(b + c \right)} \cos{\left(a \right)}\right) \sin{\left(f \right)} & \left(\sin{\left(a \right)} \sin{\left(d \right)} - \sin{\left(b + c \right)} \cos{\left(a \right)} \cos{\left(d \right)}\right) \sin{\left(e \right)} + \cos{\left(a \right)} \cos{\left(e \right)} \cos{\left(b + c \right)} & g \cos{\left(a \right)} - j \sin{\left(b \right)} \cos{\left(a \right)} - k \sin{\left(b + c \right)} \cos{\left(a \right)} + l \cos{\left(a \right)} \cos{\left(b + c \right)} + m \sin{\left(a \right)} \sin{\left(d \right)} \sin{\left(e \right)} - m \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(a \right)} \cos{\left(d \right)} + m \cos{\left(a \right)} \cos{\left(e \right)} \cos{\left(b + c \right)} + n \sin{\left(a \right)} \sin{\left(d \right)} \sin{\left(e \right)} - n \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(a \right)} \cos{\left(d \right)} + n \cos{\left(a \right)} \cos{\left(e \right)} \cos{\left(b + c \right)}\\\left(- \left(\sin{\left(a \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + \sin{\left(d \right)} \cos{\left(a \right)}\right) \cos{\left(e \right)} - \sin{\left(a \right)} \sin{\left(e \right)} \cos{\left(b + c \right)}\right) \sin{\left(f \right)} + \left(- \sin{\left(a \right)} \sin{\left(d \right)} \sin{\left(b + c \right)} + \cos{\left(a \right)} \cos{\left(d \right)}\right) \cos{\left(f \right)} & \left(- \left(\sin{\left(a \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + \sin{\left(d \right)} \cos{\left(a \right)}\right) \cos{\left(e \right)} - \sin{\left(a \right)} \sin{\left(e \right)} \cos{\left(b + c \right)}\right) \cos{\left(f \right)} - \left(- \sin{\left(a \right)} \sin{\left(d \right)} \sin{\left(b + c \right)} + \cos{\left(a \right)} \cos{\left(d \right)}\right) \sin{\left(f \right)} & - \left(\sin{\left(a \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + \sin{\left(d \right)} \cos{\left(a \right)}\right) \sin{\left(e \right)} + \sin{\left(a \right)} \cos{\left(e \right)} \cos{\left(b + c \right)} & g \sin{\left(a \right)} - j \sin{\left(a \right)} \sin{\left(b \right)} - k \sin{\left(a \right)} \sin{\left(b + c \right)} + l \sin{\left(a \right)} \cos{\left(b + c \right)} - m \sin{\left(a \right)} \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + m \sin{\left(a \right)} \cos{\left(e \right)} \cos{\left(b + c \right)} - m \sin{\left(d \right)} \sin{\left(e \right)} \cos{\left(a \right)} - n \sin{\left(a \right)} \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + n \sin{\left(a \right)} \cos{\left(e \right)} \cos{\left(b + c \right)} - n \sin{\left(d \right)} \sin{\left(e \right)} \cos{\left(a \right)}\\\left(- \sin{\left(e \right)} \sin{\left(b + c \right)} + \cos{\left(d \right)} \cos{\left(e \right)} \cos{\left(b + c \right)}\right) \sin{\left(f \right)} + \sin{\left(d \right)} \cos{\left(f \right)} \cos{\left(b + c \right)} & \left(- \sin{\left(e \right)} \sin{\left(b + c \right)} + \cos{\left(d \right)} \cos{\left(e \right)} \cos{\left(b + c \right)}\right) \cos{\left(f \right)} - \sin{\left(d \right)} \sin{\left(f \right)} \cos{\left(b + c \right)} & \sin{\left(e \right)} \cos{\left(d \right)} \cos{\left(b + c \right)} + \sin{\left(b + c \right)} \cos{\left(e \right)} & h + j \cos{\left(b \right)} + k \cos{\left(b + c \right)} + l \sin{\left(b + c \right)} + m \sin{\left(e \right)} \cos{\left(d \right)} \cos{\left(b + c \right)} + m \sin{\left(b + c \right)} \cos{\left(e \right)} + n \sin{\left(e \right)} \cos{\left(d \right)} \cos{\left(b + c \right)} + n \sin{\left(b + c \right)} \cos{\left(e \right)}\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Masahiro Furukawa</span>
+<span class="c1"># Aug, 17, 2020</span>
+<span class="c1">#</span>
+<span class="c1"># refernce : https://qiita.com/JmpM/items/4bea4997aaf406cca3b4</span>
+<span class="n">T</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">jj</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="n">ii</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">sym</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="n">assign_to</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Trans[&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">jj</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;][&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;]&#39;</span><span class="p">),</span> <span class="n">standard</span><span class="o">=</span><span class="s1">&#39;C89&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Trans[0][0] = ((sin(a)*sin(d) - sin(b + c)*cos(a)*cos(d))*cos(e) - sin(e)*cos(a)*cos(b + c))*sin(f) - (sin(a)*cos(d) + sin(d)*sin(b + c)*cos(a))*cos(f);
+Trans[1][0] = (-(sin(a)*sin(b + c)*cos(d) + sin(d)*cos(a))*cos(e) - sin(a)*sin(e)*cos(b + c))*sin(f) + (-sin(a)*sin(d)*sin(b + c) + cos(a)*cos(d))*cos(f);
+Trans[2][0] = (-sin(e)*sin(b + c) + cos(d)*cos(e)*cos(b + c))*sin(f) + sin(d)*cos(f)*cos(b + c);
+Trans[3][0] = 0;
+
+Trans[0][1] = ((sin(a)*sin(d) - sin(b + c)*cos(a)*cos(d))*cos(e) - sin(e)*cos(a)*cos(b + c))*cos(f) + (sin(a)*cos(d) + sin(d)*sin(b + c)*cos(a))*sin(f);
+Trans[1][1] = (-(sin(a)*sin(b + c)*cos(d) + sin(d)*cos(a))*cos(e) - sin(a)*sin(e)*cos(b + c))*cos(f) - (-sin(a)*sin(d)*sin(b + c) + cos(a)*cos(d))*sin(f);
+Trans[2][1] = (-sin(e)*sin(b + c) + cos(d)*cos(e)*cos(b + c))*cos(f) - sin(d)*sin(f)*cos(b + c);
+Trans[3][1] = 0;
+
+Trans[0][2] = (sin(a)*sin(d) - sin(b + c)*cos(a)*cos(d))*sin(e) + cos(a)*cos(e)*cos(b + c);
+Trans[1][2] = -(sin(a)*sin(b + c)*cos(d) + sin(d)*cos(a))*sin(e) + sin(a)*cos(e)*cos(b + c);
+Trans[2][2] = sin(e)*cos(d)*cos(b + c) + sin(b + c)*cos(e);
+Trans[3][2] = 0;
+
+Trans[0][3] = g*cos(a) - j*sin(b)*cos(a) - k*sin(b + c)*cos(a) + l*cos(a)*cos(b + c) + m*sin(a)*sin(d)*sin(e) - m*sin(e)*sin(b + c)*cos(a)*cos(d) + m*cos(a)*cos(e)*cos(b + c) + n*sin(a)*sin(d)*sin(e) - n*sin(e)*sin(b + c)*cos(a)*cos(d) + n*cos(a)*cos(e)*cos(b + c);
+Trans[1][3] = g*sin(a) - j*sin(a)*sin(b) - k*sin(a)*sin(b + c) + l*sin(a)*cos(b + c) - m*sin(a)*sin(e)*sin(b + c)*cos(d) + m*sin(a)*cos(e)*cos(b + c) - m*sin(d)*sin(e)*cos(a) - n*sin(a)*sin(e)*sin(b + c)*cos(d) + n*sin(a)*cos(e)*cos(b + c) - n*sin(d)*sin(e)*cos(a);
+Trans[2][3] = h + j*cos(b) + k*cos(b + c) + l*sin(b + c) + m*sin(e)*cos(d)*cos(b + c) + m*sin(b + c)*cos(e) + n*sin(e)*cos(d)*cos(b + c) + n*sin(b + c)*cos(e);
+Trans[3][3] = 1;
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">A1inv</span><span class="o">=</span><span class="n">A1</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
+<span class="n">A2inv</span><span class="o">=</span><span class="n">A2</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
+<span class="n">A3inv</span><span class="o">=</span><span class="n">A3</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
+<span class="n">A4inv</span><span class="o">=</span><span class="n">A4</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
+<span class="n">A5inv</span><span class="o">=</span><span class="n">A5</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
+<span class="n">A6inv</span><span class="o">=</span><span class="n">A6</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -13520,7 +14035,237 @@ $\displaystyle \left[\begin{matrix}\left(\left(\sin{\left(a \right)} \sin{\left(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">A1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[48]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}\cos{\left(a \right)} & 0 & \sin{\left(a \right)} & g \cos{\left(a \right)}\\\sin{\left(a \right)} & 0 & - \cos{\left(a \right)} & g \sin{\left(a \right)}\\0 & 1 & 0 & h\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">A1inv</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[49]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}- \frac{\sin^{2}{\left(a \right)}}{\cos{\left(a \right)}} + \frac{1}{\cos{\left(a \right)}} & \sin{\left(a \right)} & 0 & - g\\0 & 0 & 1 & - h\\\sin{\left(a \right)} & - \cos{\left(a \right)} & 0 & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">A1inv</span><span class="o">*</span><span class="n">A1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[50]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}\left(- \frac{\sin^{2}{\left(a \right)}}{\cos{\left(a \right)}} + \frac{1}{\cos{\left(a \right)}}\right) \cos{\left(a \right)} + \sin^{2}{\left(a \right)} & 0 & \left(- \frac{\sin^{2}{\left(a \right)}}{\cos{\left(a \right)}} + \frac{1}{\cos{\left(a \right)}}\right) \sin{\left(a \right)} - \sin{\left(a \right)} \cos{\left(a \right)} & g \left(- \frac{\sin^{2}{\left(a \right)}}{\cos{\left(a \right)}} + \frac{1}{\cos{\left(a \right)}}\right) \cos{\left(a \right)} + g \sin^{2}{\left(a \right)} - g\\0 & 1 & 0 & 0\\0 & 0 & \sin^{2}{\left(a \right)} + \cos^{2}{\left(a \right)} & 0\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">T</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span><span class="n">n_x</span><span class="p">,</span> <span class="n">o_x</span><span class="p">,</span> <span class="n">a_x</span><span class="p">,</span> <span class="n">p_x</span><span class="p">],</span> <span class="p">[</span><span class="n">n_y</span><span class="p">,</span> <span class="n">o_y</span><span class="p">,</span> <span class="n">a_y</span><span class="p">,</span> <span class="n">p_y</span><span class="p">],</span> <span class="p">[</span><span class="n">n_z</span><span class="p">,</span> <span class="n">o_z</span><span class="p">,</span> <span class="n">a_z</span><span class="p">,</span> <span class="n">p_z</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<span class="n">T</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[51]:</div>
+
+
+
+
+<div class="output_latex output_subarea output_execute_result">
+$\displaystyle \left[\begin{matrix}n_{x} & o_{x} & a_{x} & p_{x}\\n_{y} & o_{y} & a_{y} & p_{y}\\n_{z} & o_{z} & a_{z} & p_{z}\\0 & 0 & 0 & 1\end{matrix}\right]$
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">B1T</span> <span class="o">=</span> <span class="n">B1</span><span class="o">*</span><span class="n">T</span>
+<span class="n">B1T</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-52-85e6794630e6&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>B1T <span class="ansi-yellow-intense-fg ansi-bold">=</span> B1<span class="ansi-yellow-intense-fg ansi-bold">*</span>T
+<span class="ansi-green-fg">      2</span> B1T
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;B1&#39; is not defined</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="inverse-kinematics">inverse kinematics<a class="anchor-link" href="#inverse-kinematics">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">T1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">B1T</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">T1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">B1T</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#逆行列確認</span>
@@ -13534,7 +14279,7 @@ $\displaystyle \left[\begin{matrix}\left(\left(\sin{\left(a \right)} \sin{\left(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">U1</span><span class="o">=</span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">(</span><span class="n">B1</span><span class="p">)</span>
@@ -13551,7 +14296,7 @@ $\displaystyle \left[\begin{matrix}\left(\left(\sin{\left(a \right)} \sin{\left(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#T.subs([(a,0),(b,0),(c,0),(d,0),(e,0),(f,0)])</span>
@@ -13564,20 +14309,7 @@ $\displaystyle \left[\begin{matrix}\left(\left(\sin{\left(a \right)} \sin{\left(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#T=sym.Matrix([[n_x, o_x, a_x, p_x], [n_y, o_y, a_y, p_y], [n_z, o_z, a_z, p_z], [0, 0, 0, 1]])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">([</span><span class="n">U1</span><span class="p">,</span><span class="n">T1</span><span class="p">])</span>
@@ -13587,30 +14319,10 @@ $\displaystyle \left[\begin{matrix}\left(\left(\sin{\left(a \right)} \sin{\left(
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[18]:</div>
-
-
-
-
-<div class="output_latex output_subarea output_execute_result">
-$\displaystyle \left[ \left[\begin{matrix}\cos{\left(a \right)} & \sin{\left(a \right)} & 0 & - g\\0 & 0 & 1 & - h\\\sin{\left(a \right)} & - \cos{\left(a \right)} & 0 & 0\\0 & 0 & 0 & 1\end{matrix}\right], \  \left[\begin{matrix}- \left(\sin{\left(e \right)} \cos{\left(b + c \right)} + \sin{\left(b + c \right)} \cos{\left(d \right)} \cos{\left(e \right)}\right) \sin{\left(f \right)} - \sin{\left(d \right)} \sin{\left(b + c \right)} \cos{\left(f \right)} & - \left(\sin{\left(e \right)} \cos{\left(b + c \right)} + \sin{\left(b + c \right)} \cos{\left(d \right)} \cos{\left(e \right)}\right) \cos{\left(f \right)} + \sin{\left(d \right)} \sin{\left(f \right)} \sin{\left(b + c \right)} & - \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + \cos{\left(e \right)} \cos{\left(b + c \right)} & - j \sin{\left(b \right)} - k \sin{\left(b + c \right)} + l \cos{\left(b + c \right)} - m \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + m \cos{\left(e \right)} \cos{\left(b + c \right)} - n \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + n \cos{\left(e \right)} \cos{\left(b + c \right)}\\\left(- \sin{\left(e \right)} \sin{\left(b + c \right)} + \cos{\left(d \right)} \cos{\left(e \right)} \cos{\left(b + c \right)}\right) \sin{\left(f \right)} + \sin{\left(d \right)} \cos{\left(f \right)} \cos{\left(b + c \right)} & \left(- \sin{\left(e \right)} \sin{\left(b + c \right)} + \cos{\left(d \right)} \cos{\left(e \right)} \cos{\left(b + c \right)}\right) \cos{\left(f \right)} - \sin{\left(d \right)} \sin{\left(f \right)} \cos{\left(b + c \right)} & \sin{\left(e \right)} \cos{\left(d \right)} \cos{\left(b + c \right)} + \sin{\left(b + c \right)} \cos{\left(e \right)} & j \cos{\left(b \right)} + k \cos{\left(b + c \right)} + l \sin{\left(b + c \right)} + m \sin{\left(e \right)} \cos{\left(d \right)} \cos{\left(b + c \right)} + m \sin{\left(b + c \right)} \cos{\left(e \right)} + n \sin{\left(e \right)} \cos{\left(d \right)} \cos{\left(b + c \right)} + n \sin{\left(b + c \right)} \cos{\left(e \right)}\\\sin{\left(d \right)} \sin{\left(f \right)} \cos{\left(e \right)} - \cos{\left(d \right)} \cos{\left(f \right)} & \sin{\left(d \right)} \cos{\left(e \right)} \cos{\left(f \right)} + \sin{\left(f \right)} \cos{\left(d \right)} & \sin{\left(d \right)} \sin{\left(e \right)} & \left(m + n\right) \sin{\left(d \right)} \sin{\left(e \right)}\\0 & 0 & 0 & 1\end{matrix}\right]\right]$
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">([</span><span class="n">U2</span><span class="p">,</span><span class="n">T2</span><span class="p">])</span>
@@ -13620,30 +14332,10 @@ $\displaystyle \left[ \left[\begin{matrix}\cos{\left(a \right)} & \sin{\left(a \
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[19]:</div>
-
-
-
-
-<div class="output_latex output_subarea output_execute_result">
-$\displaystyle \left[ \left[\begin{matrix}\cos{\left(a \right)} \cos{\left(b \right)} & \sin{\left(a \right)} \cos{\left(b \right)} & \sin{\left(b \right)} & - g \cos{\left(b \right)} - h \sin{\left(b \right)}\\- \sin{\left(b \right)} \cos{\left(a \right)} & - \sin{\left(a \right)} \sin{\left(b \right)} & \cos{\left(b \right)} & g \sin{\left(b \right)} - h \cos{\left(b \right)} - j\\\sin{\left(a \right)} & - \cos{\left(a \right)} & 0 & 0\\0 & 0 & 0 & 1\end{matrix}\right], \  \left[\begin{matrix}- \left(\sin{\left(c \right)} \cos{\left(d \right)} \cos{\left(e \right)} + \sin{\left(e \right)} \cos{\left(c \right)}\right) \sin{\left(f \right)} - \sin{\left(c \right)} \sin{\left(d \right)} \cos{\left(f \right)} & - \left(\sin{\left(c \right)} \cos{\left(d \right)} \cos{\left(e \right)} + \sin{\left(e \right)} \cos{\left(c \right)}\right) \cos{\left(f \right)} + \sin{\left(c \right)} \sin{\left(d \right)} \sin{\left(f \right)} & - \sin{\left(c \right)} \sin{\left(e \right)} \cos{\left(d \right)} + \cos{\left(c \right)} \cos{\left(e \right)} & - k \sin{\left(c \right)} + l \cos{\left(c \right)} - m \sin{\left(c \right)} \sin{\left(e \right)} \cos{\left(d \right)} + m \cos{\left(c \right)} \cos{\left(e \right)} + n \left(- \sin{\left(c \right)} \sin{\left(e \right)} \cos{\left(d \right)} + \cos{\left(c \right)} \cos{\left(e \right)}\right)\\\left(- \sin{\left(c \right)} \sin{\left(e \right)} + \cos{\left(c \right)} \cos{\left(d \right)} \cos{\left(e \right)}\right) \sin{\left(f \right)} + \sin{\left(d \right)} \cos{\left(c \right)} \cos{\left(f \right)} & \left(- \sin{\left(c \right)} \sin{\left(e \right)} + \cos{\left(c \right)} \cos{\left(d \right)} \cos{\left(e \right)}\right) \cos{\left(f \right)} - \sin{\left(d \right)} \sin{\left(f \right)} \cos{\left(c \right)} & \sin{\left(c \right)} \cos{\left(e \right)} + \sin{\left(e \right)} \cos{\left(c \right)} \cos{\left(d \right)} & k \cos{\left(c \right)} + l \sin{\left(c \right)} + m \sin{\left(c \right)} \cos{\left(e \right)} + m \sin{\left(e \right)} \cos{\left(c \right)} \cos{\left(d \right)} + n \left(\sin{\left(c \right)} \cos{\left(e \right)} + \sin{\left(e \right)} \cos{\left(c \right)} \cos{\left(d \right)}\right)\\\sin{\left(d \right)} \sin{\left(f \right)} \cos{\left(e \right)} - \cos{\left(d \right)} \cos{\left(f \right)} & \sin{\left(d \right)} \cos{\left(e \right)} \cos{\left(f \right)} + \sin{\left(f \right)} \cos{\left(d \right)} & \sin{\left(d \right)} \sin{\left(e \right)} & \left(m + n\right) \sin{\left(d \right)} \sin{\left(e \right)}\\0 & 0 & 0 & 1\end{matrix}\right]\right]$
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">([</span><span class="n">U3</span><span class="p">,</span><span class="n">T3</span><span class="p">])</span>
@@ -13653,30 +14345,10 @@ $\displaystyle \left[ \left[\begin{matrix}\cos{\left(a \right)} \cos{\left(b \ri
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[20]:</div>
-
-
-
-
-<div class="output_latex output_subarea output_execute_result">
-$\displaystyle \left[ \left[\begin{matrix}- \sin{\left(a \right)} & \cos{\left(a \right)} & 0 & 0\\- \sin{\left(b + c \right)} \cos{\left(a \right)} & - \sin{\left(a \right)} \sin{\left(b + c \right)} & \cos{\left(b + c \right)} & g \sin{\left(b + c \right)} - h \cos{\left(b + c \right)} - j \cos{\left(c \right)} - k\\\cos{\left(a \right)} \cos{\left(b + c \right)} & \sin{\left(a \right)} \cos{\left(b + c \right)} & \sin{\left(b + c \right)} & - g \cos{\left(b + c \right)} - h \sin{\left(b + c \right)} - j \sin{\left(c \right)}\\0 & 0 & 0 & 1\end{matrix}\right], \  \left[\begin{matrix}- \sin{\left(d \right)} \sin{\left(f \right)} \cos{\left(e \right)} + \cos{\left(d \right)} \cos{\left(f \right)} & - \sin{\left(d \right)} \cos{\left(e \right)} \cos{\left(f \right)} - \sin{\left(f \right)} \cos{\left(d \right)} & - \sin{\left(d \right)} \sin{\left(e \right)} & - \left(m + n\right) \sin{\left(d \right)} \sin{\left(e \right)}\\\sin{\left(d \right)} \cos{\left(f \right)} + \sin{\left(f \right)} \cos{\left(d \right)} \cos{\left(e \right)} & - \sin{\left(d \right)} \sin{\left(f \right)} + \cos{\left(d \right)} \cos{\left(e \right)} \cos{\left(f \right)} & \sin{\left(e \right)} \cos{\left(d \right)} & \left(m + n\right) \sin{\left(e \right)} \cos{\left(d \right)}\\- \sin{\left(e \right)} \sin{\left(f \right)} & - \sin{\left(e \right)} \cos{\left(f \right)} & \cos{\left(e \right)} & l + m \cos{\left(e \right)} + n \cos{\left(e \right)}\\0 & 0 & 0 & 1\end{matrix}\right]\right]$
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">([</span><span class="n">U4</span><span class="p">,</span><span class="n">T4</span><span class="p">])</span>
@@ -13686,30 +14358,10 @@ $\displaystyle \left[ \left[\begin{matrix}- \sin{\left(a \right)} & \cos{\left(a
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[21]:</div>
-
-
-
-
-<div class="output_latex output_subarea output_execute_result">
-$\displaystyle \left[ \left[\begin{matrix}\cos{\left(a \right)} \cos{\left(b + c \right)} & \sin{\left(a \right)} \cos{\left(b + c \right)} & \sin{\left(b + c \right)} & - g \cos{\left(b + c \right)} - h \sin{\left(b + c \right)} - j \sin{\left(c \right)} - l\\\sin{\left(a \right)} \sin{\left(d \right)} - \sin{\left(b + c \right)} \cos{\left(a \right)} \cos{\left(d \right)} & - \sin{\left(a \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} - \sin{\left(d \right)} \cos{\left(a \right)} & \cos{\left(d \right)} \cos{\left(b + c \right)} & \left(g \sin{\left(b + c \right)} - h \cos{\left(b + c \right)} - j \cos{\left(c \right)} - k\right) \cos{\left(d \right)}\\\sin{\left(a \right)} \cos{\left(d \right)} + \sin{\left(d \right)} \sin{\left(b + c \right)} \cos{\left(a \right)} & \sin{\left(a \right)} \sin{\left(d \right)} \sin{\left(b + c \right)} - \cos{\left(a \right)} \cos{\left(d \right)} & - \sin{\left(d \right)} \cos{\left(b + c \right)} & \left(- g \sin{\left(b + c \right)} + h \cos{\left(b + c \right)} + j \cos{\left(c \right)} + k\right) \sin{\left(d \right)}\\0 & 0 & 0 & 1\end{matrix}\right], \  \left[\begin{matrix}- \sin{\left(e \right)} \sin{\left(f \right)} & - \sin{\left(e \right)} \cos{\left(f \right)} & \cos{\left(e \right)} & \left(m + n\right) \cos{\left(e \right)}\\\sin{\left(f \right)} \cos{\left(e \right)} & \cos{\left(e \right)} \cos{\left(f \right)} & \sin{\left(e \right)} & \left(m + n\right) \sin{\left(e \right)}\\- \cos{\left(f \right)} & \sin{\left(f \right)} & 0 & 0\\0 & 0 & 0 & 1\end{matrix}\right]\right]$
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sym</span><span class="o">.</span><span class="n">trigsimp</span><span class="p">([</span><span class="n">U5</span><span class="p">,</span><span class="n">T5</span><span class="p">])</span>
@@ -13719,30 +14371,10 @@ $\displaystyle \left[ \left[\begin{matrix}\cos{\left(a \right)} \cos{\left(b + c
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[22]:</div>
-
-
-
-
-<div class="output_latex output_subarea output_execute_result">
-$\displaystyle \left[ \left[\begin{matrix}- \sin{\left(a \right)} \cos{\left(d \right)} - \sin{\left(d \right)} \sin{\left(b + c \right)} \cos{\left(a \right)} & - \sin{\left(a \right)} \sin{\left(d \right)} \sin{\left(b + c \right)} + \cos{\left(a \right)} \cos{\left(d \right)} & \sin{\left(d \right)} \cos{\left(b + c \right)} & \left(g \sin{\left(b + c \right)} - h \cos{\left(b + c \right)} - j \cos{\left(c \right)} - k\right) \sin{\left(d \right)}\\- \left(\sin{\left(e \right)} \cos{\left(b + c \right)} + \sin{\left(b + c \right)} \cos{\left(d \right)} \cos{\left(e \right)}\right) \cos{\left(a \right)} + \sin{\left(a \right)} \sin{\left(d \right)} \cos{\left(e \right)} & - \left(\sin{\left(e \right)} \cos{\left(b + c \right)} + \sin{\left(b + c \right)} \cos{\left(d \right)} \cos{\left(e \right)}\right) \sin{\left(a \right)} - \sin{\left(d \right)} \cos{\left(a \right)} \cos{\left(e \right)} & - \sin{\left(e \right)} \sin{\left(b + c \right)} + \cos{\left(d \right)} \cos{\left(e \right)} \cos{\left(b + c \right)} & g \left(\sin{\left(e \right)} \cos{\left(b + c \right)} + \sin{\left(b + c \right)} \cos{\left(d \right)} \cos{\left(e \right)}\right) - h \left(- \sin{\left(e \right)} \sin{\left(b + c \right)} + \cos{\left(d \right)} \cos{\left(e \right)} \cos{\left(b + c \right)}\right) - j \left(- \sin{\left(c \right)} \sin{\left(e \right)} + \cos{\left(c \right)} \cos{\left(d \right)} \cos{\left(e \right)}\right) - k \cos{\left(d \right)} \cos{\left(e \right)} + l \sin{\left(e \right)}\\\left(- \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + \cos{\left(e \right)} \cos{\left(b + c \right)}\right) \cos{\left(a \right)} + \sin{\left(a \right)} \sin{\left(d \right)} \sin{\left(e \right)} & \left(- \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} + \cos{\left(e \right)} \cos{\left(b + c \right)}\right) \sin{\left(a \right)} - \sin{\left(d \right)} \sin{\left(e \right)} \cos{\left(a \right)} & \sin{\left(e \right)} \cos{\left(d \right)} \cos{\left(b + c \right)} + \sin{\left(b + c \right)} \cos{\left(e \right)} & g \sin{\left(e \right)} \sin{\left(b + c \right)} \cos{\left(d \right)} - g \cos{\left(e \right)} \cos{\left(b + c \right)} - h \sin{\left(e \right)} \cos{\left(d \right)} \cos{\left(b + c \right)} - h \sin{\left(b + c \right)} \cos{\left(e \right)} - j \sin{\left(c \right)} \cos{\left(e \right)} - j \sin{\left(e \right)} \cos{\left(c \right)} \cos{\left(d \right)} - k \sin{\left(e \right)} \cos{\left(d \right)} - l \cos{\left(e \right)} - m\\0 & 0 & 0 & 1\end{matrix}\right], \  \left[\begin{matrix}\cos{\left(f \right)} & - \sin{\left(f \right)} & 0 & 0\\\sin{\left(f \right)} & \cos{\left(f \right)} & 0 & 0\\0 & 0 & 1 & n\\0 & 0 & 0 & 1\end{matrix}\right]\right]$
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#x=T[0,3]</span>
