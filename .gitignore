@@ -17,3 +17,4 @@ tele_mbed_serial/.vs/tele_mbed_serial/v16/.suo
 *.pdb
 *.exe
 *.ilk
+*-checkpoint.ipynb
