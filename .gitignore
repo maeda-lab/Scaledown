@@ -1,6 +1,5 @@
-
-IK/.vs/Hirayama/v16/Browse.VC.db
-IK/Debug/Hirayama.tlog/CL.command.1.tlog
+*VC.db
+*.tlog
 *.tlog
 *.opendb
 *.idb
@@ -11,10 +10,10 @@ IK/Debug/Hirayama.tlog/CL.command.1.tlog
 *.ipdb
 *.iobj
 *.db
-tele_mbed_serial/.vs/tele_mbed_serial/v16/.suo
+*.suo
 *.log
 *.obj
 *.pdb
 *.exe
 *.ilk
-*-checkpoint.ipynb
+*checkpoint.ipynb
