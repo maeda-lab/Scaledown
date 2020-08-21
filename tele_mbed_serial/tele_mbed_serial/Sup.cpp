@@ -1,3 +1,5 @@
+//角度を指定するとそこにアームを動かすプログラム
+
 #include <math.h>
 #include <string>
 #include <inttypes.h>
@@ -47,7 +49,7 @@ int main()
     mbed = serial_open();
     mbed = serial_initialaize(mbed);
     mbed = serial_Config(mbed);
-    buffer[0] = 's';//start�R�}���h�𑗂�
+    buffer[0] = 's';//startコマンドを送る
     error = WriteFile(mbed, buffer, 1, &maindwSendSize, NULL);
     if (!error)
     {
@@ -73,12 +75,12 @@ int main()
         c = j3 - j2-101.884072;
         printf("a,b,c=[%lf,%lf,%lf]\n", a, b, c);
 
-        //�o�b�t�@�[���܂�
+        //バッファーかます
         a = a / 1.0;
         b = b / 0.85;
         c = c / 0.9;
 
-        start[0] = 'b';//start�R�}���h�𑗂�
+        start[0] = 'b';//startコマンドを送る
         error = WriteFile(mbed, start, 1, &maindwSendSize, NULL);
         if (!error)
         {
