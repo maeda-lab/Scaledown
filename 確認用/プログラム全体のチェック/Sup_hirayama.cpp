@@ -34,7 +34,7 @@ void send(double arg)
 {
     for (int cnt = 0; cnt < 4; cnt++)
     {
-        serial_Write(mbed, arg, cnt);
+        //serial_Write(mbed, arg, cnt);
     }
 
 }
@@ -43,9 +43,9 @@ int main()
 {
     Pos posi;
 
-    mbed = serial_open();
-    mbed = serial_initialaize(mbed);
-    mbed = serial_Config(mbed);
+    //mbed = serial_open();
+    //mbed = serial_initialaize(mbed);
+    //mbed = serial_Config(mbed);
     
     //世界座標系から見た初期位置の座標(単位はm)
     //double master_x = 0.24;
@@ -67,7 +67,7 @@ int main()
 
     //入力角の変換
     double master_a = master_J1;
-    double master_b = (master_J2 - 90.0)* -1;//機構上反転させたものを戻す
+    double master_b = -1*(master_J2 - 90.0);//機構上反転させたものを戻す
     double master_c = master_J2 + master_J3 - 90.0;
 
     printf("\n\n\n初期位置は以下の通りです．\n");
@@ -109,9 +109,10 @@ int main()
        j2 = cal_J2(x, y , z,j1, j3);
        printf("j1,j2,j3=[%lf,%lf,%lf]\n\n", j1, j2, j3);
        
-       //J1J2J3から送信するための角度を計算する
+       
+
        a = j1-master_a;
-       b = (j2 - 90.0)*(-1) - master_b;//機構上の補正
+       b = -1*(j2 - 90.0) - master_b;//機構上の補正
        c = j3 + j2 - 90.0 - master_c;
        
        //a = master_a - j1;
@@ -120,18 +121,19 @@ int main()
 
        
        printf("目標位置へ変位させるために入力する角度は次の通りです\n");
-       printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, b, c);
 
        //バッファーかます
        a = a / 1.0;
-       b = b / 0.85;
+       b = -1*b / 0.85;
        c = c / 0.9;
-       //send(a - a_mini);
-       //send(b - b_mini);
-       //send(c - c_mini);
-       //send(0 - d_mini);
-       //send(0 - e_mini);
-       //send(0 - f_mini);
+       printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, b, c);
+
+       send(a - a_mini);
+       send(b - b_mini);
+       send(c - c_mini);
+       send(0 - d_mini);
+       send(0 - e_mini);
+       send(0 - f_mini);
        printf("==============================================\n\n\n");
 
      }
