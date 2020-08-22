@@ -5,20 +5,21 @@
 
 #include"tel_kin.h"
 
-//=================================================‹t‰^“®Šw=======================================================
+//=================================================é€†é‹å‹•å­¦=======================================================
 #define PI  3.14159265358979
-//ƒA[ƒ€‚Ìƒpƒ‰ƒ[ƒ^
-//’PˆÊ‚Í‚·‚×‚Äƒ[ƒgƒ‹(m)
-#define g  0.03078
-#define h  0.102
-#define j  0.12003//0.120
-#define k  0.01992//0.020
-#define l  0.12008
-#define m  0.016
-#define n  0.026
+//ã‚¢ãƒ¼ãƒ ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+//å˜ä½ã¯ã™ã¹ã¦ãƒŸãƒªãƒ¡ãƒ¼ãƒˆãƒ«(mm)
+#define g  30.78//0.03078
+#define h  102.0//0.102
+#define j  120.03//0.12003
+#define k  19.92//0.01992
+#define l  120.08//0.12008
+#define m  16.0//0.016
+#define n  26.0//0.026
 
 
-//‚»‚ê‚¼‚ê‚ÌŠp‚Ì”ÍˆÍ
+
+//ãã‚Œãã‚Œã®è§’ã®ç¯„å›²
 
 
 #define a_min  -120.0
@@ -40,18 +41,18 @@ double a_2 = j;
 double a_3 = k;
 double d_4 = l;
 
-//À•W•ÏŠ·s—ñ
+//åº§æ¨™å¤‰æ›è¡Œåˆ—
 double Trans[4][4];
 
 
 double rad2deg(double rad) {
     return rad / PI * 180.0 ;
 }
-//“x”‚©‚çƒ‰ƒWƒAƒ“‚É
+//åº¦æ•°ã‹ã‚‰ãƒ©ã‚¸ã‚¢ãƒ³ã«
 double deg2rad(double deg) {
     return deg / 180.0 * PI;
 }
-//Cos,Sin‚Ì—ª‹L
+//Cos,Sinã®ç•¥è¨˜
 double C(double a) {
     return cos(a);
 }
@@ -59,11 +60,11 @@ double S(double a) {
     return sin(a);
 }
 
-//ƒNƒH[ƒ^ƒjƒIƒ“¨À•W•ÏŠ·s—ñ‚ÌŒvZ
+//ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³â†’åº§æ¨™å¤‰æ›è¡Œåˆ—ã®è¨ˆç®—
 void cal_T(double x, double y, double z, double qx, double qy, double qz, double qw) {
 
     //printf("qx=%f\nqy=%f\nqz=%f\nqw=%f\n\n", qx, qy, qz, qw);
-    //Šm”FÏ‚İª
+    //ç¢ºèªæ¸ˆã¿â†‘
 
 /*    Trans[0][0] = qx * qx - qy * qy - qz * qz + qw * qw;//nx
     Trans[1][0] = 2.0 * qx * qy + 2.0 * qz * qw;//ny
@@ -134,7 +135,7 @@ double cal_b(double a)   {
     double b1 = rad2deg(2 * atan2(-B + sqrt(B * B + A * A - D * D), A + D));
     double b2 = rad2deg(2 * atan2(-B - sqrt(B * B + A * A - D * D), A + D));
 
-    //ƒGƒ‰[‚ª‹N‚«‚é——RFsqrt‚Ì’†g‚ª•‰‚É‚È‚Á‚Ä‚¢‚éC‚È‚éê‡‚ª‚ ‚é
+    //ã‚¨ãƒ©ãƒ¼ãŒèµ·ãã‚‹ç†ç”±ï¼šsqrtã®ä¸­èº«ãŒè² ã«ãªã£ã¦ã„ã‚‹ï¼Œãªã‚‹å ´åˆãŒã‚ã‚‹
 
     //printf("sqrt(D=b^2-4ac)=%lf\n" ,- B + sqrt(B * B + A * A - D * D));
 
@@ -145,7 +146,7 @@ double cal_b(double a)   {
 
     //printf("A=%lf\nB=%lf\nD=%lf\nb1=%lf\nb2=%lf\n\n", A, B, D, b1, b2);
 
-    //‰ğ‚ª“ñ‚Â‚Å‚Ä‚¢‚é‚Ì‚Å”ÍˆÍŠO‚È‚ç‚Í‚¶‚­
+    //è§£ãŒäºŒã¤ã§ã¦ã„ã‚‹ã®ã§ç¯„å›²å¤–ãªã‚‰ã¯ã˜ã
     if ((b_min<=b1 && b_max>=b1) && (b_min > b2 || b_max < b2)) {
         return b1;
     }
@@ -153,18 +154,18 @@ double cal_b(double a)   {
         return b2;
     }
     else if ((b_min<b1 && b_max>b1) && (b_min<b2 && b_max>b2))
-    {//—¼•û‚Æ‚à‰ğ‚É‚È‚è‚¤‚éê‡,‚Æ‚è‚ ‚¦‚¸ƒGƒ‰[
+    {//ä¸¡æ–¹ã¨ã‚‚è§£ã«ãªã‚Šã†ã‚‹å ´åˆ,ã¨ã‚Šã‚ãˆãšã‚¨ãƒ©ãƒ¼
         printf("answer error in b : two answer\n");
         return EOF;
     }
     else if ((b_min > b1 || b_max < b1) && (b_min > b2 || b_max < b2))
-    {//“š‚¦‚ª‚È‚¢ê‡
-        printf("atan2error in bFNo answer\n");
+    {//ç­”ãˆãŒãªã„å ´åˆ
+        printf("atan2error in bï¼šNo answer\n");
         return EOF;
     }
     else
     {
-        printf("error in b:‚È‚ñ‚©‚¨‚©‚µ‚¢D\n");
+        printf("error in b:ãªã‚“ã‹ãŠã‹ã—ã„ï¼\n");
         return EOF;
     }*/
 
@@ -213,13 +214,13 @@ double cal_c(double a) {
     
 
 
-    //‰ğ‚Ì’²®
+    //è§£ã®èª¿æ•´
     if (c1 > 180.0) { c1 = c1 - 180.0; }
     else if (c1 < -180.0) { c1 = c1 + 360; }
     if (c2 > 180.0) { c2 = c2 - 180.0; }
     else if (c2 < -180.0) { c2 = c2 + 360; }
     
-    //‰ğ‚ª“ñ‚Â‚Å‚Ä‚¢‚é‚Ì‚Å”ÍˆÍŠO‚È‚ç‚Í‚¶‚­
+    //è§£ãŒäºŒã¤ã§ã¦ã„ã‚‹ã®ã§ç¯„å›²å¤–ãªã‚‰ã¯ã˜ã
     if ((c_min<c1 && c_max>c1) && (c_min > c2 || c_max < c2)) {
         return c1;
     }
@@ -227,18 +228,18 @@ double cal_c(double a) {
         return c2;
     }
     else if ((c_min<c1 && c_max>c1) && (c_min<c2 && c_max>c2))
-    {//—¼•û‚Æ‚à‰ğ‚É‚È‚è‚¤‚éê‡,‚Æ‚è‚ ‚¦‚¸ƒGƒ‰[
+    {//ä¸¡æ–¹ã¨ã‚‚è§£ã«ãªã‚Šã†ã‚‹å ´åˆ,ã¨ã‚Šã‚ãˆãšã‚¨ãƒ©ãƒ¼
         printf("answer error in c : two answer\n");
         return EOF;
     }
     else if ((c_min > c1 || c_max < c1) && (c_min > c2 || c_max < c2))
-    {//“š‚¦‚ª‚È‚¢ê‡
-        printf("atan2error in cFNo answer\n");
+    {//ç­”ãˆãŒãªã„å ´åˆ
+        printf("atan2error in cï¼šNo answer\n");
         return EOF;
     }
     else
     {
-        printf("error in c:‚È‚ñ‚©‚¨‚©‚µ‚¢D\n");
+        printf("error in c:ãªã‚“ã‹ãŠã‹ã—ã„ï¼\n");
         return EOF;
     }*/
     double A = Trans[2][3] - (m + n) * Trans[2][2] - h;
@@ -290,7 +291,7 @@ double cal_d(double a, double b, double c) {
     double y = Trans[0][2] * S(a) - Trans[1][2] * C(a) + 0.00000001;
     double d = rad2deg(atan2(y, x));
 
-    //printf("Šp“xd‚É‚Â‚¢‚Ä\n");
+    //printf("è§’åº¦dã«ã¤ã„ã¦\n");
     printf("x,y,d=%lf,%lf,%lf\n", x, y, d);
     if (x == 0.0 || y == 0.0)
     {
@@ -340,8 +341,8 @@ double cal_e(double a, double b, double c, double d) {
     double e = rad2deg(atan(sqrt((n + m) * (n + m) - tmpE * tmpE) / tmpE));
     //printf("e=%lf\n", e);
 
-    //‚Ç‚±‚©‚Åabs‚ª“ü‚Á‚Ä‚¢‚é
-    //sqrt‚ª“ü‚Á‚Ä‚¢‚é‚©‚ç‰ö‚µ‚¢
+    //ã©ã“ã‹ã§absãŒå…¥ã£ã¦ã„ã‚‹
+    //sqrtãŒå…¥ã£ã¦ã„ã‚‹ã‹ã‚‰æ€ªã—ã„
 
 
     //printf("x,y=%lf,%lf\n", x, y);
@@ -401,7 +402,7 @@ double cal_f(double a, double b, double c) {
 }
 
 
-//J1J2J3‚©‚çèæˆÊ’u‚ğŒvZ‚·‚é‡‰^“®Šw
+//J1J2J3ã‹ã‚‰æ‰‹å…ˆä½ç½®ã‚’è¨ˆç®—ã™ã‚‹é †é‹å‹•å­¦
 double cal_fpx(double j1, double j2, double j3)
 {
     double J1 = deg2rad(j1);
@@ -447,7 +448,7 @@ double cal_J2(double x, double y, double z,double j1,double j3) {
     double J2_2 = rad2deg(      acos( -1 * (a_3 * C(J3) + d_4 * S(J3) - pz) / a_2));
     
     //printf("J2_1,J2_2=%lf , %lf\n", J2_1, J2_2);
-    //ğŒ•ªŠò
+    //æ¡ä»¶åˆ†å²
     if ((J2_1 <= 150.0 && J2_1 >= 10.0) && (J2_2 > 150.0 || J2_2 < 10.0))
     {
         return J2_1;
@@ -499,11 +500,11 @@ double cal_J3(double x, double y, double z,double j1){
     double J3_1 = rad2deg( 2 * atan2(-2 * tmpA * a_3 + 2 * d_4 * pz + sqrt(ruto), bunbo));
     double J3_2 = rad2deg(-2 * atan2( 2 * tmpA * a_3 - 2 * d_4 * pz + sqrt(ruto), bunbo));
 
-    //printf("ƒ‹[ƒg‚Ì’†g:%lf\n", a_3 * a_3 + d_4 * d_4 - pz * pz + 2 * pz - 1);
+    //printf("ãƒ«ãƒ¼ãƒˆã®ä¸­èº«:%lf\n", a_3 * a_3 + d_4 * d_4 - pz * pz + 2 * pz - 1);
     //double J3_1 = rad2deg( 2 * atan2(d_4 - sqrt(a_3 * a_3 + d_4 * d_4 - pz * pz + 2 * pz - 1), a_3 + pz - 1));
     //double J3_2 = rad2deg(-2 * atan2(d_4 + sqrt(a_3 * a_3 + d_4 * d_4 - pz * pz + 2 * pz - 1), a_3 + pz - 1));
 
-    //‰ğ‚Ì’²®
+    //è§£ã®èª¿æ•´
 
     //printf("J3_1,J3_2=[%lf,%lf]\n", J3_1, J3_2);
     if (J3_1 > 180.0) { J3_1 = J3_1 - 180.0; }
@@ -514,7 +515,7 @@ double cal_J3(double x, double y, double z,double j1){
 
 
 
-    //ŒÂX‚ÌğŒ•ªŠò‚¨‚©‚µ‚¢
+    //å€‹ã€…ã®æ¡ä»¶åˆ†å²ãŠã‹ã—ã„
     if ((J3_1 <= 90 && J3_1 >= -15) && (J3_2 > 90 || J3_2<-15))
     {
         return J3_1;
