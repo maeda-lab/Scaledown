@@ -47,29 +47,29 @@ int main()
     mbed = serial_initialaize(mbed);
     mbed = serial_Config(mbed);
     
-    //‰ŠúˆÊ’u‚ÉŒü‚©‚¤ŠÖßŠp
+    //åˆæœŸä½ç½®ã«å‘ã‹ã†é–¢ç¯€è§’
     double master_J1 = 0.0;
     double master_J2 = 120.0;
     double master_J3 = 0.0;//109.338;// -95.783661;
 
-    //‰ŠúˆÊ’uÀ•W‚ÌŒvZ
+    //åˆæœŸä½ç½®åº§æ¨™ã®è¨ˆç®—
     double master_x = cal_fpx(master_J1, master_J2, master_J3);
     double master_y = cal_fpy(master_J1, master_J2, master_J3);
     double master_z = cal_fpz(master_J1, master_J2, master_J3);
 
-    //“ü—ÍŠp‚Ì•ÏŠ·
+    //å…¥åŠ›è§’ã®å¤‰æ›
     double master_a = master_J1;
-    //double master_b = -1*(master_J2 - 90.0);//‹@\ã”½“]‚³‚¹‚½‚à‚Ì‚ğ–ß‚·
+    //double master_b = -1*(master_J2 - 90.0);//æ©Ÿæ§‹ä¸Šåè»¢ã•ã›ãŸã‚‚ã®ã‚’æˆ»ã™
     double master_b = master_J2;// -90.0;
     //double master_c = master_J2 + master_J3 - 90.0;
     double master_c = master_J3;//-1*(master_J2 + master_J3 - 90.0);
 
 
-    printf("\n\n\n‰ŠúˆÊ’u‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·D\n");
+    printf("\n\n\nåˆæœŸä½ç½®ã¯ä»¥ä¸‹ã®é€šã‚Šã§ã™ï¼\n");
     printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x,master_y, master_z);
-    printf("‰ŠúŠp‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·D\n");
+    printf("åˆæœŸè§’ã¯ä»¥ä¸‹ã®é€šã‚Šã§ã™ï¼\n");
     printf("J1,J2,J3=[%lf,%lf,%lf]\n\n", master_J1, master_J2, master_J3);
-    printf("‰ŠúŠp‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·D\n");
+    printf("åˆæœŸè§’ã¯ä»¥ä¸‹ã®é€šã‚Šã§ã™ï¼\n");
     printf("a,b,c=[%lf,%lf,%lf]\n\n", master_a, master_b, master_c);
 
     int t = 0;
@@ -79,49 +79,40 @@ int main()
         double j1, j2, j3;
         double x, y, z;
        printf("==============================================\n");
-       printf("\n–Ú•W’l‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢.’PˆÊ‚Ímm‚Å‚·D\n");
+       printf("\nç›®æ¨™å€¤ã‚’æŒ‡å®šã—ã¦ãã ã•ã„.å˜ä½ã¯mmã§ã™ï¼\n");
 
        scanf_s("%lf", &posi.x);
        scanf_s("%lf", &posi.y);
        scanf_s("%lf", &posi.z);
 
-       //‰ŠúˆÊ’u‚©‚ç‚Ì•ÏˆÊ‚ğpos‚É‘ã“ü
-       //->‹t‰^“®ŠwŒvZ‚É‚Í¢ŠEÀ•WŒn‚©‚çŒ©‚½ˆÊ’u‚ğ‘«‚µZ‚·‚éD
+       //åˆæœŸä½ç½®ã‹ã‚‰ã®å¤‰ä½ã‚’posã«ä»£å…¥
+       //->é€†é‹å‹•å­¦è¨ˆç®—ã«ã¯ä¸–ç•Œåº§æ¨™ç³»ã‹ã‚‰è¦‹ãŸä½ç½®ã‚’è¶³ã—ç®—ã™ã‚‹ï¼
 
-       printf("w’è‚µ‚½‰ŠúˆÊ’u‚©‚ç‚Ì•ÏˆÊ‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·\n");
+       printf("æŒ‡å®šã—ãŸåˆæœŸä½ç½®ã‹ã‚‰ã®å¤‰ä½ã¯ä»¥ä¸‹ã®é€šã‚Šã§ã™\n");
        printf("x,y,z=%lf,%lf,%lf\n\n", posi.x, posi.y, posi.z);
 
 
-       //w’è‚µ‚½•ÏˆÊ–scale@{@‰ŠúˆÊ’u
+       //æŒ‡å®šã—ãŸå¤‰ä½ï¼Šscaleã€€ï¼‹ã€€åˆæœŸä½ç½®
        x = posi.x * scale + master_x;
        y = posi.y * scale + master_y;
        z = posi.z * scale + master_z;
-       printf("¢ŠEÀ•WŒn‚Å‚ÌˆÊ’u‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·\t‚½‚¾‚µCƒXƒP[ƒ‹”ä‚Í%.4lf‚Å‚·\n",scale);
+       printf("ä¸–ç•Œåº§æ¨™ç³»ã§ã®ä½ç½®ã¯ä»¥ä¸‹ã®é€šã‚Šã§ã™\tãŸã ã—ï¼Œã‚¹ã‚±ãƒ¼ãƒ«æ¯”ã¯%.4lfã§ã™\n",scale);
        printf("x,y,z=%lf,%lf,%lf\n\n", x, y, z);
 
-       //‹t‰^“®Šw‚ÌŒvZ
+       //é€†é‹å‹•å­¦ã®è¨ˆç®—
        j1 = cal_J1(x, y , z );
        j3 = cal_J3(x, y , z,j1);
        j2 = cal_J2(x, y , z,j1, j3);
        printf("j1,j2,j3=[%lf,%lf,%lf]\n\n", j1, j2, j3);
        
-       //J1~J3‚Ì•ÏˆÊ‚ğŒvZ
-
-
-
        a = j1-master_a;
        b = j2 - master_b;
        c = j3 - master_c;
 
-       printf("–Ú•WˆÊ’u‚Ö•ÏˆÊ‚³‚¹‚é‚½‚ß‚É“ü—Í‚·‚éŠp“x‚ÍŸ‚Ì’Ê‚è‚Å‚·\n");
+       printf("ç›®æ¨™ä½ç½®ã¸å¤‰ä½ã•ã›ã‚‹ãŸã‚ã«å…¥åŠ›ã™ã‚‹è§’åº¦ã¯æ¬¡ã®é€šã‚Šã§ã™\n");
 
-       //ƒoƒbƒtƒ@[‚©‚Ü‚·,‚±‚±‚Å‰ñ“]•ûŒü‚à‡‚í‚¹‚é
+       //ã“ã“ã§å›è»¢æ–¹å‘ã‚‚åˆã‚ã›ã‚‹
        printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, -c, -b);
-       //a = a / 1.0;
-       //b = -b / 0.525;
-       //c = -c / 0.9;
-       //printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, c, b);
-       
        send(a - a_mini);
        send(-c - b_mini);
        send(-b - c_mini);
