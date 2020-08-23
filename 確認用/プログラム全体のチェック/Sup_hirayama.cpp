@@ -67,8 +67,8 @@ int main()
 
     //入力角の変換
     double master_a = master_J1;
-    double master_b = -1*(master_J2 - 90.0);//機構上反転させたものを戻す
-    double master_c = master_J2 + master_J3 - 90.0;
+    double master_b = master_J2;//-1*(master_J2 - 90.0);
+    double master_c = master_J3;//+master_J2 - 90.0;
 
     printf("\n\n\n初期位置は以下の通りです．\n");
     printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x,master_y, master_z);
@@ -115,9 +115,9 @@ int main()
        
        
 
-       a = j1-master_a;
-       b = -1*(j2 - 90.0) - master_b;//機構上の補正
-       c = j3 + j2 - 90.0 - master_c;
+       a = j1 - master_a;
+       b = j2 - master_b;
+       c = j3 - master_c;
        
        //a = master_a - j1;
        //b = master_b - (j2 - 90);
@@ -128,13 +128,13 @@ int main()
 
        //バッファーかます
        a = a / 1.0;
-       b = -1*b / 0.85;
-       c = c / 0.9;
+       b = -1*b / 0.85;//機構上の補正
+       c = -1*c / 0.9;//機構上の補正
        printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, b, c);
 
        send(a - a_mini);
-       send(b - b_mini);
-       send(c - c_mini);
+       send(c - b_mini);
+       send(b - c_mini);
        send(0 - d_mini);
        send(0 - e_mini);
        send(0 - f_mini);
