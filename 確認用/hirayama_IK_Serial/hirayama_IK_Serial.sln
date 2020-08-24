@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hirayama_IK_Serial", "hirayama_IK_Serial\hirayama_IK_Serial.vcxproj", "{EB44391E-C941-4717-8462-F26F14BB4213}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB44391E-C941-4717-8462-F26F14BB4213}.Debug|x64.ActiveCfg = Debug|x64
+		{EB44391E-C941-4717-8462-F26F14BB4213}.Debug|x64.Build.0 = Debug|x64
+		{EB44391E-C941-4717-8462-F26F14BB4213}.Debug|x86.ActiveCfg = Debug|Win32
+		{EB44391E-C941-4717-8462-F26F14BB4213}.Debug|x86.Build.0 = Debug|Win32
+		{EB44391E-C941-4717-8462-F26F14BB4213}.Release|x64.ActiveCfg = Release|x64
+		{EB44391E-C941-4717-8462-F26F14BB4213}.Release|x64.Build.0 = Release|x64
+		{EB44391E-C941-4717-8462-F26F14BB4213}.Release|x86.ActiveCfg = Release|Win32
+		{EB44391E-C941-4717-8462-F26F14BB4213}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3895B9F5-5681-42B1-AAC4-61E2A0BE2A79}
+	EndGlobalSection
+EndGlobal
