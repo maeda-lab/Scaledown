@@ -106,7 +106,7 @@ int main()
         pc.scanf("%f", &dOut);
         pc.scanf("%f", &eOut);
         pc.scanf("%f", &fOut);
-        fprintf(fp, "%d,%d,%d,%d,%d,%d,%d\n",aOut, bOut, cOut, dOut, eOut, fOut);
+        fprintf(fp, "%f,%f,%f,%f,%f,%f\n",aOut, bOut, cOut, dOut, eOut, fOut);
 
         //move();
     }
