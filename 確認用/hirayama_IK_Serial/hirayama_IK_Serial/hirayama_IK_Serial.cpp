@@ -9,6 +9,7 @@
 
 #include"tel_kin.h"
 #include"mbed_Serial.h"
+#include "hirayama_IK_Serial.h"
 
 DWORD maindwSendSize;
 DWORD maindwGetSize;
@@ -45,9 +46,54 @@ void send(double arg)
     }
 
 }
-
+VOID APIENTRY DoSomething(LPVOID Args, DWORD low, DWORD high) 
+{
+    printf(">");
+}
 int main()
 {
+
+
+
+    // Masahiro Furukawa
+    // Aug 24, 2020
+    //
+    // Interval Timer 
+    //
+    // reference : https://qiita.com/tobira-code/items/ae0764634f078407662f
+
+    HANDLE timer = NULL;
+
+
+    timer = CreateWaitableTimer(
+        NULL,  // LPSECURITY_ATTRIBUTES lpTimerAttributes,
+        TRUE,  // BOOL bManualReset,
+        NULL   // LPCTSTR lpTimerName
+    );
+    if (timer == NULL) {
+        /* error */
+    }
+    LARGE_INTEGER interval;
+    interval.QuadPart = -10 * 1000*3000; /* unit:100nsec, wait xx msec */
+    if (!SetWaitableTimer(
+        timer,      // HANDLE hTimer,
+        &interval,  // LARGE_INTEGER *pDueTime,
+        3,          // LONG lPeriod,
+        DoSomething,// PTIMERAPCROUTINE pfnCompletionRoutine,
+        NULL,       // LPVOID lpArgToCompletionRoutine,
+        FALSE       // BOOL fResume
+    )) {
+        /* error */
+    }
+
+    if (WaitForSingleObject(timer, INFINITE) != WAIT_OBJECT_0) {
+        /* error */
+    }
+
+    if (!CloseHandle(timer)) {
+        /* error */
+    }
+
     Pos posi;
 
     //ÉVÉäÉAÉãí êMÇÃê›íË
