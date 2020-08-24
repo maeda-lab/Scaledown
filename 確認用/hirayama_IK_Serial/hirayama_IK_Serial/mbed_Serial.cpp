@@ -5,28 +5,29 @@
 #include<windows.h>
 #include<conio.h>
 #include<windows.h>
+//#include <sstream>
 
 #include"mbed_Serial.h"
 
 
 #define PI 3.14159265358979
-HANDLE h;//HANDLEå‹ã€ãƒã‚¤ãƒ³ã‚¿ã§ã™ã€‚(void* )
-DCB dcb; //ã‚·ãƒªã‚¢ãƒ«é€šä¿¡ãƒ‡ãƒã‚¤ã‚¹ã®åˆ¶å¾¡å®šç¾©ã‚’è¡¨ã™
-COMMTIMEOUTS cto;//é€šä¿¡ãƒ‡ãƒã‚¤ã‚¹ã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+HANDLE h;//HANDLEŒ^Aƒ|ƒCƒ“ƒ^‚Å‚·B(void* )
+DCB dcb; //ƒVƒŠƒAƒ‹’ÊMƒfƒoƒCƒX‚Ì§Œä’è‹`‚ğ•\‚·
+COMMTIMEOUTS cto;//’ÊMƒfƒoƒCƒX‚Ìƒ^ƒCƒ€ƒAƒEƒgƒpƒ‰ƒ[ƒ^
 
 //COMPORT *COM;
 
-DWORD nn0, nn1;//32bitç¬¦å·ãªã—æ•´æ•°ã€ç¯„å›²ã¯0~18446744073709551615 10é€²æ•°
-unsigned char buf0[1];
+DWORD nn0, nn1;//32bit•„†‚È‚µ®”A”ÍˆÍ‚Í0~18446744073709551615 10i”
+char buf0[1];
 unsigned char buf1[1];
 double com;
 double rep;
 
 int checknum[4];
 
-/*int ctoi(char c)
+int ctoi(char c)
 {
-	//1æ–‡å­—ã®æ•°å­—ï¼ˆcharå‹ï¼‰ã‚’æ•°å€¤ï¼ˆintå‹ï¼‰ã«å¤‰æ›
+	//1•¶š‚Ì”šicharŒ^j‚ğ”’liintŒ^j‚É•ÏŠ·
 	if ('0' <= c && c <= '9')
 	{
 		return (c - '0');
@@ -35,7 +36,7 @@ int checknum[4];
 	{
 		return -1;
 	}
-}*/
+}
 
 
 HANDLE serial_open()
@@ -43,15 +44,15 @@ HANDLE serial_open()
 	//HANDLE h = CreateFile(_T("com3"), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	HANDLE h = CreateFile(_T("COM3"), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	//ãƒãƒ¼ãƒˆç•ªå·ã¯PCã®è¨­å®šã¨ç›¸è«‡ã—ã¾ã—ã‚‡ã†
+	//ƒ|[ƒg”Ô†‚ÍPC‚Ìİ’è‚Æ‘Š’k‚µ‚Ü‚µ‚å‚¤
 
 	if (h == INVALID_HANDLE_VALUE) {
-		//é–‹ã‘ãªã‹ã£ãŸå ´åˆã«ã¯
-		//é–‹ã‘ã‚‰ã‚Œã¸ã‚“ã‹ã£ãŸãï¼
+		//ŠJ‚¯‚È‚©‚Á‚½ê‡‚É‚Í
+		//ŠJ‚¯‚ç‚ê‚Ö‚ñ‚©‚Á‚½‚¼I
 		printf("PORT COULD NOT OPEN\n");
-		//ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®ä¸€æ™‚åœæ­¢
+		//ƒvƒƒOƒ‰ƒ€‚Ìˆê’â~
 		system("PAUSE");
-		//ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®æ­£å¸¸çµ‚äº†
+		//ƒvƒƒOƒ‰ƒ€‚Ì³íI—¹
 		exit(0);
 	}
 	printf("PORT COULD OPEN\n");
@@ -61,13 +62,13 @@ HANDLE serial_initialaize(HANDLE h)
 {
 	BOOL Ret;
 	//SetUpComm(HANDLE h, DWORD dwInQueue , DWORD dwOutQueue)
-	//h:é€šä¿¡ãƒ‡ãƒã‚¤ã‚¹ã®ãƒãƒ³ãƒ‰ãƒ«
-	//dwInQueue :ãƒ‡ãƒã‚¤ã‚¹ã®å†…éƒ¨å…¥åŠ›ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®æ¨å¥¨ã‚µã‚¤ã‚º
-	//dwOutQueue:ãƒ‡ãƒã‚¤ã‚¹ã®å†…éƒ¨å‡ºåŠ›ãƒãƒƒãƒ•ã‚¡ãƒ¼ã®æ¨å¥¨ã‚µã‚¤ã‚º
+	//h:’ÊMƒfƒoƒCƒX‚Ìƒnƒ“ƒhƒ‹
+	//dwInQueue :ƒfƒoƒCƒX‚Ì“à•”“ü—Íƒoƒbƒtƒ@[‚Ì„§ƒTƒCƒY
+	//dwOutQueue:ƒfƒoƒCƒX‚Ì“à•”o—Íƒoƒbƒtƒ@[‚Ì„§ƒTƒCƒY
 	Ret = SetupComm(h, 1024, 1024);
 	if (!Ret) {
-		//è¨­å®š
-		//å¤±æ•—ã—ãŸã‚ˆï¼
+		//İ’è
+		//¸”s‚µ‚½‚æI
 		printf("SET UP FAILED\n");
 		//CloseHandle(HANDLE h)
 		CloseHandle(h);
@@ -75,35 +76,35 @@ HANDLE serial_initialaize(HANDLE h)
 		exit(0);
 	}
 	printf("SET UP SUCCESSED\n");
-	//åˆæœŸåŒ–ã™ã‚‹
+	//‰Šú‰»‚·‚é
 	//PurgeComm(HANDLE h,DWORD Flags)
-	//æŒ‡å®šã•ã‚ŒãŸãƒãƒ¼ãƒˆã®å…¥åŠ›ãƒãƒƒãƒ•ã‚¡ã«ã‚ã‚‹ã™ã¹ã¦ã®æ–‡å­—ã‚’ç ´æ£„ã™ã‚‹ã€‚
+	//w’è‚³‚ê‚½ƒ|[ƒg‚Ì“ü—Íƒoƒbƒtƒ@‚É‚ ‚é‚·‚×‚Ä‚Ì•¶š‚ğ”jŠü‚·‚éB
 	Ret = PurgeComm(h, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
 	if (!Ret) {
-		//åˆæœŸåŒ–å¤±æ•—ã—ãŸã‚‰
-		//å¤±æ•—ã—ãŸã§ï¼
+		//‰Šú‰»¸”s‚µ‚½‚ç
+		//¸”s‚µ‚½‚ÅI
 		printf("CLEAR FAILED\n");
 		CloseHandle(h);
 		exit(0);
 	}
 
 	return h;
-}				
+}
 HANDLE serial_Config(HANDLE h)
 {
-	//3.åŸºæœ¬é€šä¿¡æ¡ä»¶ã®è¨­å®š
+	//3.Šî–{’ÊMğŒ‚Ìİ’è
 	DCB dcb;
 	BOOL Ret;
 	//GetCommState(HANDLE h ,LPDCB lpdcb)
-	//    h:é€šä¿¡ãƒ‡ãƒã‚¤ã‚¹ã¸ã®ãƒãƒ³ãƒ‰ãƒ«
-	//lpdcb:åˆ¶å¾¡è¨­å®šæƒ…å ±ã‚’å—ã‘å–ã‚‹DCBæ§‹é€ ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+	//    h:’ÊMƒfƒoƒCƒX‚Ö‚Ìƒnƒ“ƒhƒ‹
+	//lpdcb:§Œäİ’èî•ñ‚ğó‚¯æ‚éDCB\‘¢‚Ö‚Ìƒ|ƒCƒ“ƒ^
 	GetCommState(h, &dcb);
-	//dcb.DCBlength = sizeof(DCB);//length  :DCBæ§‹é€ ä½“ã®å¤§ãã•(ãƒã‚¤ãƒˆæ•°)
-	dcb.BaudRate = 115200;        //BaudRate:é€šä¿¡ãƒ‡ãƒã‚¤ã‚¹ã®ãƒœãƒ¼ãƒ¬ãƒ¼ãƒˆ
-	//dcb.fBinary = TRUE;         //fBinary :ãƒã‚¤ãƒŠãƒªãƒ¢ãƒ¼ãƒ‰ã®å¯å¦
-	dcb.ByteSize = 8;           //ByteSize:é€å—ä¿¡ã™ã‚‹ãƒã‚¤ãƒˆãƒ‡ãƒ¼ã‚¿ã®ãƒ“ãƒƒãƒˆæ•°
-	dcb.fParity = NOPARITY;     //fParity :ãƒ‘ãƒªãƒ†ã‚£ãƒã‚§ãƒƒã‚¯ã®å¯å¦
-	dcb.StopBits = ONESTOPBIT;  //StopBits:ä½¿ç”¨ã™ã‚‹ã‚¹ãƒˆãƒƒãƒ—ãƒ“ãƒƒãƒˆæ•°ã®æŒ‡å®šã€1ã‚¹ãƒˆãƒƒãƒ—ãƒ“ãƒƒãƒˆ
+	//dcb.DCBlength = sizeof(DCB);//length  :DCB\‘¢‘Ì‚Ì‘å‚«‚³(ƒoƒCƒg”)
+	dcb.BaudRate = 115200;        //BaudRate:’ÊMƒfƒoƒCƒX‚Ìƒ{[ƒŒ[ƒg
+	//dcb.fBinary = TRUE;         //fBinary :ƒoƒCƒiƒŠƒ‚[ƒh‚Ì‰Â”Û
+	dcb.ByteSize = 8;           //ByteSize:‘—óM‚·‚éƒoƒCƒgƒf[ƒ^‚Ìƒrƒbƒg”
+	dcb.fParity = NOPARITY;     //fParity :ƒpƒŠƒeƒBƒ`ƒFƒbƒN‚Ì‰Â”Û
+	dcb.StopBits = ONESTOPBIT;  //StopBits:g—p‚·‚éƒXƒgƒbƒvƒrƒbƒg”‚Ìw’èA1ƒXƒgƒbƒvƒrƒbƒg
 	//SetCommState(HANDLE h ,LPDCB lpdcb)
 	cto.ReadIntervalTimeout = 0;
 	cto.ReadTotalTimeoutMultiplier = 0;
@@ -113,8 +114,8 @@ HANDLE serial_Config(HANDLE h)
 	Ret = SetCommState(h, &dcb);
 	SetCommTimeouts(h, &cto);
 	if (!Ret) {
-		//è¨­å®šã§ããªã‹ã£ãŸã‚‰
-		//å¤±æ•—ã—ãŸã§ï¼
+		//İ’è‚Å‚«‚È‚©‚Á‚½‚ç
+		//¸”s‚µ‚½‚ÅI
 		printf("SetCommState FAILED\n");
 		CloseHandle(h);
 		system("PAUSE");
@@ -123,84 +124,96 @@ HANDLE serial_Config(HANDLE h)
 	printf("SetCommState SUCCESSED\n");
 	return h;
 }
-void serial_Write(HANDLE h,double com,int cnt)//const char* data)
+void serial_Write(HANDLE h, double com, int cnt)//const char* data)
 {
-	//h:ã‚·ãƒªã‚¢ãƒ«é€šä¿¡ã®è¨­å®šã®ãƒã‚¤ãƒ³ã‚¿
-	//com:é€ã‚ŠãŸã„ãƒ‡ãƒ¼ã‚¿
-	//cnt:ã‚«ã‚¦ãƒ³ã‚¿
+	//h:ƒVƒŠƒAƒ‹’ÊM‚Ìİ’è‚Ìƒ|ƒCƒ“ƒ^
+	//com:‘—‚è‚½‚¢ƒf[ƒ^
+	//cnt:ƒJƒEƒ“ƒ^
 	DWORD dwSendSize;
 	DWORD dwErrorMask;
 	BOOL Ret;
 	//int intcom;
+	//float data = (float)com;
+	//buf0[0] = '\n';
 
-	
-	/*int num[4];
-	num[3] = com * 0.01;
-	num[2] = (com - num[3] * 100.0) * 0.1;
-	num[1] = (com - num[3] * 100.0 - num[2] * 10.0) * 1;
-	num[0] = (com - num[3] * 100.0 - num[2] * 10.0 - num[1]) * 10;
+	//int num[4];
+	//num[3] = com * 0.01;
+	//num[2] = (com - num[3] * 100.0) * 0.1;
+	//num[1] = (com - num[3] * 100.0 - num[2] * 10.0) * 1;
+	//num[0] = (com - num[3] * 100.0 - num[2] * 10.0 - num[1]) * 10;
 
-	
+	int num[5];
+	num[4] = com * 0.1;
+	num[3] = (com - num[4] * 10.0) * 1;
+	num[2] = (com - num[4] * 10.0 - num[3] * 1.0) * 10;
+	num[1] = (com - num[4] * 10.0 - num[3] * 1.0 - num[2] * 0.1) * 100;
+	num[0] = (com - num[4] * 10.0 - num[3] * 1.0 - num[2] * 0.1 - num[1] * 0.01) * 1000;
 
 
-	//printf("%d,%d,%d,%d\n", num[3], num[2], num[1], num[0]);
-	//if (cnt == 0)	buf0[0] = 's';//é–‹å§‹ã®åˆå›³ï¼ˆmbedãƒ—ãƒ­ã‚°ãƒ©ãƒ cnt=0ï¼‰
-	//if (cnt == 1)	buf0[0] = num[0] + '0';//0.1ã®ä½
-	//if (cnt == 2)	buf0[0] = num[1] + '0';//1ã®ä½
-	//if (cnt == 3)	buf0[0] = num[2] + '0';//10ã®ä½
-	//if (cnt == 4)	buf0[0] = num[3] + '0';//100ã®ä½
 
-	if (cnt == 0) 
-	{ 
-		buf0[0] = num[0] + '0';//0.1ã®ä½ 
-		checknum[0] = ctoi(buf0[0]);
+
+	//printf("%d,%d,%d,%d\n", num[4],num[3], num[2], num[1], num[0]);
+	//if (cnt == 0)	buf0[0] = 's';//ŠJn‚Ì‡}imbedƒvƒƒOƒ‰ƒ€cnt=0j
+	//if (cnt == 1)	buf0[0] = num[0] + '0';//0.1‚ÌˆÊ
+	//if (cnt == 2)	buf0[0] = num[1] + '0';//1‚ÌˆÊ
+	//if (cnt == 3)	buf0[0] = num[2] + '0';//10‚ÌˆÊ
+	//if (cnt == 4)	buf0[0] = num[3] + '0';//100‚ÌˆÊ
+
+	if (cnt == 0)
+	{
+		buf0[0] = num[0] + '0';//0.001‚ÌˆÊ 
+		//checknum[0] = ctoi(buf0[0]);
 	}
-	if (cnt == 1) 
-	{ 
-		buf0[0] = num[1] + '0';//1ã®ä½
-		checknum[1] = ctoi(buf0[0]);
-	}	
-	if (cnt == 2) 
-	{ 
-		buf0[0] = num[2] + '0';//10ã®ä½
-		checknum[2] = ctoi(buf0[0]);
-	}	
+	if (cnt == 1)
+	{
+		buf0[0] = num[1] + '0';//0.01‚ÌˆÊ
+		//checknum[1] = ctoi(buf0[0]);
+	}
+	if (cnt == 2)
+	{
+		buf0[0] = num[2] + '0';//0.1‚ÌˆÊ
+		//checknum[2] = ctoi(buf0[0]);
+	}
 	if (cnt == 3)
 	{
-		buf0[0] = num[3] + '0'; //100ã®ä½
+		buf0[0] = num[3] + '0'; //1‚ÌˆÊ
 		//checknum[3] = ctoi(buf0[0]);
 		//printf("send data:%d,%d,%d,%d\n", num[3], num[2], num[1], num[0]);
 	}
-
+	if (cnt == 4)
+	{
+		buf0[0] = num[4] + '0'; //10‚ÌˆÊ
+		//checknum[3] = ctoi(buf0[0]);
+		//printf("send data:%d,%d,%d,%d,%d\n", num[4],num[3], num[2], num[1], num[0]);
+	}
 
 	//printf("%c", buf0[0]);
-	//Ret = WriteFile(h, &data, sizeof(data), &dwSendSize, NULL);
-	Ret = WriteFile(h, buf0, 1, &dwSendSize, NULL);//1æ–‡å­—é€ã‚‹
-	if (!Ret) {
-		//é€ä¿¡ã§ããªã‹ã£ãŸã‚‰
-		//ãƒ€ãƒ¡ã§ã™ï¼
-		printf("SEND FAILED\n");
-		CloseHandle(h);
-		system("PAUSE");
-		exit(0);
-	}
-	if (cnt == 3)
-	{
-		float mbedOut = 1000 * checknum[3] + 100 * checknum[2] + 10 * checknum[1] + 1 * checknum[0];
-		//printf("get data  %4.f\n",mbedOut);
 
-	}*/
-	float data = (float)com
-	Ret = WriteFile(h, &data, sizeof(data), &dwSendSize, NULL);
-	
+	Ret = WriteFile(h, buf0, 1, &dwSendSize, NULL);//1•¶š‘—‚é
 	if (!Ret) {
-		//é€ä¿¡ã§ããªã‹ã£ãŸã‚‰
-		//ãƒ€ãƒ¡ã§ã™ï¼
+		//‘—M‚Å‚«‚È‚©‚Á‚½‚ç
+		//ƒ_ƒ‚Å‚·I
 		printf("SEND FAILED\n");
 		CloseHandle(h);
 		system("PAUSE");
 		exit(0);
 	}
+
+
+	//printf("data=%p,%f\n", &data,data);
+	//Ret = WriteFile(h, &data, sizeof(data), &dwSendSize, NULL);
+	//Ret = WriteFile(h, buf0, sizeof(buf0), &dwSendSize, NULL);
+
+	//Ret = WriteFile(h, &com, sizeof(com), &dwSendSize, NULL);
+	//if (!Ret) {
+	//	//‘—M‚Å‚«‚È‚©‚Á‚½‚ç
+	//	//ƒ_ƒ‚Å‚·I
+	//	printf("SEND FAILED\n");
+	//	CloseHandle(h);
+	//	system("PAUSE");
+	//	exit(0);
+	//}
+
 
 
 
@@ -208,5 +221,5 @@ void serial_Write(HANDLE h,double com,int cnt)//const char* data)
 }
 void serial_close(HANDLE h)
 {
-	CloseHandle(h);		// ã‚·ãƒªã‚¢ãƒ«é€šä¿¡ã‚’çµ‚äº†
+	CloseHandle(h);		// ƒVƒŠƒAƒ‹’ÊM‚ğI—¹
 }

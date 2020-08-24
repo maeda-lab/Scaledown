@@ -22,6 +22,6 @@ double cal_fpx(double, double, double);
 double cal_fpy(double, double, double);
 double cal_fpz(double, double, double);
 
-double cal_J1(double,double,double);
-double cal_J2(double,double,double,double, double);
-double cal_J3(double,double,double,double);
+double cal_J1(double, double, double);
+double cal_J2(double, double, double, double, double);
+double cal_J3(double, double, double, double);

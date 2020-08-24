@@ -9,6 +9,7 @@ HANDLE serial_open();
 HANDLE serial_initialaize(HANDLE);
 HANDLE serial_Config(HANDLE);
 //void serial_Write(HANDLE, const char*);
-void serial_Write(HANDLE, double , int);
+void serial_Write(HANDLE, double, int);
 
 void serial_close(HANDLE);
+

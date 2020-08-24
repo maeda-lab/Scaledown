@@ -11,7 +11,7 @@ PwmOut servo5(p26);//θ5に対応するピン
 //MG996Rのほう
 
 Serial pc(USBTX, USBRX);
-
+LocalFileSystem local("local");
 
 float aOut, bOut, cOut, dOut, eOut, fOut;//それぞれの角度
 int num[30];//数字格納場所，基本的に1桁の数字しか入らない
@@ -91,12 +91,19 @@ void cal_Out()
 
        //送られてくるのは整数2桁＋小数3桁ではなく
     //1000倍されたなことに注意
-    aOut = 10.0 * num[4]  + 1.0 * num[3]  + 0.1 * num[2] + 0.01 * num[1] + 0.001 * num[0] - 60.0;//
-    bOut = 10.0 * num[9]  + 1.0 * num[8]  + 0.1 * num[7] + 0.01 * num[6] + 0.001 * num[5] - 60.0;//
+    aOut = 10.0 * num[4] + 1.0 * num[3] + 0.1 * num[2] + 0.01 * num[1] + 0.001 * num[0] - 60.0;//
+    bOut = 10.0 * num[9] + 1.0 * num[8] + 0.1 * num[7] + 0.01 * num[6] + 0.001 * num[5] - 60.0;//
     cOut = 10.0 * num[14] + 1.0 * num[13] + 0.1 * num[12] + 0.01 * num[11] + 0.001 * num[10] - 60.0;//
     dOut = 10.0 * num[19] + 1.0 * num[18] + 0.1 * num[17] + 0.01 * num[16] + 0.001 * num[15] - 60.0;//
     eOut = 10.0 * num[24] + 1.0 * num[23] + 0.1 * num[22] + 0.01 * num[21] + 0.001 * num[20] - 60.0;//
     fOut = 10.0 * num[29] + 1.0 * num[28] + 0.1 * num[27] + 0.01 * num[26] + 0.001 * num[25] - 60.0;//
+
+    //aOut = 10.0 * num[28] + 1.0 * num[27] + 0.1 * num[26] + 0.01 * num[25] + 0.001 * num[24] - 60.0;//
+    //bOut = 10.0 * num[3]  + 1.0 * num[2]  + 0.1 * num[1]  + 0.01 * num[0]  + 0.001 * num[29] - 60.0;//
+    //cOut = 10.0 * num[8]  + 1.0 * num[7]  + 0.1 * num[6]  + 0.01 * num[5]  + 0.001 * num[4]  - 60.0;//
+    //dOut = 10.0 * num[13] + 1.0 * num[12] + 0.1 * num[11] + 0.01 * num[10] + 0.001 * num[9]  - 60.0;//
+    //eOut = 10.0 * num[18] + 1.0 * num[17] + 0.1 * num[16] + 0.01 * num[15] + 0.001 * num[14] - 60.0;//
+    //fOut = 10.0 * num[23] + 1.0 * num[22] + 0.1 * num[21] + 0.01 * num[20] + 0.001 * num[19] - 60.0;//
 
 }
 void cal_pw()
@@ -111,17 +118,11 @@ void cal_pw()
 void send_servo()
 {
     servo0.pulsewidth_us(pw0);//パルス変調幅を1625usで入力
-    //pc.printf("pw0=%lf\n",pw0);
     servo1.pulsewidth_us(pw1);//パルス変調幅を1420usで入力
-    //pc.printf("pw1=%lf\n",pw1);
     servo2.pulsewidth_us(pw2); //パルス変調幅を 632usで入力
-    //pc.printf("pw2=%lf\n",pw2);
     servo3.pulsewidth_us(pw3);//パルス変調幅を1310usで入力
-    //pc.printf("pw3=%lf\n",pw3);
     servo4.pulsewidth_us(pw4);//パルス変調幅を1368usで入力
-    //pc.printf("pw4=%lf\n",pw4);
     servo5.pulsewidth_us(pw5);//パルス変調幅を1500usで入力
-    //pc.printf("pw5=%lf\n",pw5);
 }
 
 //動く関数．総まとめ
@@ -133,9 +134,10 @@ void move()
 }
 int main()
 {
+    float output[500][6];
     float w = 60.0;//========制御周波数===========
     float PWMperiod = 1.0 / w;    //PWM周期の計算
-    char buf[256];
+    char ch;
     //===============ボーレート=============
     pc.baud(115200);
 
@@ -147,23 +149,46 @@ int main()
     servo5.period(PWMperiod);
 
     ///受け取り準備開始
-    pc.printf("serial starts\n");
+    //pc.printf("serial starts\n");
     //シリアル通信をスタートする
     //numの初期化
     num_ini();
-
-    while (1)
+    //while (1)
+    for (int counter = 0; counter < 100; counter++)
     {
-        pc.gets(buf, 31);         // 1文字受信バッファより取り出し
+
+        //pc.gets(buf, 31);         // 1文字受信バッファより取り出し
         for (int i = 0; i < 30; i++)
         {
-            num[i] = ctoi(buf[i]);//数字を数値に変換
+            ch = pc.getc();
+            num[i] = ctoi(ch);//数字を数値に変換
         }
-        move();
-        //動かしたら初期化する
-        num_ini();
-    }
 
+        move();
+
+        //動かしたら初期化する
+        output[counter][0] = aOut;
+        output[counter][1] = bOut;
+        output[counter][2] = cOut;
+        output[counter][3] = dOut;
+        output[counter][4] = eOut;
+        output[counter][5] = fOut;
+        num_ini();
+
+    }
+    FILE* fp;
+    fp = fopen("/local/Output.csv", "w");
+    if (fp == NULL)
+    {
+        //pc.printf("error");
+    }
+    //while (1)
+    fprintf(fp, "aOut,bOut,cOut,dOut,eOut,fOut\n");
+    for (int j = 0; j < 500; j++)
+    {
+        fprintf(fp, "%f,%f,%f,%f,%f,%f\n", output[j][0], output[j][1], output[j][2], output[j][3], output[j][4], output[j][5]);
+    }
+    fclose(fp);
     wait(0.1);
 
 }
