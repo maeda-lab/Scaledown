@@ -1,16 +1,17 @@
+//mbedå´ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã§ã™
 #include "mbed.h"
 
-PwmOut servo0(p21);//ƒÆ0‚É‘Î‰‚·‚éƒsƒ“
-PwmOut servo1(p22);//ƒÆ1‚É‘Î‰‚·‚éƒsƒ“
-PwmOut servo2(p23);//ƒÆ2‚É‘Î‰‚·‚éƒsƒ“
-PwmOut servo3(p24);//ƒÆ3‚É‘Î‰‚·‚éƒsƒ“
-PwmOut servo4(p25);//ƒÆ4‚É‘Î‰‚·‚éƒsƒ“
-PwmOut servo5(p26);//ƒÆ5‚É‘Î‰‚·‚éƒsƒ“
+PwmOut servo0(p21);//Î¸0ã«å¯¾å¿œã™ã‚‹ãƒ”ãƒ³
+PwmOut servo1(p22);//Î¸1ã«å¯¾å¿œã™ã‚‹ãƒ”ãƒ³
+PwmOut servo2(p23);//Î¸2ã«å¯¾å¿œã™ã‚‹ãƒ”ãƒ³
+PwmOut servo3(p24);//Î¸3ã«å¯¾å¿œã™ã‚‹ãƒ”ãƒ³
+PwmOut servo4(p25);//Î¸4ã«å¯¾å¿œã™ã‚‹ãƒ”ãƒ³
+PwmOut servo5(p26);//Î¸5ã«å¯¾å¿œã™ã‚‹ãƒ”ãƒ³
 
 Serial pc(USBTX, USBRX);
 LocalFileSystem local("local");
-float aOut, bOut, cOut, dOut, eOut, fOut;//‚»‚ê‚¼‚ê‚ÌŠp“x
-int num[30];//”šŠi”[êŠCŠî–{“I‚É1Œ…‚Ì”š‚µ‚©“ü‚ç‚È‚¢
+float aOut, bOut, cOut, dOut, eOut, fOut;//ãã‚Œãã‚Œã®è§’åº¦
+int num[30];//æ•°å­—æ ¼ç´å ´æ‰€ï¼ŒåŸºæœ¬çš„ã«1æ¡ã®æ•°å­—ã—ã‹å…¥ã‚‰ãªã„
 
 int a_num[8];
 int b_num[8];
@@ -21,11 +22,11 @@ int f_num[8];
 
 
 
-int pw0, pw1, pw2, pw3, pw4, pw5;//o—Íƒpƒ‹ƒX•
+int pw0, pw1, pw2, pw3, pw4, pw5;//å‡ºåŠ›ãƒ‘ãƒ«ã‚¹å¹…
 
-//‚«‚¿‚ñ‚Æ’l‚ªó‚¯æ‚ê‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN‚·‚é‚½‚ß‚Ì‰Šú‰»
-//Šp“x[‹]‚©‚ç“ü—Íƒpƒ‹ƒX•[us]‚É•ÏŠ·‚·‚éŠÖ”
-//(‹t‰^“®Šw‚Ì‰ŠúˆÊ’u‚É‘Î‰‚·‚éƒpƒ‹ƒX•){ideg->usj*(‰Šúp¨Šp{•ÏŠparg)
+//ãã¡ã‚“ã¨å€¤ãŒå—ã‘å–ã‚Œã¦ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹ãŸã‚ã®åˆæœŸåŒ–
+//è§’åº¦[Â°]ã‹ã‚‰å…¥åŠ›ãƒ‘ãƒ«ã‚¹å¹…[us]ã«å¤‰æ›ã™ã‚‹é–¢æ•°
+//(é€†é‹å‹•å­¦æ™‚ã®åˆæœŸä½ç½®ã«å¯¾å¿œã™ã‚‹ãƒ‘ãƒ«ã‚¹å¹…)ï¼‹ï¼ˆdeg->usï¼‰*(åˆæœŸå§¿å‹¢è§’ï¼‹å¤‰è§’arg)
 
 int cal_input0(float arg) {
     return 1475 + 8.6667 * (0.0 + arg);
@@ -49,8 +50,8 @@ int cal_input5(float arg) {
 
 void cal_pw()
 {
-    //‘—‚ç‚ê‚Ä‚­‚é‚Ì‚Í®”3Œ…{¬”1Œ…‚Å‚Í‚È‚­
-    //10”{‚³‚ê‚½‚È‚±‚Æ‚É’ˆÓ
+    //é€ã‚‰ã‚Œã¦ãã‚‹ã®ã¯æ•´æ•°3æ¡ï¼‹å°æ•°1æ¡ã§ã¯ãªã
+    //10å€ã•ã‚ŒãŸãªã“ã¨ã«æ³¨æ„
     pw0 = cal_input0(aOut);
     pw1 = cal_input1(bOut);
     pw2 = cal_input2(cOut);
@@ -60,15 +61,15 @@ void cal_pw()
 }
 void send_servo()
 {
-    servo0.pulsewidth_us(pw0);//ƒpƒ‹ƒX•Ï’²•‚ğ1625us‚Å“ü—Í
-    servo1.pulsewidth_us(pw1);//ƒpƒ‹ƒX•Ï’²•‚ğ1420us‚Å“ü—Í
-    servo2.pulsewidth_us(pw2); //ƒpƒ‹ƒX•Ï’²•‚ğ 632us‚Å“ü—Í
-    servo3.pulsewidth_us(pw3);//ƒpƒ‹ƒX•Ï’²•‚ğ1310us‚Å“ü—Í
-    servo4.pulsewidth_us(pw4);//ƒpƒ‹ƒX•Ï’²•‚ğ1368us‚Å“ü—Í
-    servo5.pulsewidth_us(pw5);//ƒpƒ‹ƒX•Ï’²•‚ğ1500us‚Å“ü—Í
+    servo0.pulsewidth_us(pw0);//ãƒ‘ãƒ«ã‚¹å¤‰èª¿å¹…ã‚’1625usã§å…¥åŠ›
+    servo1.pulsewidth_us(pw1);//ãƒ‘ãƒ«ã‚¹å¤‰èª¿å¹…ã‚’1420usã§å…¥åŠ›
+    servo2.pulsewidth_us(pw2); //ãƒ‘ãƒ«ã‚¹å¤‰èª¿å¹…ã‚’ 632usã§å…¥åŠ›
+    servo3.pulsewidth_us(pw3);//ãƒ‘ãƒ«ã‚¹å¤‰èª¿å¹…ã‚’1310usã§å…¥åŠ›
+    servo4.pulsewidth_us(pw4);//ãƒ‘ãƒ«ã‚¹å¤‰èª¿å¹…ã‚’1368usã§å…¥åŠ›
+    servo5.pulsewidth_us(pw5);//ãƒ‘ãƒ«ã‚¹å¤‰èª¿å¹…ã‚’1500usã§å…¥åŠ›
 }
 
-//“®‚­ŠÖ”D‘‚Ü‚Æ‚ß
+//å‹•ãé–¢æ•°ï¼ç·ã¾ã¨ã‚
 void move()
 {
     //cal_Out();
@@ -81,20 +82,20 @@ int main()
     FILE* fp;
     fp = fopen("/local/Out.csv", "w");
     fprintf(fp, "cnt,aOut,bOut,cOut,dOut,eOut,fOut\n");
-    float w = 60.0;//§Œäü”g”,‹K’è‚Í50‚Å‚±‚êˆÈã‘å‚«‚­‚·‚é‚Æ‚â‚Î‚¢‚©‚àB
-    float PWMperiod = 1.0 / w;    //PWMüŠú‚ÌŒvZ
+    float w = 60.0;//åˆ¶å¾¡å‘¨æ³¢æ•°,è¦å®šã¯50ã§ã“ã‚Œä»¥ä¸Šå¤§ããã™ã‚‹ã¨ã‚„ã°ã„ã‹ã‚‚ã€‚
+    float PWMperiod = 1.0 / w;    //PWMå‘¨æœŸã®è¨ˆç®—
     pc.baud(115200);
-    servo0.period(PWMperiod);          // servo0‚ÌPwmüŠú‚ğ20ms‚Æ‚·‚é
-    servo1.period(PWMperiod);          // servo1‚ÌPwmüŠú‚ğ20ms‚Æ‚·‚é
-    servo2.period(PWMperiod);          // servo2‚ÌPwmüŠú‚ğ20ms‚Æ‚·‚é
-    servo3.period(PWMperiod);          // servo3‚ÌPwmüŠú‚ğ20ms‚Æ‚·‚é
-    servo4.period(PWMperiod);          // servo4‚ÌPwmüŠú‚ğ20ms‚Æ‚·‚é
-    servo5.period(PWMperiod);          // servo5‚ÌPwmüŠú‚ğ20ms‚Æ‚·‚é
+    servo0.period(PWMperiod);          // servo0ã®Pwmå‘¨æœŸã‚’20msã¨ã™ã‚‹
+    servo1.period(PWMperiod);          // servo1ã®Pwmå‘¨æœŸã‚’20msã¨ã™ã‚‹
+    servo2.period(PWMperiod);          // servo2ã®Pwmå‘¨æœŸã‚’20msã¨ã™ã‚‹
+    servo3.period(PWMperiod);          // servo3ã®Pwmå‘¨æœŸã‚’20msã¨ã™ã‚‹
+    servo4.period(PWMperiod);          // servo4ã®Pwmå‘¨æœŸã‚’20msã¨ã™ã‚‹
+    servo5.period(PWMperiod);          // servo5ã®Pwmå‘¨æœŸã‚’20msã¨ã™ã‚‹
 
-    ///ó‚¯æ‚è€”õŠJn
-    //‰ŠúˆÊ’u‚Ìİ’è
+    ///å—ã‘å–ã‚Šæº–å‚™é–‹å§‹
+    //åˆæœŸä½ç½®ã®è¨­å®š
     pw0 = 0.0; pw1 = 0.0; pw2 = 0.0; pw3 = 0.0; pw4 = 0.0; pw5 = 0.0;
-    //ƒVƒŠƒAƒ‹’ÊM‚ğƒXƒ^[ƒg‚·‚é
+    //ã‚·ãƒªã‚¢ãƒ«é€šä¿¡ã‚’ã‚¹ã‚¿ãƒ¼ãƒˆã™ã‚‹
     pc.printf("serial starts\n");
     for(cnt=0;cnt<100;cnt++)
     //while (1)
