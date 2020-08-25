@@ -33,17 +33,17 @@ double prev_J3;
 
 struct Pos
 {
-    double x;
-    double y;
-    double z;
+	double x;
+	double y;
+	double z;
 };
 
 void send(double arg)
 {
-    for (int i = 0; i < 5; i++)
-    {
-        serial_Write(mbed, arg, i);
-    }
+	for (int i = 0; i < 5; i++)
+	{
+		serial_Write(mbed, arg, i);
+	}
 }
 
 // Masahiro Furukawa
@@ -69,211 +69,209 @@ LONGLONG msTo100Ns(LONGLONG ms);
 LONGLONG usTo100Ns(LONGLONG us);
 
 LONGLONG getWaitTime() {
-    return waitTime_;
+	return waitTime_;
 }
 LONGLONG getTime() {
-    LONGLONG tm;
-    QueryPerformanceCounter((LARGE_INTEGER*)&tm);
-    return tm;
+	LONGLONG tm;
+	QueryPerformanceCounter((LARGE_INTEGER*)&tm);
+	return tm;
 }
 LONGLONG msTo100Ns(LONGLONG ms) {
-    return usTo100Ns(ms * 1000);
+	return usTo100Ns(ms * 1000);
 }
 LONGLONG usTo100Ns(LONGLONG us) {
-    return us * 10;
+	return us * 10;
 }
 void wait() {
-    //timer object wait. one frame time each if to timeout.
+	//timer object wait. one frame time each if to timeout.
 
 #ifdef ENABLE_ERROR_CORRECTION
-    auto waitRet = WaitForSingleObject(timer_, (1000 + fps_ - 1) / fps_);
+	auto waitRet = WaitForSingleObject(timer_, (1000 + fps_ - 1) / fps_);
 #else
-    auto waitRet = WaitForSingleObject(timer_, INFINITE);
+	auto waitRet = WaitForSingleObject(timer_, INFINITE);
 #endif
-    auto current = getTime();
-    //タイマーがタイム・アウトしている場合はwait-wait間ですでに時間が過ぎているものとして誤差調整処理の対象外にする
+	auto current = getTime();
 #ifdef ENABLE_ERROR_CORRECTION
-    auto sub = (current - preframeTime_) - freq_ / fps_;
-    auto delay = waitRet == WAIT_TIMEOUT;
-    if (delay == false && preframeIsDelay_ == false) {
-        waitTime_ += sub;
-    }
-    preframeIsDelay_ = delay;
+	auto sub = (current - preframeTime_) - freq_ / fps_;
+	auto delay = waitRet == WAIT_TIMEOUT;
+	if (delay == false && preframeIsDelay_ == false) {
+		waitTime_ += sub;
+	}
+	preframeIsDelay_ = delay;
 #endif
-    SetWaitableTimer(timer_, (LARGE_INTEGER*)&waitTime_, 0, NULL, NULL, FALSE);
-    preframeTime_ = getTime();
+	SetWaitableTimer(timer_, (LARGE_INTEGER*)&waitTime_, 0, NULL, NULL, FALSE);
+	preframeTime_ = getTime();
 
 }
 
 int main()
 {
-    //// Masahiro Furukawa
-    //// Aug 24, 2020
-    ////
-    //// Interval Timer 
-    ////
-    //// https://misakichi-k.hatenablog.com/entry/2018/10/19/010134#WaitableTimer%E3%81%AB%E3%82%88%E3%82%8B%E5%9B%BA%E5%AE%9AFPS
-    
-    
-    // timer interval 
-    fps_ = 60;
+	//// Masahiro Furukawa
+	//// Aug 24, 2020
+	////
+	//// Interval Timer 
+	////
+	//// https://misakichi-k.hatenablog.com/entry/2018/10/19/010134#WaitableTimer%E3%81%AB%E3%82%88%E3%82%8B%E5%9B%BA%E5%AE%9AFPS
 
 
-    timer_ = CreateWaitableTimer(NULL, FALSE, NULL);
-    QueryPerformanceFrequency((LARGE_INTEGER*)&freq_);
-    preframeTime_ = getTime();
-    waitTime_ = -msTo100Ns(1000) / fps_;
-    SetWaitableTimer(timer_, (LARGE_INTEGER*)&waitTime_, 0, NULL, NULL, FALSE);
-
-    LARGE_INTEGER li;
-    QueryPerformanceFrequency((LARGE_INTEGER*)&li);
-    auto freq = li.QuadPart;
-
-    //get perf timer
-    auto getTm = []()->LONGLONG {
-        LARGE_INTEGER cnt;
-        QueryPerformanceCounter(&cnt);
-        return cnt.QuadPart;
-    };
+	// timer interval 
+	fps_ = 60;
 
 
-    //// timer sample
-    //for (int i = 0; i < 200; i++) {
-    //    for (int j = 0; j < 6; j++) {
-    //        for (int k = 0; k < 10; k++) {
-    //            printf(">");
-    //            wait();
-    //        }
-    //        printf(" ");
-    //    }
-    //    printf("\n");
-    //}
+	timer_ = CreateWaitableTimer(NULL, FALSE, NULL);
+	QueryPerformanceFrequency((LARGE_INTEGER*)&freq_);
+	preframeTime_ = getTime();
+	waitTime_ = -msTo100Ns(1000) / fps_;
+	SetWaitableTimer(timer_, (LARGE_INTEGER*)&waitTime_, 0, NULL, NULL, FALSE);
 
-    Pos posi;
+	LARGE_INTEGER li;
+	QueryPerformanceFrequency((LARGE_INTEGER*)&li);
+	auto freq = li.QuadPart;
 
-    ////シリアル通信の設定
-    //mbed = serial_open();
-    //mbed = serial_initialaize(mbed);
-    //mbed = serial_Config(mbed);
-
-    //初期位置の座標を計算する
-    double master_J1 = 0.0;
-    double master_J2 = -120.0;
-    double master_J3 = 30.0;
+	//get perf timer
+	auto getTm = []()->LONGLONG {
+		LARGE_INTEGER cnt;
+		QueryPerformanceCounter(&cnt);
+		return cnt.QuadPart;
+	};
 
 
-    //�����ʒu�ɂ�����X�̃T�[�{�̉�]�p�̐ݒ�
-    double master_theta1 = master_J1;
-    double master_theta2 = -1 * master_J2 - 90.0;//-1 * ( -1 * master_J2 - 90.0);
-    double master_theta3 = -1 * master_J3 - master_J2 - 90.0;//-1 * (-1 * master_J3 - master_J2 - 90.0);
+	//// timer sample
+	//for (int i = 0; i < 200; i++) {
+	//    for (int j = 0; j < 6; j++) {
+	//        for (int k = 0; k < 10; k++) {
+	//            printf(">");
+	//            wait();
+	//        }
+	//        printf(" ");
+	//    }
+	//    printf("\n");
+	//}
 
-    //�����ʒu�̍��W���v�Z����
-    double master_x = cal_fpx(master_J1, master_J2, master_J3);
-    double master_y = cal_fpy(master_J1, master_J2, master_J3);
-    double master_z = cal_fpz(master_J1, master_J2, master_J3);
+	Pos posi;
 
-    printf("\n\n\Initial position is as follows\n");
-    printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x, master_y, master_z);
-    printf("IK results of the initial goal position below is as follows\n");
-    printf("J1,J2,J3=[%lf,%lf,%lf]\n\n", master_J1, master_J2, master_J3);
-    printf("個々のサーボが実現する回転角は以下の通りです．\n");
-    printf("a,b,c=[%lf,%lf,%lf]\n\n", master_theta1, master_theta2, master_theta3);
+	////シリアル通信の設定
+	//mbed = serial_open();
+	//mbed = serial_initialaize(mbed);
+	//mbed = serial_Config(mbed);
 
-    //�����ʒu�Ɉړ�������
-    /*for (int i = 0; i < 10; i++)
-    {
-        send(60.0);
-        send(60.0);
-        send(60.0);
-        send(60.0);
-        send(60.0);
-        send(60.0);
-    }*/
-    //�J�E���^
-    int t = 0;
-    while (1)
-    {
-        //�ϐ��̐ݒ�
-        double a, b, c;
-        double j1, j2, j3;
-        double theta1, theta2, theta3;
-        double x, y, z;
-        //printf("==============================================\n");
-        //printf("\n�ڕW�l���w�肵�Ă�������.�P�ʂ�mm�ł��D\n");
+	//初期位置におけるアーム全体が実現する関節角の設定
+	double master_J1 = 0.0;
+	double master_J2 = -120.0;
+	double master_J3 = 30.0;
 
 
-        //===��ł��ŖڕW�ψʂ���͂������Ƃ��͂�������g��
-        //scanf_s("%lf", &posi.x);
-        //scanf_s("%lf", &posi.y);
-        //scanf_s("%lf", &posi.z);
+	//初期位置における個々のサーボの回転角の設定
+	double master_theta1 = master_J1;
+	double master_theta2 = -1 * master_J2 - 90.0;//-1 * ( -1 * master_J2 - 90.0);
+	double master_theta3 = -1 * master_J3 - master_J2 - 90.0;//-1 * (-1 * master_J3 - master_J2 - 90.0);
+
+	//初期位置の座標を計算する
+	double master_x = cal_fpx(master_J1, master_J2, master_J3);
+	double master_y = cal_fpy(master_J1, master_J2, master_J3);
+	double master_z = cal_fpz(master_J1, master_J2, master_J3);
+
+	printf("\n\n\Initial position is as follows\n");
+	printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x, master_y, master_z);
+	printf("IK results of the initial goal position below is as follows\n");
+	printf("J1,J2,J3=[%lf,%lf,%lf]\n\n", master_J1, master_J2, master_J3);
+	printf("個々のサーボが実現する回転角は以下の通りです．\n");
+	printf("a,b,c=[%lf,%lf,%lf]\n\n", master_theta1, master_theta2, master_theta3);
+
+	//初期位置に移動させる
+	/*for (int i = 0; i < 10; i++)
+	{
+		send(60.0);
+		send(60.0);
+		send(60.0);
+		send(60.0);
+		send(60.0);
+		send(60.0);
+	}*/
+	//�J�E���^
+	int t = 0;
+	while (1)
+	{
+		//�ϐ��̐ݒ�
+		double a, b, c;
+		double j1, j2, j3;
+		double theta1, theta2, theta3;
+		double x, y, z;
+		//printf("==============================================\n");
+		//printf("\n目標値を指定してください.単位はmmです．\n");
 
 
-        //===�A���ő��M��������Ƃ��ɂ�������g��
-        //=====�J�E���^�����Ă���̂ŁC�ω�����������
-        posi.x = 30.0 * sin(2 * 3.14 * t * 0.01);
-        posi.y = 0.0;// +t * 0.01;
-        posi.z = 0.0;// +t * 0.01;
+		//===手打ちで目標変位を入力したいときはこちらを使う
+		//scanf_s("%lf", &posi.x);
+		//scanf_s("%lf", &posi.y);
+		//scanf_s("%lf", &posi.z);
 
 
-        //========================================�����ʒu����̕ψʂ�pos�ɑ��===========================================
-        //                                  ->�t�^���w�v�Z�ɂ͐��E���W�n���猩���ʒu�𑫂��Z����D
-
-        //printf("�w�肵�������ʒu����̕ψʂ͈ȉ��̒ʂ�ł�\n");
-        //printf("x,y,z=%lf,%lf,%lf\n\n", posi.x, posi.y, posi.z);
-        //�w�肵���ψ� �� scale�@�{�@�����ʒu�œ������������E���W�n�ł̈ʒu���v�Z����
-        x = posi.x * scale + master_x;
-        y = posi.y * scale + master_y;
-        z = posi.z * scale + master_z;
-        //printf("���E���W�n�ł̈ʒu�͈ȉ��̒ʂ�ł�\t�������C�X�P�[�����%.4lf�ł�\n",scale);
-        //printf("x,y,z=%lf,%lf,%lf\n\n", x, y, z);
-
-        //=============================================�t�^���w�̌v�Z=============================================
-        //===========================���蕔����1�O�̊p�x�f�[�^���g���̂ŗv�C��================================
-        j1 = cal_J1(x, y, z);
-        j3 = cal_J3(x, y, z, j1);
-        j2 = cal_J2(x, y, z, j1, j3);
+		//===�A���ő��M��������Ƃ��ɂ�������g��
+		//=====�J�E���^�����Ă���̂ŁC�ω�����������
+		posi.x = 30.0 * sin(2 * 3.14 * t * 0.01);
+		posi.y = 0.0;// +t * 0.01;
+		posi.z = 0.0;// +t * 0.01;
 
 
-        //======================���鎞��t�ɑ΂���t-1�̎����̊p�x�̃f�[�^�������Ă���===========================================
-        //prev_J2 = j2;
-        //prev_J3 = j3;
+	   //========================================初期位置からの変位をposに代入===========================================
+	   //                                  ->逆運動学計算には世界座標系から見た位置を足し算する．
+
+	   //printf("指定した初期位置からの変位は以下の通りです\n");
+	   //printf("x,y,z=%lf,%lf,%lf\n\n", posi.x, posi.y, posi.z);
+	   //指定した変位 ＊ scale　＋　初期位置で動かしたい世界座標系での位置を計算する
+		x = posi.x * scale + master_x;
+		y = posi.y * scale + master_y;
+		z = posi.z * scale + master_z;
+		//printf("世界座標系での位置は以下の通りです\tただし，スケール比は%.4lfです\n",scale);
+		//printf("x,y,z=%lf,%lf,%lf\n\n", x, y, z);
+
+		//逆運動学の計算
+		j1 = cal_J1(x, y, z);
+		j3 = cal_J3(x, y, z, j1);
+		j2 = cal_J2(x, y, z, j1, j3);
+
+
+		//======================���鎞��t�ɑ΂���t-1�̎����̊p�x�̃f�[�^�������Ă���===========================================
+		//prev_J2 = j2;
+		//prev_J3 = j3;
 
 
 
-        if (j2 == EOF || j3 == EOF)
-        {
-            printf("EOEOF");
-            break;
-        }
-        //printf("j1,j2,j3=[%lf,%lf,%lf]\n\n", j1, j2, j3);
+		if (j2 == EOF || j3 == EOF)
+		{
+			printf("EOEOF");
+			break;
+		}
+		//printf("j1,j2,j3=[%lf,%lf,%lf]\n\n", j1, j2, j3);
 
-        //�t�^���w�Ōv�Z�����l�ƃT�[�{�ɓ��͂���p�͈قȂ邽�߁C�ϊ����ɑ������
-        theta1 = j1;
-        theta2 = -1 * j2 - 90.0;
-        theta3 = -j3 - j2 - 90.0;
-        //printf("theta1,theta2,theta3=[%lf,%lf,%lf]\n", theta1, theta2, theta3);
+	   //逆運動学で計算した値とサーボに入力する角は異なるため，変換式に代入する
+		theta1 = j1;
+		theta2 = -1 * j2 - 90.0;
+		theta3 = -j3 - j2 - 90.0;
+		//printf("theta1,theta2,theta3=[%lf,%lf,%lf]\n", theta1, theta2, theta3);
 
-        //�������W����̍������v�Z���ăT�[�{�ɑ���l���v�Z����
-        a = theta1 - master_theta1;
-        b = theta2 - master_theta2;
-        c = theta3 - master_theta3;
-
-
-        //printf("x=%lf\n", posi.x);
+	   //初期座標からの差分を計算してサーボに送る値を計算する
+		a = theta1 - master_theta1;
+		b = theta2 - master_theta2;
+		c = theta3 - master_theta3;
 
 
-        //printf("�ڕW�ʒu�֕ψʂ����邽�߂ɓ��͂���p�x�͎��̒ʂ�ł�\n");
-        printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, b, c);
-        send(a + 60.0);
-        send(b + 60.0);
-        send(c + 60.0);
-        send(0.0 + 60.0);
-        send(0.0 + 60.0);
-        send(0.0 + 60.0);
+		//printf("x=%lf\n", posi.x);
 
-        t++;
-        wait();
-    }
-    return 0;
+
+	   //printf("目標位置へ変位させるために入力する角度は次の通りです\n");
+		printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, b, c);
+		send(a + 60.0);
+		send(b + 60.0);
+		send(c + 60.0);
+		send(0.0 + 60.0);
+		send(0.0 + 60.0);
+		send(0.0 + 60.0);
+
+		t++;
+		wait();
+	}
+	return 0;
 
 }
