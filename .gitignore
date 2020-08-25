@@ -18,3 +18,8 @@
 *.ilk
 *checkpoint.ipynb
 miyamoto/.DS_Store
+*.tlog
+*.tlog
+*.idb
+*.obj
+*.pdb
