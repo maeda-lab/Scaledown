@@ -138,14 +138,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="hirayama_IK_Serial.cpp" />
-    <ClCompile Include="mbed_Serial.cpp" />
-    <ClCompile Include="tel_kin.cpp" />
+    <ClCompile Include="..\..\手先\tele_mbed_serial\mbed_Serial.cpp" />
+    <ClCompile Include="..\..\手先\tele_mbed_serial\hirayama_IK_Serial.cpp" />
+    <ClCompile Include="..\..\手先\tele_mbed_serial\tel_kin.cpp" />
+    <ClCompile Include="tele_mbed.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="hirayama_IK_Serial.h" />
-    <ClInclude Include="mbed_Serial.h" />
-    <ClInclude Include="tel_kin.h" />
+    <ClInclude Include="..\..\手先\tele_mbed_serial\mbed_Serial.h" />
+    <ClInclude Include="..\..\手先\tele_mbed_serial\tel_kin.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

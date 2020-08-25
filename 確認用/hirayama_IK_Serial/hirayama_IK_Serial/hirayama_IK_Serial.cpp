@@ -40,17 +40,11 @@ struct Pos
 
 void send(double arg)
 {
-    for (int cnt = 0; cnt < 4; cnt++)
+    for (int i = 0; i < 5; i++)
     {
-        serial_Write(mbed, arg, cnt);
+        serial_Write(mbed, arg, i);
     }
-
 }
-VOID APIENTRY DoSomething(LPVOID Args, DWORD low, DWORD high) 
-{
-    printf(">");
-}
-
 
 // Masahiro Furukawa
 // Aug 24, 2020
@@ -59,7 +53,7 @@ VOID APIENTRY DoSomething(LPVOID Args, DWORD low, DWORD high)
 //
 // reference ; https://misakichi-k.hatenablog.com/entry/2018/10/19/010134#WaitableTimer%E3%81%AB%E3%82%88%E3%82%8B%E5%9B%BA%E5%AE%9AFPS
 //
-////’Êí‚Í—LŒø‚Å‚¢‚¢AƒeƒXƒg—p‚É‘¶İ‚·‚é
+////ï¿½Êï¿½Í—Lï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½Aï¿½eï¿½Xï¿½gï¿½pï¿½É‘ï¿½ï¿½İ‚ï¿½ï¿½ï¿½
 #define ENABLE_ERROR_CORRECTION
 
 unsigned int	fps_;
@@ -97,7 +91,7 @@ void wait() {
 #endif
     auto current = getTime();
 #ifdef ENABLE_ERROR_CORRECTION
-    //ƒ^ƒCƒ}[‚ªƒ^ƒCƒ€EƒAƒEƒg‚µ‚Ä‚¢‚éê‡‚Íwait-waitŠÔ‚Å‚·‚Å‚ÉŠÔ‚ª‰ß‚¬‚Ä‚¢‚é‚à‚Ì‚Æ‚µ‚ÄŒë·’²®ˆ—‚Ì‘ÎÛŠO‚É‚·‚é
+    //ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½ï¿½Eï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½ï¿½wait-waitï¿½Ô‚Å‚ï¿½ï¿½Å‚Éï¿½ï¿½Ô‚ï¿½ï¿½ß‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ÄŒë·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‘ÎÛŠOï¿½É‚ï¿½ï¿½ï¿½
     auto sub = (current - preframeTime_) - freq_ / fps_;
     auto delay = waitRet == WAIT_TIMEOUT;
     if (delay == false && preframeIsDelay_ == false) {
@@ -112,9 +106,6 @@ void wait() {
 
 int main()
 {
-
-
-
     //// Masahiro Furukawa
     //// Aug 24, 2020
     ////
@@ -159,115 +150,128 @@ int main()
 
     Pos posi;
 
-    //ƒVƒŠƒAƒ‹’ÊM‚Ìİ’è
+    //ï¿½Vï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ÊMï¿½Ìİ’ï¿½
     mbed = serial_open();
     mbed = serial_initialaize(mbed);
     mbed = serial_Config(mbed);
-    
-    //‰ŠúˆÊ’u‚É‚¨‚¯‚éƒA[ƒ€‘S‘Ì‚ªÀŒ»‚·‚éŠÖßŠp‚Ìİ’è
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½[ï¿½ï¿½ï¿½Sï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖßŠpï¿½Ìİ’ï¿½
     double master_J1 = 0.0;
     double master_J2 = -120.0;
     double master_J3 = 30.0;
 
 
-    //‰ŠúˆÊ’u‚É‚¨‚¯‚éŒÂX‚ÌƒT[ƒ{‚Ì‰ñ“]Šp‚Ìİ’è
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ÂXï¿½ÌƒTï¿½[ï¿½{ï¿½Ì‰ï¿½]ï¿½pï¿½Ìİ’ï¿½
     double master_theta1 = master_J1;
     double master_theta2 = -1 * master_J2 - 90.0;//-1 * ( -1 * master_J2 - 90.0);
     double master_theta3 = -1 * master_J3 - master_J2 - 90.0;//-1 * (-1 * master_J3 - master_J2 - 90.0);
-    
-    //‰ŠúˆÊ’u‚ÌÀ•W‚ğŒvZ‚·‚é
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
     double master_x = cal_fpx(master_J1, master_J2, master_J3);
     double master_y = cal_fpy(master_J1, master_J2, master_J3);
     double master_z = cal_fpz(master_J1, master_J2, master_J3);
 
-    printf("\n\n\n‰ŠúˆÊ’u‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·D\n");
-    printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x,master_y, master_z);
-    printf("ƒA[ƒ€‘S‘Ì‚ªÀŒ»‚·‚é‰ŠúŠp‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·D\n");
+    printf("\n\n\nï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½ÍˆÈ‰ï¿½ï¿½Ì’Ê‚ï¿½Å‚ï¿½ï¿½D\n");
+    printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x, master_y, master_z);
+    printf("ï¿½Aï¿½[ï¿½ï¿½ï¿½Sï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‰ï¿½ï¿½ï¿½pï¿½ÍˆÈ‰ï¿½ï¿½Ì’Ê‚ï¿½Å‚ï¿½ï¿½D\n");
     printf("J1,J2,J3=[%lf,%lf,%lf]\n\n", master_J1, master_J2, master_J3);
-    printf("ŒÂX‚ÌƒT[ƒ{‚ªÀŒ»‚·‚é‰ñ“]Šp‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·D\n");
+    printf("ï¿½ÂXï¿½ÌƒTï¿½[ï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½pï¿½ÍˆÈ‰ï¿½ï¿½Ì’Ê‚ï¿½Å‚ï¿½ï¿½D\n");
     printf("a,b,c=[%lf,%lf,%lf]\n\n", master_theta1, master_theta2, master_theta3);
-    
-    //‰ŠúˆÊ’u‚ÉˆÚ“®‚³‚¹‚é
-    for (int i = 0; i < 10; i++)
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½ÉˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    /*for (int i = 0; i < 10; i++)
     {
-        send(0 - a_mini);
-        send(0 - b_mini);
-        send(0 - c_mini);
-        send(0 - d_mini);
-        send(0 - e_mini);
-        send(0 - f_mini);
-    }
-    //ƒJƒEƒ“ƒ^
+        send(60.0);
+        send(60.0);
+        send(60.0);
+        send(60.0);
+        send(60.0);
+        send(60.0);
+    }*/
+    //ï¿½Jï¿½Eï¿½ï¿½ï¿½^
     int t = 0;
     while (1)
     {
-        //•Ï”‚Ìİ’è
-       double a, b, c;
-       double j1, j2, j3;
-       double theta1, theta2, theta3;
-       double x, y, z;
-       //printf("==============================================\n");
-       //printf("\n–Ú•W’l‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢.’PˆÊ‚Ímm‚Å‚·D\n");
+        //ï¿½Ïï¿½ï¿½Ìİ’ï¿½
+        double a, b, c;
+        double j1, j2, j3;
+        double theta1, theta2, theta3;
+        double x, y, z;
+        //printf("==============================================\n");
+        //printf("\nï¿½Ú•Wï¿½lï¿½ï¿½ï¿½wï¿½è‚µï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.ï¿½Pï¿½Ê‚ï¿½mmï¿½Å‚ï¿½ï¿½D\n");
 
 
-       //===è‘Å‚¿‚Å–Ú•W•ÏˆÊ‚ğ“ü—Í‚µ‚½‚¢‚Æ‚«‚Í‚±‚¿‚ç‚ğg‚¤
-       //scanf_s("%lf", &posi.x);
-       //scanf_s("%lf", &posi.y);
-       //scanf_s("%lf", &posi.z);
+        //===ï¿½ï¿½Å‚ï¿½ï¿½Å–Ú•Wï¿½ÏˆÊ‚ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½
+        //scanf_s("%lf", &posi.x);
+        //scanf_s("%lf", &posi.y);
+        //scanf_s("%lf", &posi.z);
 
 
-       //===˜A‘±‚Å‘—M‚µ‘±‚¯‚é‚Æ‚«‚É‚±‚¿‚ç‚ğg‚¤
-       posi.x = 0.0 +t * 0.01;
-       posi.y = 0.0;// +t * 0.01;
-       posi.z = 0.0;// +t * 0.01;
+        //===ï¿½Aï¿½ï¿½ï¿½Å‘ï¿½ï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½
+        //=====ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Â‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ÅCï¿½Ï‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        posi.x = 30.0 * sin(2 * 3.14 * t * 0.01);
+        posi.y = 0.0;// +t * 0.01;
+        posi.z = 0.0;// +t * 0.01;
 
 
-       //========================================‰ŠúˆÊ’u‚©‚ç‚Ì•ÏˆÊ‚ğpos‚É‘ã“ü===========================================
-       //                                  ->‹t‰^“®ŠwŒvZ‚É‚Í¢ŠEÀ•WŒn‚©‚çŒ©‚½ˆÊ’u‚ğ‘«‚µZ‚·‚éD
+        //========================================ï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½ï¿½Ì•ÏˆÊ‚ï¿½posï¿½É‘ï¿½ï¿½===========================================
+        //                                  ->ï¿½tï¿½^ï¿½ï¿½ï¿½wï¿½vï¿½Zï¿½É‚Íï¿½ï¿½Eï¿½ï¿½ï¿½Wï¿½nï¿½ï¿½ï¿½çŒ©ï¿½ï¿½ï¿½Ê’uï¿½ğ‘«‚ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½D
 
-       //printf("w’è‚µ‚½‰ŠúˆÊ’u‚©‚ç‚Ì•ÏˆÊ‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·\n");
-       //printf("x,y,z=%lf,%lf,%lf\n\n", posi.x, posi.y, posi.z);
-       //w’è‚µ‚½•ÏˆÊ – scale@{@‰ŠúˆÊ’u‚Å“®‚©‚µ‚½‚¢¢ŠEÀ•WŒn‚Å‚ÌˆÊ’u‚ğŒvZ‚·‚é
-       x = posi.x * scale + master_x;
-       y = posi.y * scale + master_y;
-       z = posi.z * scale + master_z;
-       //printf("¢ŠEÀ•WŒn‚Å‚ÌˆÊ’u‚ÍˆÈ‰º‚Ì’Ê‚è‚Å‚·\t‚½‚¾‚µCƒXƒP[ƒ‹”ä‚Í%.4lf‚Å‚·\n",scale);
-       //printf("x,y,z=%lf,%lf,%lf\n\n", x, y, z);
+        //printf("ï¿½wï¿½è‚µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½ï¿½Ì•ÏˆÊ‚ÍˆÈ‰ï¿½ï¿½Ì’Ê‚ï¿½Å‚ï¿½\n");
+        //printf("x,y,z=%lf,%lf,%lf\n\n", posi.x, posi.y, posi.z);
+        //ï¿½wï¿½è‚µï¿½ï¿½ï¿½Ïˆï¿½ ï¿½ï¿½ scaleï¿½@ï¿½{ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½Å“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½Wï¿½nï¿½Å‚ÌˆÊ’uï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
+        x = posi.x * scale + master_x;
+        y = posi.y * scale + master_y;
+        z = posi.z * scale + master_z;
+        //printf("ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½Wï¿½nï¿½Å‚ÌˆÊ’uï¿½ÍˆÈ‰ï¿½ï¿½Ì’Ê‚ï¿½Å‚ï¿½\tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½%.4lfï¿½Å‚ï¿½\n",scale);
+        //printf("x,y,z=%lf,%lf,%lf\n\n", x, y, z);
 
-       //‹t‰^“®Šw‚ÌŒvZ
-       j1 = cal_J1(x, y , z );
-       j3 = cal_J3(x, y , z,j1);
-       j2 = cal_J2(x, y , z,j1, j3);
-       //printf("j1,j2,j3=[%lf,%lf,%lf]\n\n", j1, j2, j3);
-       
-       //‹t‰^“®Šw‚ÅŒvZ‚µ‚½’l‚ÆƒT[ƒ{‚É“ü—Í‚·‚éŠp‚ÍˆÙ‚È‚é‚½‚ßC•ÏŠ·®‚É‘ã“ü‚·‚é
-       theta1 = j1 ;
-       theta2 = -1*j2 - 90.0;
-       theta3 = -j3 - j2 - 90.0;
-       //printf("theta1,theta2,theta3=[%lf,%lf,%lf]\n", theta1, theta2, theta3);
-
-       //‰ŠúÀ•W‚©‚ç‚Ì·•ª‚ğŒvZ‚µ‚ÄƒT[ƒ{‚É‘—‚é’l‚ğŒvZ‚·‚é
-       a = theta1 - master_theta1;
-       b = theta2 - master_theta2;
-       c = theta3 - master_theta3;
-
-       
-       printf("x=%lf\n", posi.x);
+        //=============================================ï¿½tï¿½^ï¿½ï¿½ï¿½wï¿½ÌŒvï¿½Z=============================================
+        //===========================ï¿½ï¿½ï¿½è•”ï¿½ï¿½ï¿½ï¿½1ï¿½Â‘Oï¿½ÌŠpï¿½xï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ì‚Å—vï¿½Cï¿½ï¿½================================
+        j1 = cal_J1(x, y, z);
+        j3 = cal_J3(x, y, z, j1);
+        j2 = cal_J2(x, y, z, j1, j3);
 
 
-       //printf("–Ú•WˆÊ’u‚Ö•ÏˆÊ‚³‚¹‚é‚½‚ß‚É“ü—Í‚·‚éŠp“x‚ÍŸ‚Ì’Ê‚è‚Å‚·\n");
-       printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, b, c);
-       send(a - a_mini);
-       send(b - b_mini);
-       send(c - c_mini);
-       send(0 - d_mini);
-       send(0 - e_mini);
-       send(0 - f_mini);
-       //printf("==============================================\n\n\n");
-       t++;
-       wait();
-     }
-    //CloseHandle(timer_);
+        //======================ï¿½ï¿½ï¿½éï¿½ï¿½tï¿½É‘Î‚ï¿½ï¿½ï¿½t-1ï¿½Ìï¿½ï¿½ï¿½ï¿½ÌŠpï¿½xï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½===========================================
+        //prev_J2 = j2;
+        //prev_J3 = j3;
+
+
+
+        if (j2 == EOF || j3 == EOF)
+        {
+            printf("EOEOF");
+            break;
+        }
+        //printf("j1,j2,j3=[%lf,%lf,%lf]\n\n", j1, j2, j3);
+
+        //ï¿½tï¿½^ï¿½ï¿½ï¿½wï¿½ÅŒvï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ÆƒTï¿½[ï¿½{ï¿½É“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½pï¿½ÍˆÙ‚È‚é‚½ï¿½ßCï¿½ÏŠï¿½ï¿½ï¿½ï¿½É‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        theta1 = j1;
+        theta2 = -1 * j2 - 90.0;
+        theta3 = -j3 - j2 - 90.0;
+        //printf("theta1,theta2,theta3=[%lf,%lf,%lf]\n", theta1, theta2, theta3);
+
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ÄƒTï¿½[ï¿½{ï¿½É‘ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
+        a = theta1 - master_theta1;
+        b = theta2 - master_theta2;
+        c = theta3 - master_theta3;
+
+
+        //printf("x=%lf\n", posi.x);
+
+
+        //printf("ï¿½Ú•Wï¿½Ê’uï¿½Ö•ÏˆÊ‚ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚É“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½pï¿½xï¿½Íï¿½ï¿½Ì’Ê‚ï¿½Å‚ï¿½\n");
+        printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, b, c);
+        send(a + 60.0);
+        send(b + 60.0);
+        send(c + 60.0);
+        send(0.0 + 60.0);
+        send(0.0 + 60.0);
+        send(0.0 + 60.0);
+        //printf("==============================================\n\n\n");
+        t++;
+    }
     return 0;
 
 }
