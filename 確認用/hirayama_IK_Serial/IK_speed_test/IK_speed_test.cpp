@@ -13,6 +13,8 @@
 #include "hirayama_IK_Serial/hirayama_IK_Serial.h"
 #include "hirayama_IK_Serial/tel_kin.h"
 
+#define PI 3.14159265358979
+
 DWORD maindwSendSize;
 DWORD maindwGetSize;
 unsigned char start[1];
@@ -117,17 +119,9 @@ int main()
 	waitTime_ = -msTo100Ns(1000) / fps_;
 	SetWaitableTimer(timer_, (LARGE_INTEGER*)&waitTime_, 0, NULL, NULL, FALSE);
 
-	LARGE_INTEGER li;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&li);
-	auto freq = li.QuadPart;
 
-	////get perf timer
-	//auto getTm = []()->LONGLONG {
-	//	LARGE_INTEGER cnt;
-	//	QueryPerformanceCounter(&cnt);
-	//	return cnt.QuadPart;
-	//};
-
+	LONGLONG		startTime_;
+	LONGLONG		endTime_;
 
 	//// timer sample
 	//for (int i = 0; i < 200; i++) {
@@ -164,51 +158,39 @@ int main()
 	double master_y = cal_fpy(master_J1, master_J2, master_J3);
 	double master_z = cal_fpz(master_J1, master_J2, master_J3);
 
-	printf("\n\nInitial position is as follows\n");
-	printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x, master_y, master_z);
-	printf("IK results of the initial goal position below is as follows\n");
-	printf("J1,J2,J3=[%lf,%lf,%lf]\n\n", master_J1, master_J2, master_J3);
-	printf("個々のサーボが実現する回転角は以下の通りです．\n");
-	printf("a,b,c=[%lf,%lf,%lf]\n\n", master_theta1, master_theta2, master_theta3);
-
 	int t = 0;
-	while (1)
+
+	double a, b, c;
+	double j1, j2, j3;
+	double theta1, theta2, theta3;
+	double x, y, z;
+
+	// start time
+	startTime_ = getTime();
+
+#define NUM_OF_IK_CYCLE 100000
+
+	for (int i = 0; i < NUM_OF_IK_CYCLE; i++)
 	{
-		double a, b, c;
-		double j1, j2, j3;
-		double theta1, theta2, theta3;
-		double x, y, z;
 		// target position
-		posi.x = 30.0 * sin(2 * 3.14 * t * 0.01);
+		posi.x = 30.0 * sin(2 * PI * t * 0.01);
 		posi.y = 0.0;// +t * 0.01;
 		posi.z = 0.0;// +t * 0.01;
 
-
-	   //========================================初期位置からの変位をposに代入===========================================
-	   //                                  ->逆運動学計算には世界座標系から見た位置を足し算する．
-
-	   //printf("指定した初期位置からの変位は以下の通りです\n");
-	   //printf("x,y,z=%lf,%lf,%lf\n\n", posi.x, posi.y, posi.z);
-	   //指定した変位 ＊ scale　＋　初期位置で動かしたい世界座標系での位置を計算する
 		x = posi.x * scale + master_x;
 		y = posi.y * scale + master_y;
 		z = posi.z * scale + master_z;
-		//printf("世界座標系での位置は以下の通りです\tただし，スケール比は%.4lfです\n",scale);
-		//printf("x,y,z=%lf,%lf,%lf\n\n", x, y, z);
 
 		//逆運動学の計算
 		j1 = cal_J1(x, y, z);
 		j3 = cal_J3(x, y, z, j1);
 		j2 = cal_J2(x, y, z, j1, j3);
 
-
-
 		if (j2 == EOF || j3 == EOF)
 		{
 			printf("EOEOF");
 			break;
 		}
-		//printf("j1,j2,j3=[%lf,%lf,%lf]\n\n", j1, j2, j3);
 
 	   //逆運動学で計算した値とサーボに入力する角は異なるため，変換式に代入する
 		theta1 = j1;
@@ -223,20 +205,29 @@ int main()
 
 
 		////printf("x=%lf\n", posi.x);
-
-
-	 //  //printf("目標位置へ変位させるために入力する角度は次の通りです\n");
-		//printf("a,b,c=[%.3lf , %.3lf , %.3lf]\n\n", a, b, c);
-		//send(a + 60.0);
-		//send(b + 60.0);
-		//send(c + 60.0);
-		//send(0.0 + 60.0);
-		//send(0.0 + 60.0);
-		//send(0.0 + 60.0);
-
 		t++;
-		wait();
 	}
+
+	endTime_ = getTime();
+
+#ifndef _DEBUG                  /* For RELEASE builds */
+	printf("\n *** Relase Build ****\n\n");
+#else                           /* For DEBUG builds   */
+	printf("\n !!! Debug Build  !!!! --- SLOW !!! DO NOT BUILD UNDER Debug Mode !!!\n\n");
+#endif
+
+	printf("\nperformance counter frequency : %lld [MHz]",    freq_ / 1000000);
+	printf("\nperformance counter term      : %lld [ns]\n\n", 1000000000 / freq_);
+	
+	printf("num of cycle : %d\n\n",   t);
+	printf("start count  : %lld\n", startTime_);
+	printf("end   count  : %lld\n", endTime_);
+	printf("diff  count  : %lld\n", endTime_ - startTime_);
+	
+	printf("\nIK solusion took %.3lf [ns/cycle] = %.3lf [us/cycle]\n\n",
+		(double)(endTime_ - startTime_) * (double)1000000000 / (double)freq_ / (double)NUM_OF_IK_CYCLE,
+		(double)(endTime_ - startTime_) * (double)1000000 / (double)freq_ / (double)NUM_OF_IK_CYCLE);
+
 	return 0;
 
 }
