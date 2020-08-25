@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include"tel_kin.h"
-#include"mbed_Serial.h"
+#include "tel_kin.h"
+#include "mbed_Serial.h"
 #include "hirayama_IK_Serial.h"
 
 DWORD maindwSendSize;
@@ -50,49 +50,112 @@ VOID APIENTRY DoSomething(LPVOID Args, DWORD low, DWORD high)
 {
     printf(">");
 }
+
+
+// Masahiro Furukawa
+// Aug 24, 2020
+//
+// Interval Timer 
+//
+// reference ; https://misakichi-k.hatenablog.com/entry/2018/10/19/010134#WaitableTimer%E3%81%AB%E3%82%88%E3%82%8B%E5%9B%BA%E5%AE%9AFPS
+//
+////通常は有効でいい、テスト用に存在する
+#define ENABLE_ERROR_CORRECTION
+
+unsigned int	fps_;
+bool			preframeIsDelay_;
+HANDLE			timer_;
+LONGLONG		freq_;
+LONGLONG		preframeTime_;
+LONGLONG		waitTime_;
+
+LONGLONG getTime();
+LONGLONG getWaitTime();
+LONGLONG msTo100Ns(LONGLONG ms);
+LONGLONG usTo100Ns(LONGLONG us);
+
+LONGLONG getWaitTime() {
+    return waitTime_;
+}
+LONGLONG getTime() {
+    LONGLONG tm;
+    QueryPerformanceCounter((LARGE_INTEGER*)&tm);
+    return tm;
+}
+LONGLONG msTo100Ns(LONGLONG ms) {
+    return usTo100Ns(ms * 1000);
+}
+LONGLONG usTo100Ns(LONGLONG us) {
+    return us * 10;
+}
+void wait() {
+    //timer object wait. one frame time each if to timeout.
+#ifdef ENABLE_ERROR_CORRECTION
+    auto waitRet = WaitForSingleObject(timer_, (1000 + fps_ - 1) / fps_);
+#else
+    auto waitRet = WaitForSingleObject(timer_, INFINITE);
+#endif
+    auto current = getTime();
+#ifdef ENABLE_ERROR_CORRECTION
+    //タイマーがタイム・アウトしている場合はwait-wait間ですでに時間が過ぎているものとして誤差調整処理の対象外にする
+    auto sub = (current - preframeTime_) - freq_ / fps_;
+    auto delay = waitRet == WAIT_TIMEOUT;
+    if (delay == false && preframeIsDelay_ == false) {
+        waitTime_ += sub;
+    }
+    preframeIsDelay_ = delay;
+#endif
+    SetWaitableTimer(timer_, (LARGE_INTEGER*)&waitTime_, 0, NULL, NULL, FALSE);
+    preframeTime_ = getTime();
+
+}
+
 int main()
 {
 
 
 
-    // Masahiro Furukawa
-    // Aug 24, 2020
-    //
-    // Interval Timer 
-    //
-    // reference : https://qiita.com/tobira-code/items/ae0764634f078407662f
+    //// Masahiro Furukawa
+    //// Aug 24, 2020
+    ////
+    //// Interval Timer 
+    ////
+    //// https://misakichi-k.hatenablog.com/entry/2018/10/19/010134#WaitableTimer%E3%81%AB%E3%82%88%E3%82%8B%E5%9B%BA%E5%AE%9AFPS
+    
+    
+    // timer interval 
+    fps_ = 60;
 
-    HANDLE timer = NULL;
+
+    timer_ = CreateWaitableTimer(NULL, FALSE, NULL);
+    QueryPerformanceFrequency((LARGE_INTEGER*)&freq_);
+    preframeTime_ = getTime();
+    waitTime_ = -msTo100Ns(1000) / fps_;
+    SetWaitableTimer(timer_, (LARGE_INTEGER*)&waitTime_, 0, NULL, NULL, FALSE);
+
+    LARGE_INTEGER li;
+    QueryPerformanceFrequency((LARGE_INTEGER*)&li);
+    auto freq = li.QuadPart;
+
+    //get perf timer
+    auto getTm = []()->LONGLONG {
+        LARGE_INTEGER cnt;
+        QueryPerformanceCounter(&cnt);
+        return cnt.QuadPart;
+    };
 
 
-    timer = CreateWaitableTimer(
-        NULL,  // LPSECURITY_ATTRIBUTES lpTimerAttributes,
-        TRUE,  // BOOL bManualReset,
-        NULL   // LPCTSTR lpTimerName
-    );
-    if (timer == NULL) {
-        /* error */
-    }
-    LARGE_INTEGER interval;
-    interval.QuadPart = -10 * 1000*3000; /* unit:100nsec, wait xx msec */
-    if (!SetWaitableTimer(
-        timer,      // HANDLE hTimer,
-        &interval,  // LARGE_INTEGER *pDueTime,
-        3,          // LONG lPeriod,
-        DoSomething,// PTIMERAPCROUTINE pfnCompletionRoutine,
-        NULL,       // LPVOID lpArgToCompletionRoutine,
-        FALSE       // BOOL fResume
-    )) {
-        /* error */
-    }
-
-    if (WaitForSingleObject(timer, INFINITE) != WAIT_OBJECT_0) {
-        /* error */
-    }
-
-    if (!CloseHandle(timer)) {
-        /* error */
-    }
+    //// timer sample
+    //for (int i = 0; i < 200; i++) {
+    //    for (int j = 0; j < 6; j++) {
+    //        for (int k = 0; k < 10; k++) {
+    //            printf(">");
+    //            wait();
+    //        }
+    //        printf(" ");
+    //    }
+    //    printf("\n");
+    //}
 
     Pos posi;
 
@@ -202,7 +265,9 @@ int main()
        send(0 - f_mini);
        //printf("==============================================\n\n\n");
        t++;
+       wait();
      }
+    //CloseHandle(timer_);
     return 0;
 
 }
