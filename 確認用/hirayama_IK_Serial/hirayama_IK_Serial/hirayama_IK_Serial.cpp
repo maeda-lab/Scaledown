@@ -53,7 +53,7 @@ void send(double arg)
 //
 // reference ; https://misakichi-k.hatenablog.com/entry/2018/10/19/010134#WaitableTimer%E3%81%AB%E3%82%88%E3%82%8B%E5%9B%BA%E5%AE%9AFPS
 //
-////�ʏ�͗L���ł����A�e�X�g�p�ɑ��݂���
+////通常は有効でいい、テスト用に存在する
 #define ENABLE_ERROR_CORRECTION
 
 unsigned int	fps_;
@@ -84,14 +84,15 @@ LONGLONG usTo100Ns(LONGLONG us) {
 }
 void wait() {
     //timer object wait. one frame time each if to timeout.
+
 #ifdef ENABLE_ERROR_CORRECTION
     auto waitRet = WaitForSingleObject(timer_, (1000 + fps_ - 1) / fps_);
 #else
     auto waitRet = WaitForSingleObject(timer_, INFINITE);
 #endif
     auto current = getTime();
+    //タイマーがタイム・アウトしている場合はwait-wait間ですでに時間が過ぎているものとして誤差調整処理の対象外にする
 #ifdef ENABLE_ERROR_CORRECTION
-    //�^�C�}�[���^�C���E�A�E�g���Ă���ꍇ��wait-wait�Ԃł��łɎ��Ԃ��߂��Ă�����̂Ƃ��Č덷���������̑ΏۊO�ɂ���
     auto sub = (current - preframeTime_) - freq_ / fps_;
     auto delay = waitRet == WAIT_TIMEOUT;
     if (delay == false && preframeIsDelay_ == false) {
@@ -150,12 +151,12 @@ int main()
 
     Pos posi;
 
-    //�V���A���ʐM�̐ݒ�
+    //シリアル通信の設定
     mbed = serial_open();
     mbed = serial_initialaize(mbed);
     mbed = serial_Config(mbed);
 
-    //�����ʒu�ɂ�����A�[���S�̂���������֐ߊp�̐ݒ�
+    //初期位置の座標を計算する
     double master_J1 = 0.0;
     double master_J2 = -120.0;
     double master_J3 = 30.0;
@@ -171,11 +172,11 @@ int main()
     double master_y = cal_fpy(master_J1, master_J2, master_J3);
     double master_z = cal_fpz(master_J1, master_J2, master_J3);
 
-    printf("\n\n\n�����ʒu�͈ȉ��̒ʂ�ł��D\n");
+    printf("\n\n\n初期位置は以下の通りです．\n");
     printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x, master_y, master_z);
-    printf("�A�[���S�̂��������鏉���p�͈ȉ��̒ʂ�ł��D\n");
+    printf("アーム全体が実現する初期角は以下の通りです．\n");
     printf("J1,J2,J3=[%lf,%lf,%lf]\n\n", master_J1, master_J2, master_J3);
-    printf("�X�̃T�[�{�����������]�p�͈ȉ��̒ʂ�ł��D\n");
+    printf("個々のサーボが実現する回転角は以下の通りです．\n");
     printf("a,b,c=[%lf,%lf,%lf]\n\n", master_theta1, master_theta2, master_theta3);
 
     //�����ʒu�Ɉړ�������
@@ -271,6 +272,7 @@ int main()
         send(0.0 + 60.0);
         //printf("==============================================\n\n\n");
         t++;
+        wait();
     }
     return 0;
 
