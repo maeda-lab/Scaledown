@@ -151,10 +151,10 @@ int main()
 
     Pos posi;
 
-    //シリアル通信の設定
-    mbed = serial_open();
-    mbed = serial_initialaize(mbed);
-    mbed = serial_Config(mbed);
+    ////シリアル通信の設定
+    //mbed = serial_open();
+    //mbed = serial_initialaize(mbed);
+    //mbed = serial_Config(mbed);
 
     //初期位置の座標を計算する
     double master_J1 = 0.0;
@@ -172,9 +172,9 @@ int main()
     double master_y = cal_fpy(master_J1, master_J2, master_J3);
     double master_z = cal_fpz(master_J1, master_J2, master_J3);
 
-    printf("\n\n\n初期位置は以下の通りです．\n");
+    printf("\n\n\Initial position is as follows\n");
     printf("x,y,z=[%lf,%lf,%lf]\n\n", master_x, master_y, master_z);
-    printf("アーム全体が実現する初期角は以下の通りです．\n");
+    printf("IK results of the initial goal position below is as follows\n");
     printf("J1,J2,J3=[%lf,%lf,%lf]\n\n", master_J1, master_J2, master_J3);
     printf("個々のサーボが実現する回転角は以下の通りです．\n");
     printf("a,b,c=[%lf,%lf,%lf]\n\n", master_theta1, master_theta2, master_theta3);
@@ -270,7 +270,7 @@ int main()
         send(0.0 + 60.0);
         send(0.0 + 60.0);
         send(0.0 + 60.0);
-        //printf("==============================================\n\n\n");
+
         t++;
         wait();
     }
