@@ -29,7 +29,7 @@ int main()
 	qpTime.setFps(60);
 	qpTime.wait();
 
-	tgtAng.J1_deg = 0.1f;
+	tgtAng.J1_deg = 5.1f;
 	tgtAng.J2_deg = 0.2f;
 	tgtAng.J3_deg = 0.3f;
 	tgtAng.J4_deg = 40.0f;
@@ -38,17 +38,18 @@ int main()
 
 	Com_Binary com;
 
-	unsigned char sbuf[4 * 6];
+	unsigned char sbuf[4 * 6+1];
 	unsigned char fbuf[4];
 	float fret;
 
 	// make float structure -> byte list
-	com.float2byte(&sbuf[ 0], tgtAng.J1_deg);
-	com.float2byte(&sbuf[ 4], tgtAng.J2_deg);
-	com.float2byte(&sbuf[ 8], tgtAng.J3_deg);
+	com.float2byte(&sbuf[0], tgtAng.J1_deg);
+	com.float2byte(&sbuf[4], tgtAng.J2_deg);
+	com.float2byte(&sbuf[8], tgtAng.J3_deg);
 	com.float2byte(&sbuf[12], tgtAng.J4_deg);
 	com.float2byte(&sbuf[16], tgtAng.J5_deg);
 	com.float2byte(&sbuf[20], tgtAng.J6_deg);
+	sbuf[24] = '*';
 
 	// bytes -> float conversion test
 	memcpy(fbuf, sbuf, 4);
@@ -76,14 +77,20 @@ int main()
 	std::printf("The value is %3.3lf *20\n", fret);
 
 
-	// test
+	// dump byte list
 	for (std::size_t i = 0; i != 4 * 6; ++i)
 	{
 		std::printf("The byte #%zu is 0x%02X *\n", i, sbuf[i]);
 	}
 
-	com.send_one_float(0.1);
-	com.send_bytes(sbuf);
+	//com.send_one_float(0.1);
+
+	// test for 24byte sending while 2 seconds
+	for (int i = 0; i < 120; i++) {
+		com.send_bytes(sbuf);
+		qpTime.wait();
+	}
+
 	return 0;
 
 }

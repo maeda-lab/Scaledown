@@ -35,7 +35,7 @@ private:
 public:
 	Com_Binary()
 	{
-		h = CreateFile(_T("COM1"), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		h = CreateFile(_T("COM4"), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if (h == INVALID_HANDLE_VALUE) {
 			printf("PORT COULD NOT OPEN\n");
@@ -154,7 +154,7 @@ private:
 		//lpdcb:制御設定情報を受け取るDCB構造へのポインタ
 		GetCommState(h, &dcb);
 		//dcb.DCBlength = sizeof(DCB);//length  :DCB構造体の大きさ(バイト数)
-		dcb.BaudRate = 115200;      //BaudRate:通信デバイスのボーレート
+		dcb.BaudRate = 921600;      //BaudRate:通信デバイスのボーレート
 		//dcb.fBinary = TRUE;       //fBinary :バイナリモードの可否
 		dcb.ByteSize = 8;           //ByteSize:送受信するバイトデータのビット数
 		dcb.fParity = NOPARITY;     //fParity :パリティチェックの可否
