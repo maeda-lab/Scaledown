@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mbed.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mbed_Serial_binary.h" />
