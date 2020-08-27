@@ -23,71 +23,79 @@ struct TargetAngle {
 	float J6_deg;
 } tgtAng;
 
+#define NUM_OF_HEADER 2
+#define NUM_OF_BUF 26
+
 int main()
 {
+	// serial port
+	Com_Binary com;
+	unsigned char sbuf[4 * 6 + NUM_OF_HEADER];
+	unsigned char fbuf[4];
+	float fret;
+	
+	// timer
 	QueryPerformanceTimer qpTime;
 	qpTime.setFps(60);
 	qpTime.wait();
 
-	tgtAng.J1_deg = 5.1f;
-	tgtAng.J2_deg = 0.2f;
-	tgtAng.J3_deg = 0.3f;
+	tgtAng.J1_deg = 5.3f;
+	tgtAng.J2_deg = 5.2f;
+	tgtAng.J3_deg = -0.3f;
 	tgtAng.J4_deg = 40.0f;
 	tgtAng.J5_deg = 50.0f;
 	tgtAng.J6_deg = 60.0f;
 
-	Com_Binary com;
-
-	unsigned char sbuf[4 * 6+1];
-	unsigned char fbuf[4];
-	float fret;
-
 	// make float structure -> byte list
-	com.float2byte(&sbuf[0], tgtAng.J1_deg);
-	com.float2byte(&sbuf[4], tgtAng.J2_deg);
-	com.float2byte(&sbuf[8], tgtAng.J3_deg);
-	com.float2byte(&sbuf[12], tgtAng.J4_deg);
-	com.float2byte(&sbuf[16], tgtAng.J5_deg);
-	com.float2byte(&sbuf[20], tgtAng.J6_deg);
-	sbuf[24] = '*';
+	com.float2byte(&sbuf[0 + NUM_OF_HEADER], tgtAng.J1_deg);
+	com.float2byte(&sbuf[4 + NUM_OF_HEADER], tgtAng.J2_deg);
+	com.float2byte(&sbuf[8 + NUM_OF_HEADER], tgtAng.J3_deg);
+	com.float2byte(&sbuf[12 + NUM_OF_HEADER], tgtAng.J4_deg);
+	com.float2byte(&sbuf[16 + NUM_OF_HEADER], tgtAng.J5_deg);
+	com.float2byte(&sbuf[20 + NUM_OF_HEADER], tgtAng.J6_deg);
+
+	// header
+	sbuf[0] = '*';
+	sbuf[1] = '+';
 
 	// bytes -> float conversion test
-	memcpy(fbuf, sbuf, 4);
+	memcpy(fbuf, &sbuf[0 + NUM_OF_HEADER], 4);
 	com.byte2float(&fret, fbuf);
-	std::printf("The value is %3.3lf *\n", fret);
+	std::printf("J1_deg is %3.3lf \n", fret);
 
-	memcpy(fbuf, &sbuf[4], 4);
+	memcpy(fbuf, &sbuf[4 + NUM_OF_HEADER], 4);
 	com.byte2float(&fret, fbuf);
-	std::printf("The value is %3.3lf *4\n", fret);
+	std::printf("J2_deg is %3.3lf \n", fret);
 
-	memcpy(fbuf, &sbuf[8], 4);
+	memcpy(fbuf, &sbuf[8 + NUM_OF_HEADER], 4);
 	com.byte2float(&fret, fbuf);
-	std::printf("The value is %3.3lf *8\n", fret);
+	std::printf("J3_deg is %3.3lf \n", fret);
 
-	memcpy(fbuf, &sbuf[12], 4);
+	memcpy(fbuf, &sbuf[12 + NUM_OF_HEADER], 4);
 	com.byte2float(&fret, fbuf);
-	std::printf("The value is %3.3lf *12\n", fret);
+	std::printf("J4_deg is %3.3lf \n", fret);
 
-	memcpy(fbuf, &sbuf[16], 4);
+	memcpy(fbuf, &sbuf[16 + NUM_OF_HEADER], 4);
 	com.byte2float(&fret, fbuf);
-	std::printf("The value is %3.3lf *16\n", fret);
+	std::printf("J5_deg is %3.3lf \n", fret);
 
-	memcpy(fbuf, &sbuf[20], 4);
+	memcpy(fbuf, &sbuf[20 + NUM_OF_HEADER], 4);
 	com.byte2float(&fret, fbuf);
-	std::printf("The value is %3.3lf *20\n", fret);
+	std::printf("J6_deg is %3.3lf \n", fret);
 
-
+	std::printf("The byte list : %02x %02x   ", sbuf[0], sbuf[1]);
 	// dump byte list
-	for (std::size_t i = 0; i != 4 * 6; ++i)
-	{
-		std::printf("The byte #%zu is 0x%02X *\n", i, sbuf[i]);
+	for (int j = 0; j < 6; j++){
+		for (int i = 0; i < 4; i++){
+			std::printf("%02x ", (unsigned char) sbuf[i + 4 * j + NUM_OF_HEADER]);
+		}
+		printf("  ");
 	}
-
-	//com.send_one_float(0.1);
+	printf("\n\nsizeof(sbuf) = <%d>\n",(int)sizeof(sbuf));
 
 	// test for 24byte sending while 2 seconds
 	for (int i = 0; i < 120; i++) {
-		com.send_bytes(sbuf);
+		com.send_bytes(sbuf, NUM_OF_BUF);
 		qpTime.wait();
 	}
 

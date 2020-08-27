@@ -4,6 +4,7 @@
 // Serial Binary Communication
 //
 // reference : mbed_Serial.h written by Tomoki Hirayama
+// reference : https://stackoverflow.com/questions/14018894/how-to-convert-float-to-byte-array-of-length-4-array-of-char
 
 #include<stdio.h>
 #include<iostream>
@@ -11,6 +12,7 @@
 #include<stdlib.h>
 #include<windows.h>
 #include<conio.h>
+
 
 #define PI 3.14159265358979
 
@@ -21,13 +23,7 @@ private:
 	DCB dcb;			// シリアル通信デバイスの制御定義を表す
 	COMMTIMEOUTS cto;	// 通信デバイスのタイムアウトパラメータ
 
-	//COMPORT *COM;
-
-	DWORD nn0, nn1;//32bit符号なし整数、範囲は0~18446744073709551615 10進数
-	char buf0[1];
-	unsigned char buf1[1];
 	double com;
-	double rep;
 
 	int checknum[4];
 	int size_of_float{ sizeof(float) };
@@ -39,9 +35,7 @@ public:
 
 		if (h == INVALID_HANDLE_VALUE) {
 			printf("PORT COULD NOT OPEN\n");
-			//プログラムの一時停止
 			system("PAUSE");
-			//プログラムの正常終了
 			exit(0);
 		}
 		printf("PORT OPEN SUCCESSED\n");
@@ -53,7 +47,7 @@ public:
 	// シリアル通信を終了
 	~Com_Binary()
 	{
-		CloseHandle(h);		
+		CloseHandle(h);
 	}
 
 	void float2byte(unsigned char ret[], float f) {
@@ -69,9 +63,8 @@ public:
 		//	std::printf("The byte #%zu is 0x%02X\n", i, ret[i]);
 		//}
 	}
-	void byte2float(float *f, unsigned char ret[]) {
+	void byte2float(float* f, unsigned char ret[]) {
 		// 
-		// reference : https://stackoverflow.com/questions/14018894/how-to-convert-float-to-byte-array-of-length-4-array-of-char
 
 		float const* p = reinterpret_cast<float const*>(ret);
 
@@ -79,7 +72,7 @@ public:
 
 		//std::printf("The value is %3.3lf\n", *f);
 	}
-	void send_one_float(double d) {  send_one_float((float)d); } // overload
+	void send_one_float(double d) { send_one_float((float)d); } // overload
 	void send_one_float(float f)
 	{
 		BOOL Ret;
@@ -97,22 +90,22 @@ public:
 		Ret = WriteFile(h, sbuf, size_of_float, NULL, NULL); // 4 文字送る
 
 		if (!Ret) {
-			//送信できなかったら
-			//ダメです！
 			printf("SEND FAILED\n");
 			CloseHandle(h);
 			system("PAUSE");
 			exit(0);
 		}
-	}void send_bytes(unsigned char sbuf[])
+		// sendBytes is required !! 
+	}void send_bytes(unsigned char sbuf[], int sendBytes)
 	{
 		BOOL Ret;
+		DWORD writtenBytes;
 
-		Ret = WriteFile(h, sbuf, sizeof(sbuf), NULL, NULL);
+		Ret = WriteFile(h, sbuf, sendBytes, &writtenBytes, NULL);
+
+		// printf("written %d in %d bytes\n", writtenBytes, sendBytes);
 
 		if (!Ret) {
-			//送信できなかったら
-			//ダメです！
 			printf("SEND FAILED\n");
 			CloseHandle(h);
 			system("PAUSE");
@@ -135,8 +128,6 @@ private:
 			exit(0);
 		}
 		printf("SET UP SUCCESSED\n");
-		//初期化する
-		//指定されたポートの入力バッファにあるすべての文字を破棄する。
 		Ret = PurgeComm(h, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
 		if (!Ret) {
 			printf("CLEAR FAILED\n");
@@ -150,28 +141,30 @@ private:
 		//3.基本通信条件の設定
 		DCB dcb;
 		BOOL Ret;
-		//    h:通信デバイスへのハンドル
-		//lpdcb:制御設定情報を受け取るDCB構造へのポインタ
 		GetCommState(h, &dcb);
-		//dcb.DCBlength = sizeof(DCB);//length  :DCB構造体の大きさ(バイト数)
+		dcb.DCBlength = sizeof(DCB);//length  :DCB構造体の大きさ(バイト数)
 		dcb.BaudRate = 921600;      //BaudRate:通信デバイスのボーレート
-		//dcb.fBinary = TRUE;       //fBinary :バイナリモードの可否
+		dcb.fBinary = TRUE;         //fBinary :バイナリモードの可否
 		dcb.ByteSize = 8;           //ByteSize:送受信するバイトデータのビット数
 		dcb.fParity = NOPARITY;     //fParity :パリティチェックの可否
 		dcb.StopBits = ONESTOPBIT;  //StopBits:使用するストップビット数の指定、1ストップビット
-		cto.ReadIntervalTimeout = 0;
-		cto.ReadTotalTimeoutMultiplier = 0;
-		cto.ReadTotalTimeoutConstant = 0;
-		cto.WriteTotalTimeoutMultiplier = 0;
-		cto.WriteTotalTimeoutConstant = 0;
+
 		Ret = SetCommState(h, &dcb);
-		SetCommTimeouts(h, &cto);
 		if (!Ret) {
 			printf("SetCommState FAILED\n");
 			CloseHandle(h);
 			system("PAUSE");
 			exit(0);
 		}
+
+		cto.ReadIntervalTimeout = 0;
+		cto.ReadTotalTimeoutMultiplier = 0;
+		cto.ReadTotalTimeoutConstant = 0;
+		cto.WriteTotalTimeoutMultiplier = 1;
+		cto.WriteTotalTimeoutConstant = 10;
+
+		SetCommTimeouts(h, &cto);
+
 		printf("SetCommState SUCCESSED\n");
 	}
 };
