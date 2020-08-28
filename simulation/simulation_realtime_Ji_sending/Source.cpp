@@ -45,6 +45,11 @@ private:
     deg deg_seq[_NUM_DEG_SEQ_];
     int ptr;
 public:
+    Deg_List(void);
+    void init(void);
+    void setStart(void);
+    int getNext(double* J1, double* J2, double* J3);
+public:
     Deg_List(void) {
         init();
     }
@@ -60,7 +65,7 @@ public:
         ptr = 0;
     }
     int add(double J1, double J2, double J3) {
-        if(ptr < _NUM_DEG_SEQ_ ) {
+        if (ptr < _NUM_DEG_SEQ_) {
             deg_seq[ptr].j1 = J1;
             deg_seq[ptr].j2 = J2;
             deg_seq[ptr].j3 = J3;
@@ -77,7 +82,12 @@ public:
         }
         else { return -1; }
     }
+    int getLen(void) {
+        return ptr;
+    }
 };
+
+Deg_List dl;
 
 //radian to degree
 double rad2deg(double rad) {
@@ -318,8 +328,13 @@ void read_cal_J123(FILE* fp1,FILE* fp2)
         //Writing.
         fprintf(fp2, "%lf,%lf,%lf\n", csvJ.j1, csvJ.j2, csvJ.j3);
 
-
+        // store angle list
+        dl.add(csvJ.j1, csvJ.j2, csvJ.j3);
     }
+}
+
+void realtime_angle_sending() {
+
 }
 
 //create savename
@@ -368,6 +383,10 @@ int main(void)
     const char* filename = "sweep.csv";
     for (int i = 0; i < 9; i++)
     {
+
+        // angle list to realize realtime angle sending
+        dl.init();
+
         printf("%d\n", i);
         error_fp = fopen_s(&fp1, filename, "r");
         if (fp1==NULL)
@@ -400,6 +419,11 @@ int main(void)
                 //free(fp2);
             }
         }
+
+
+        // start realtime angle sending
+        dl.init();
+
     }
     return 0;
 }
