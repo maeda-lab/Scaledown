@@ -1,4 +1,4 @@
 ﻿  Source.cpp
-C:\Users\vega2\source\repos\simulation\simulation\Source.cpp(134): warning C4715: 'cal_J2': 値を返さないコントロール パスがあります。
-C:\Users\vega2\source\repos\simulation\simulation\Source.cpp(195): warning C4715: 'cal_J3': 値を返さないコントロール パスがあります。
-  simulation.vcxproj -> C:\Users\vega2\source\repos\simulation\Debug\simulation.exe
+C:\Users\MasahiroFurukawa\Documents\GitHub\Scaledown\simulation\simulation\Source.cpp(134): warning C4715: 'cal_J2': 値を返さないコントロール パスがあります。
+C:\Users\MasahiroFurukawa\Documents\GitHub\Scaledown\simulation\simulation\Source.cpp(195): warning C4715: 'cal_J3': 値を返さないコントロール パスがあります。
+  simulation.vcxproj -> C:\Users\MasahiroFurukawa\Documents\GitHub\Scaledown\simulation\Debug\simulation.exe

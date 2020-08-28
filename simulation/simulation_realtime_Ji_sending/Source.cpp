@@ -11,6 +11,10 @@
 #include <iostream>
 #include <string>
 
+#include "QueryPerformanceTimer.h"
+#include "mbed_Serial_binary.h"
+#include "Deg_List.h"
+
 //=================================================Function Definition=======================================================
 
 //======PI=====
@@ -38,56 +42,20 @@ double scale;
 //xy->movespace=0 yz->movespace=1 zx->movespace=2
 int movespace;
 
-//=================================================angle table=======================================================
-#define _NUM_DEG_SEQ_ 3000
-class Deg_List {
-private:
-    deg deg_seq[_NUM_DEG_SEQ_];
-    int ptr;
-public:
-    Deg_List(void);
-    void init(void);
-    void setStart(void);
-    int getNext(double* J1, double* J2, double* J3);
-public:
-    Deg_List(void) {
-        init();
-    }
-    void init(void) {
-        ptr = 0;
-        for (int i = 0; i < _NUM_DEG_SEQ_; i++) {
-            deg_seq[i].j1 = 0.0;
-            deg_seq[i].j2 = 0.0;
-            deg_seq[i].j3 = 0.0;
-        }
-    }
-    void setStart(void) {
-        ptr = 0;
-    }
-    int add(double J1, double J2, double J3) {
-        if (ptr < _NUM_DEG_SEQ_) {
-            deg_seq[ptr].j1 = J1;
-            deg_seq[ptr].j2 = J2;
-            deg_seq[ptr].j3 = J3;
-            return (ptr++);
-        }
-        else { return -1; }
-    }
-    int getNext(double* J1, double* J2, double* J3) {
-        if (ptr < _NUM_DEG_SEQ_) {
-            memcpy(J1, &deg_seq[ptr].j1, sizeof(double));
-            memcpy(J2, &deg_seq[ptr].j2, sizeof(double));
-            memcpy(J3, &deg_seq[ptr].j3, sizeof(double));
-            return (ptr++);
-        }
-        else { return -1; }
-    }
-    int getLen(void) {
-        return ptr;
-    }
-};
-
+// degree list
+// defined in "Deg_List.h"
 Deg_List dl;
+
+// binary communication
+// defined in "mbed_Serial_binary.h"
+#define NUM_OF_HEADER 2
+#define NUM_OF_BUF 26
+Com_Binary com;
+unsigned char sbuf[4 * 6 + NUM_OF_HEADER];
+
+// global timer
+// defined in "QueryPerformanceTimer.h"
+QueryPerformanceTimer qpTime;
 
 //radian to degree
 double rad2deg(double rad) {
@@ -334,8 +302,39 @@ void read_cal_J123(FILE* fp1,FILE* fp2)
 }
 
 void realtime_angle_sending() {
+    int ret;
+    double j1, j2, j3;
+    unsigned char sbuf[4 * 6 + NUM_OF_HEADER];
+    
+    printf("\n\n ... realtime_angle_sending ...\n\n");
 
-    while()
+    // initialize pointer as zero
+    dl.setStart();
+
+    // header
+    sbuf[0] = '*';
+    sbuf[1] = '+';
+
+    // angular sequence trail
+    do {
+        // refer angular sequence
+        ret = dl.getNext(&j1, &j2, &j3);
+
+        // make byte list
+        com.float2byte(&sbuf[0 + NUM_OF_HEADER], (float)j1);
+        com.float2byte(&sbuf[4 + NUM_OF_HEADER], (float)j2);
+        com.float2byte(&sbuf[8 + NUM_OF_HEADER], (float)j3);
+        com.float2byte(&sbuf[12 + NUM_OF_HEADER], 0.0f);
+        com.float2byte(&sbuf[16 + NUM_OF_HEADER], 0.0f);
+        com.float2byte(&sbuf[20 + NUM_OF_HEADER], 0.0f);
+
+        // send via serial port
+        com.send_bytes(sbuf, NUM_OF_BUF);
+
+        // constant time loop
+        qpTime.wait();
+
+    } while (ret != -1);
 }
 
 //create savename
@@ -379,6 +378,11 @@ std::string setname(int i)
 
 int main(void)
 {
+
+    // timer
+    qpTime.setFps(60);
+    qpTime.wait();
+
     FILE* fp1,*fp2;
     errno_t error_fp;
     const char* filename = "sweep.csv";
@@ -398,11 +402,14 @@ int main(void)
         else 
         {
             printf("fp1 open OK\n");
+
             //create savename
             std::string tmp = setname(i);
             const char* savename = tmp.c_str();
-            printf("%s\n", savename);
+            printf("savename %s\n", savename);
+
             error_fp = fopen_s(&fp2, savename, "w");
+
             if (fp2 == NULL)
             {
                 printf("fp2 error!");

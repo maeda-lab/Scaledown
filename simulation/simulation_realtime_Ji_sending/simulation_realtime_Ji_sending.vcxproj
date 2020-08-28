@@ -144,6 +144,7 @@
     <None Include="sweep.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Deg_List.h" />
     <ClInclude Include="mbed_Serial_binary.h" />
     <ClInclude Include="QueryPerformanceTimer.h" />
   </ItemGroup>

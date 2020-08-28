@@ -31,7 +31,7 @@ private:
 public:
 	Com_Binary()
 	{
-		h = CreateFile(_T("COM4"), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		h = CreateFile(_T("COM6"), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if (h == INVALID_HANDLE_VALUE) {
 			printf("PORT COULD NOT OPEN\n");
