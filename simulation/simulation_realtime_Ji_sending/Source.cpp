@@ -335,6 +335,7 @@ void read_cal_J123(FILE* fp1,FILE* fp2)
 
 void realtime_angle_sending() {
 
+    while()
 }
 
 //create savename
@@ -422,7 +423,7 @@ int main(void)
 
 
         // start realtime angle sending
-        dl.init();
+        realtime_angle_sending();
 
     }
     return 0;
