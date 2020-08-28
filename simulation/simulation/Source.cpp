@@ -322,6 +322,8 @@ int main(void)
     FILE* fp1,*fp2;
     errno_t error_fp;
     const char* filename = "sweep.csv";
+
+    //make file
     for (int i = 0; i < 9; i++)
     {
         printf("%d\n", i);
@@ -357,5 +359,7 @@ int main(void)
             }
         }
     }
+
+
     return 0;
 }
