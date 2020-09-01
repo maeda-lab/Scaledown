@@ -1,0 +1,4 @@
+﻿  Source.cpp
+C:\Users\vega2\source\repos\simulation_realtime_Ji_sending\simulation_realtime_ji_sending\Source.cpp(154): warning C4715: 'cal_J2': 値を返さないコントロール パスがあります。
+C:\Users\vega2\source\repos\simulation_realtime_Ji_sending\simulation_realtime_ji_sending\Source.cpp(215): warning C4715: 'cal_J3': 値を返さないコントロール パスがあります。
+  simulation_realtime_ji_sending.vcxproj -> C:\Users\vega2\source\repos\simulation_realtime_Ji_sending\Debug\simulation_realtime_ji_sending.exe
