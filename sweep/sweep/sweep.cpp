@@ -1,7 +1,8 @@
-//2020/08/25ã€€TomokiHirayama
-//ã‚¹ã‚¤ãƒ¼ãƒ—æ›²ç·šã‚’ä½œæˆã™ã‚‹ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã§ã™ï¼Ž
-//è¨ˆç®—çµæžœã‚’ä¸€æ™‚çš„ã«ä¿å­˜ã™ã‚‹é…åˆ—ãŒã‚¹ã‚¿ãƒƒã‚¯ã‚µã‚¤ã‚ºã‚ªãƒ¼ãƒãƒ¼ã®ãŸã‚
-//ç”¨æ„ã§ããªã‹ã£ãŸã®ã§ï¼Œè¨ˆç®—çµæžœã‚’ãã®ã¾ã¾æ›¸ãè¾¼ã‚“ã§ã„ã¾ã™ï¼Ž
+//2020/08/31 TomokiHirayama XV
+//2020/08/25@TomokiHirayama
+//ƒXƒC[ƒv‹Èü‚ðì¬‚·‚éƒvƒƒOƒ‰ƒ€‚Å‚·D
+//ŒvŽZŒ‹‰Ê‚ðˆêŽž“I‚É•Û‘¶‚·‚é”z—ñ‚ªƒXƒ^ƒbƒNƒTƒCƒYƒI[ƒo[‚Ì‚½‚ß
+//—pˆÓ‚Å‚«‚È‚©‚Á‚½‚Ì‚ÅCŒvŽZŒ‹‰Ê‚ð‚»‚Ì‚Ü‚Ü‘‚«ž‚ñ‚Å‚¢‚Ü‚·D
 
 
 #include<stdio.h>
@@ -10,58 +11,72 @@
 
 #define PI 3.14159265358979
 
-//å‘¨æ³¢æ•°ã®å®šç¾©[Hz]
-//0.1Hz(=ä¸€å‘¨10ç§’ãªã‚‰ã‚¢ãƒ¼ãƒ ã¯è¿½ã„ã¤ã„ã¦ã„ã‚‹ã ã‚ã†)
-// 10Hz(=ä¸€å‘¨0.1ç§’ãªã‚‰ã‚¢ãƒ¼ãƒ ã¯è¿½ã„ã¤ã‹ãªã„ã ã‚ã†)
-#define f_min 0.1
-#define f_max 10.0
+//Žü”g”‚Ì’è‹`[Hz]
+//0.1Hz(=ˆêŽü10•b‚È‚çƒA[ƒ€‚Í’Ç‚¢‚Â‚¢‚Ä‚¢‚é‚¾‚ë‚¤)
+// 10Hz(=ˆêŽü0.1•b‚È‚çƒA[ƒ€‚Í’Ç‚¢‚Â‚©‚È‚¢‚¾‚ë‚¤)
+#define f_min 0.2
+#define f_max 8.0
 
-//æŒ¯å‹•æ•°ã®å¢—åˆ†ã®å®šç¾©
-//æŒ¯å‹•æ•°ã‚’1sã‚ãŸã‚Šã©ã‚Œã ã‘å¢—ã‚„ã™ã‹
-float delta_f = 0.25;
+//ƒTƒ“ƒvƒŠƒ“ƒOƒŒ[ƒg
+#define Sampling_rate 60
+//ƒTƒ“ƒvƒŠƒ“ƒO”
+#define Point 8192
+//Žü”g”‚Ì‘•ª‚Ì’è‹`
+//Žü”g”‚ð1s‚ ‚½‚è‚Ç‚ê‚¾‚¯‘‚â‚·‚©
+double delta_f = (f_max - f_min) / (Point - 1); //0.25;
 
-//å›žè»¢åŠå¾„ã®å®šç¾©[mm]
-#define r 20.0  //è¦å¤‰æ›´
+//‰ñ“]”¼Œa‚Ì’è‹`[mm]
+#define r 200.0  //—v•ÏX
 
-//ç§’æ•°ã®å¢—åˆ†ã®å®šç¾©[s]
-//ã‚µãƒ¼ãƒœã®åˆ¶å¾¡å‘¨æ³¢æ•°ã¨åˆã‚ã›ã‚‹
-//#define delta_t 1/60
+//•b”‚Ì‘•ª‚Ì’è‹`[s]
+//ƒT[ƒ{‚Ì§ŒäŽü”g”‚Æ‡‚í‚¹‚é
+//#define delta_t 201/60
 
-//ä½ç½®ã‚’è¡¨ã™æ§‹é€ ä½“ã®è¨­å®š
+//ˆÊ’u‚ð•\‚·\‘¢‘Ì‚ÌÝ’è
 struct Pos {
-	float x;//ã‚¹ã‚¤ãƒ¼ãƒ—æ›²ç·šä¸Šã‚’ç§»å‹•ã™ã‚‹ç‚¹ã®ã‚ã‚‹æ™‚åˆ»tã«ãŠã‘ã‚‹xåº§æ¨™
-	float y;//ã‚¹ã‚¤ãƒ¼ãƒ—æ›²ç·šä¸Šã‚’ç§»å‹•ã™ã‚‹ç‚¹ã®ã‚ã‚‹æ™‚åˆ»tã«ãŠã‘ã‚‹yåº§æ¨™
+	double x;//ƒXƒC[ƒv‹Èüã‚ðˆÚ“®‚·‚é“_‚Ì‚ ‚éŽžt‚É‚¨‚¯‚éxÀ•W
+	double y;//ƒXƒC[ƒv‹Èüã‚ðˆÚ“®‚·‚é“_‚Ì‚ ‚éŽžt‚É‚¨‚¯‚éyÀ•W
 };
 
 int main(void)
 {
-	Pos pos;//ä¸€æ™‚ä¿å­˜ã™ã‚‹æ§‹é€ ä½“
+	Pos pos;//ˆêŽž•Û‘¶‚·‚é\‘¢‘Ì
 	FILE* fp;
 	errno_t error_fp;
-	const char* filename = "sweep.csv";//ãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜å
-	printf("%f", delta_f / 60.0);
-	//======fileã‚’æ›¸ãè¾¼ã¿ãƒ¢ãƒ¼ãƒ‰ã§ã‚ªãƒ¼ãƒ—ãƒ³=======
+	const char* filename = "r200_f80_f02_P81newsweep.csv";//ƒtƒ@ƒCƒ‹‚Ì•Û‘¶–¼
+	//printf("%f", delta_f / 60.0);
+	//======file‚ð‘‚«ž‚Ýƒ‚[ƒh‚ÅƒI[ƒvƒ“=======
 	error_fp = fopen_s(&fp, filename, "w");
 	if (fp==NULL)
 	{
-		printf("ãƒ•ã‚¡ã‚¤ãƒ«ã‚’Openå‡ºæ¥ã¾ã›ã‚“!\n");
+		printf("ƒtƒ@ƒCƒ‹‚ðOpeno—ˆ‚Ü‚¹‚ñ!\n");
 		exit(0);
 	}
 	else
 	{
-		//===========-sweepæ›²ç·šã‚’ä½œæˆã™ã‚‹========
-		//"2458"ã¯ã‚µãƒ¼ãƒœã®åˆ¶å¾¡å‘¨æ³¢æ•°ã‹ã‚‰è¨ˆç®—(40.96s * 60[1/s]=2457.6å€‹ï¼Œ2458å€‹ã®ç‚¹ã‚’å–ã‚‹ã“ã¨ãŒã§ãã‚‹)
-		for (float t = 0.0; t < 2458.0; t++)
+		//===========Å‰‚Í0.1Hz‚Å10•b(=1Žü)‰ñ‚·==========
+		for (int cnt = 0; cnt < int(1.0/f_min)*Sampling_rate*5; cnt++)
 		{
-			//(å˜ä½å††ã®åŠå¾„r)*(PI)*(æ™‚åˆ»tã«ãŠã‘ã‚‹æŒ¯å‹•æ•°f)*(æ™‚åˆ»t)
-			pos.x = r * cos(2.0 * PI * (f_min + delta_f / 60.0 * t) * t/60.0);
-			pos.y = r * sin(2.0 * PI * (f_min + delta_f / 60.0 * t) * t/60.0);
+			//(’PˆÊ‰~‚Ì”¼Œar)*(PI)*(Žžt‚É‚¨‚¯‚éŽü”g”f)*(Žžt)
+			pos.x = r * cos(2.0 * PI * f_min * cnt / Sampling_rate);
+			pos.y = r * sin(2.0 * PI * f_min * cnt / Sampling_rate);
 
-			//======æ›¸ãè¾¼ã¿å‡¦ç†ã‚’è¡Œã†=======
+			//======‘‚«ž‚Ýˆ—‚ðs‚¤=======
+			fprintf(fp, "%lf,%lf\n", pos.x, pos.y);
+
+		}
+		//===========-sweep‹Èü‚ðì¬‚·‚é========
+		for (int sn = 0; sn < Point; sn++)
+		{
+			//(’PˆÊ‰~‚Ì”¼Œar)*(PI)*(Žžt‚É‚¨‚¯‚éŽü”g”f)*(Žžt)
+			pos.x = r * cos(2.0 * PI * ( f_min + delta_f * sn ) * sn / Sampling_rate);
+			pos.y = r * sin(2.0 * PI * ( f_min + delta_f * sn ) * sn / Sampling_rate);
+
+			//======‘‚«ž‚Ýˆ—‚ðs‚¤=======
 			fprintf(fp, "%lf,%lf\n", pos.x, pos.y);
 			
 		}
-		printf("æ›¸ãè¾¼ã¿å®Œäº†");
+		printf("‘‚«ž‚ÝŠ®—¹");
 		fclose(fp);
 	}
 	return 0;

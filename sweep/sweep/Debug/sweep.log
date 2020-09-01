@@ -1,4 +1,2 @@
 ﻿  sweep.cpp
-C:\Users\vega2\source\repos\sweep\sweep\sweep.cpp(57,14): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\vega2\source\repos\sweep\sweep\sweep.cpp(58,14): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
   sweep.vcxproj -> C:\Users\vega2\source\repos\sweep\Debug\sweep.exe
